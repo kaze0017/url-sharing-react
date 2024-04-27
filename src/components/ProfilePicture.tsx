@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface ProfilePictureProps {
   size?: number;
@@ -21,7 +22,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
     <div
       className={`relative inline-block rounded-full overflow-hidden w-${size}px h-${size}px border-2 border-blue-500 ${className}`}
     >
-      <a href={`/dashboard/${id}`}>
+      <Link to={`/profile/${id}`}>
         <img
           src={imageUrl}
           alt={alt}
@@ -29,7 +30,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
           height={size}
           className="object-cover transition-transform transform hover:scale-110"
         />
-      </a>
+      </Link>
     </div>
   );
 };

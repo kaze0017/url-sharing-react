@@ -12,6 +12,7 @@ import LinkManagement from "./pages/LinkManagement";
 import CreateLink from "./components/linkManagement/CreateLink";
 import MainPanel from "./components/linkManagement/MainPanel";
 import MemberManagement from "./pages/MemberManagement";
+import Profile from "./pages/Profile";
 
 function App() {
   const mainPanelWrapper =
@@ -35,6 +36,7 @@ function App() {
               </Route>
               <Route path="/MemberManagement" element={<MemberManagement />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/profile/:userId" element={<Profile />} />
             </Route>
           </Route>
         </Route>
