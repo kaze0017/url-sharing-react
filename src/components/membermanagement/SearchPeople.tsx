@@ -26,11 +26,11 @@ export default function SearchPeople() {
     setPeopleToDisplay(filteredPeople);
   }
 
-  const ref =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-  const { events } = useDraggable(ref);
+  // const ref =
+  //   useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
+  // const { events } = useDraggable(ref);
   const mainWrapperClass =
-    "relative p-2 max-h-full row flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide min-w-full";
+    "relative p-2 max-h-full row flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide min-w-full ";
 
   return (
     <div className="flex panel-light p-2 h-full w-[250px] items-center flex-col gap-2">
@@ -43,7 +43,8 @@ export default function SearchPeople() {
       />
 
       {/* display people */}
-      <div className={mainWrapperClass} {...events} ref={ref}>
+      {/* <div className={mainWrapperClass} {...events} ref={ref}> */}
+      <div className={mainWrapperClass}>
         {peopleToDisplay?.map((person, index) => (
           <Draggable dragObject={person} key={index}>
             <div className="flex p-1 w-full items-center gap-1 border border-indigo-200">

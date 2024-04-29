@@ -137,14 +137,16 @@ export default function AddLinkForm() {
     }
   }
 
-  function handlePrevious() {
+  function handlePrevious(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
     if (currentStep > 0) {
       setPreviousStep(currentStep - 2);
       setCurrentStep(currentStep - 1);
     }
   }
 
-  function changeThumbnail() {
+  function changeThumbnail(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
     setShowThumbnailSelector(!showThumbnailSelector);
   }
 
@@ -283,7 +285,7 @@ export default function AddLinkForm() {
                 </div>
               )}
               <button
-                onClick={changeThumbnail}
+                onClick={(e) => changeThumbnail(e)}
                 className="flex gap-2 items-center justify-between p-2 w-52 button transition-500"
               >
                 Thumbnail <MdOutlineChangeCircle className="tex-2xl" />
@@ -418,7 +420,9 @@ export default function AddLinkForm() {
         )}
         {currentStep < 3 && (
           <div className="flex gap-2">
-            {currentStep > 0 && <button onClick={handlePrevious}>Back</button>}
+            {currentStep > 0 && (
+              <button onClick={(e) => handlePrevious(e)}>Back</button>
+            )}
             <div className="flex-grow"></div>
             <div className="flex gap-4">
               {currentStep === 0 && (

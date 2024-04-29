@@ -4,7 +4,6 @@ import { FiList } from "react-icons/fi";
 import { GrDocumentConfig } from "react-icons/gr";
 import { FiVideo } from "react-icons/fi";
 import { FiImage } from "react-icons/fi";
-import { SlMagnifier } from "react-icons/sl";
 import ControlBtn from "./ControlBtn";
 import SearchBar from "../SearchBar";
 

@@ -5,12 +5,15 @@ import { getSharedLinks } from "../../../../lib/actions";
 import Search from "./shared/Search";
 import Sort from "./shared/Sort";
 import GrabScroll from "../../../GrabScroll";
+import axios from "../../../../api/axios";
 
 export default function Shared() {
   const [query, setQuery] = React.useState("");
   const [sort, setSort] = React.useState("saved");
   const [sharedLinksToDisplay, setSharedLinksToDisplay] =
     React.useState(getSharedLinks);
+
+  const URL = "http://18.224.166.225:8000/link_management/public_links/";
 
   useEffect(() => {
     // Filter the shared links based on the query
@@ -22,6 +25,16 @@ export default function Shared() {
       setSharedLinksToDisplay(getSharedLinks);
     } else setSharedLinksToDisplay(filteredLinks);
   }, [query]);
+
+  async function getSharedLinksFromServer() {
+    try {
+      const response = await axios.get(URL);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  getSharedLinksFromServer();
 
   useEffect(() => {
     console.log(sort);

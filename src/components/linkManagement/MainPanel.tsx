@@ -5,7 +5,6 @@ import { PiChartLineUp } from "react-icons/pi";
 import { TfiTag } from "react-icons/tfi";
 import SelectorMenu from "../menus/SelectorMenu";
 import SearchBar from "../SearchBar";
-
 import Table from "./table/Table";
 import FadeInOut from "../login/FadeInOut";
 import { Link } from "react-router-dom";

@@ -1,3 +1,5 @@
+import { useDrag } from "react-dnd";
+
 // Define DraggableProps interface
 interface DraggableProps {
   children: React.ReactNode;
@@ -13,11 +15,16 @@ interface Person {
 }
 
 // Draggable Component
-export default function Draggable({ children, dragObject, onDragEnd }: DraggableProps) {
+export default function Draggable({
+  children,
+  dragObject,
+  onDragEnd,
+}: DraggableProps) {
   const onDragStarting = (
     e: React.DragEvent<HTMLDivElement>,
     dragObject: Person
   ) => {
+    console.log("dragging", dragObject);
     e.dataTransfer.setData("application/json", JSON.stringify({ dragObject }));
   };
 
@@ -30,6 +37,7 @@ export default function Draggable({ children, dragObject, onDragEnd }: Draggable
 
   return (
     <div
+      className="w-full"
       draggable={true}
       onDragStart={(e) => onDragStarting(e, dragObject)}
       onDragEnd={onDragEnding}

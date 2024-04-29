@@ -1,6 +1,6 @@
 import Social from "./Social";
 import FadeInOut from "./FadeInOut";
-import axios from "../../api/axios";
+// import axios from "../../api/axios";
 
 import { useEffect, useState, useRef } from "react";
 import useAuth from "../../hooks/useAuth";
@@ -13,9 +13,19 @@ import {
 } from "../../constants";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function LoginForm() {
-  console.log("render loginform");
+import axios from "axios";
 
+import { getCookie } from "../../api/axios";
+
+const instanceAxios = axios.create({
+  baseURL: "http://18.224.166.225:8000",
+  withCredentials: true,
+  headers: {
+    "Content-type": "application/x-www-form-urlencoded",
+  },
+});
+
+export default function LoginForm() {
   const { setAuth } = useAuth();
 
   //Register
@@ -87,6 +97,7 @@ export default function LoginForm() {
   const [showLogin, setShowLogin] = useState<boolean>(true);
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [isPending, setIsPending] = useState<boolean>(false);
+  const [XCSRFToken, setXCSRFToken] = useState<string>("");
 
   const [formType, setFormType] = useState<"login" | "register">("login");
 
@@ -122,24 +133,32 @@ export default function LoginForm() {
     }, 500);
   }
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {}
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-  useEffect(() => {
-    // const fetchData = async () => {
-    //   console.log("Fetching data...");
-    //   try {
-    //     const response = await fetch("http://18.222.137.37:8000/auth/login/");
-    //     if (!response.ok) {
-    //       throw new Error("Failed to fetch data");
-    //     }
-    //     const data = await response.json();
-    //     console.log("Data received:", data);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-    // fetchData();
-  }, []);
+    console.log("Logging in...");
+
+    try {
+      const formData = new URLSearchParams();
+      formData.append("username", userName);
+      formData.append("password", password);
+      formData.append("X-CSRFToken", XCSRFToken);
+
+      const response = await axios.post(LOGIN_URL, formData.toString(), {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        withCredentials: true,
+      });
+      console.log(response);
+
+      // Assuming setUser is a function to set the logged-in user in your application state
+      setUser(response.data.username);
+      // Clear any input fields or states related to login
+      setUserName("");
+      setPassword("");
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -147,14 +166,23 @@ export default function LoginForm() {
     console.log("Registering...");
 
     try {
-      const response = await axios.post(
+      const formData = new URLSearchParams();
+      formData.append("username", user);
+      formData.append("password", pwd);
+      formData.append("email", email);
+
+      const response = await instanceAxios.post(
         REGISTER_URL,
-        JSON.stringify({ username: user, password: pwd }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
+        formData.toString(),
+        {}
       );
+      console.log(document.cookie);
+      console.log(getCookie("csrftoken"));
+
+      setAuth({ user: user, token: "gf" });
+
+      // navigate to  /
+      navigate("/");
 
       setUser("");
       setPwd("");
@@ -162,35 +190,6 @@ export default function LoginForm() {
     } catch (err) {
       console.log(err);
     }
-
-    console.log(user, pwd, matchPwd);
-  }
-
-  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    console.log("Logging in...");
-    // try {
-    //   const response = await axios.post(
-    //     LOGIN_URL,
-    //     JSON.stringify({ username: userName, password: password }),
-    //     {
-    //       headers: { "Content-Type": "application/json" },
-    //       withCredentials: true,
-    //     }
-    //   );
-    //   setLoginUser("");
-    //   setLoginPwd("");
-    //   setLoginSuccess("Login successful");
-    //   const accessToken = response?.data?.access_token || "no token";
-    //   setAuth({ user: userName, token: accessToken });
-    //   // navigate("/");
-    // } catch (err) {
-    //   console.log(err);
-    //   setLoginErrorMsg("Invalid username or password");
-    // }
-
-    setAuth({ user: "userName", token: "accessToken" });
-    navigate(from, { replace: true });
   }
 
   return (
@@ -306,6 +305,7 @@ export default function LoginForm() {
                 type="email"
                 placeholder="Email"
                 disabled={isPending}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 className="rounded-md border-gray-300"

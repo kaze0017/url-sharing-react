@@ -1,4 +1,3 @@
-import React from "react";
 import { Person } from "../../lib/interfaces";
 import ProfilePicture from "../ProfilePicture";
 import { PiChartLineUp } from "react-icons/pi";
