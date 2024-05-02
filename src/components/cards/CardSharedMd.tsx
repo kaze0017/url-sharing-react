@@ -3,6 +3,11 @@ import { SharedLinkType } from "../../lib/interfaces";
 import { IoIosLink } from "react-icons/io";
 import ProfilePicture from "../ProfilePicture";
 import CardDetailIcons from "./CardDetailIcons";
+import GradientIcon from "../customIcons/GradientIcon";
+import { CiPlay1 } from "react-icons/ci";
+import { CiCamera } from "react-icons/ci";
+// import Link from "../home/mainPanel/feed/Link";
+import { Link } from "react-router-dom";
 
 interface CardSharedMdProps {
   sharedLink: SharedLinkType;
@@ -23,13 +28,21 @@ export default function CardSharedMd({ sharedLink, width }: CardSharedMdProps) {
       className={mainWrapperClass}
       style={{ width: `${width}px`, height: `${width}px` }}
     >
-      <div className="flex w-full aspect-video">
-        <img
-          src={imgUrl}
-          className="object-cover rounded-md"
-          alt={sharedLink.title}
-        />
-      </div>
+      <Link to={`/sharedLink/${sharedLink.id}`}>
+        <div className="relative flex w-full aspect-video">
+          <div className="absolute top-0 left-0 w-full h-full">
+            <GradientIcon
+              icon={sharedLink.type === "image" ? CiCamera : CiPlay1}
+              size={80}
+            />
+          </div>
+          <img
+            src={imgUrl}
+            className="object-cover rounded-md"
+            alt={sharedLink.title}
+          />
+        </div>
+      </Link>
       <div className="flex flex-col w-full">
         <div className="w-full flex flex-col">
           <h2 className="font-bold text-md uppercase ">{sharedLink.title}</h2>

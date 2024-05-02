@@ -1,5 +1,4 @@
 import React, { createContext, useState } from "react";
-import { user } from "../lib/placeholder-data";
 
 interface AuthContextType {
   auth: { user: string; token: string } | null;
@@ -20,7 +19,7 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [auth, setAuth] = useState<{ user: string; token: string } | null>({
     user: "",
-    token: "hi",
+    token: "",
   });
 
   return (

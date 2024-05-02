@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { motion } from "framer-motion";
 import ProgressBarComp from "../ProgressBarComp";
@@ -8,6 +8,9 @@ import { MdOutlineChangeCircle } from "react-icons/md";
 import { IoCloseOutline } from "react-icons/io5";
 import { CiCirclePlus } from "react-icons/ci";
 import TagSelector from "../TagSelector";
+import AuthContext from "../../context/AuthProvider";
+import axiosInstance from "../../api/axios";
+import { CREATE_URL } from "../../constants";
 
 // Steps
 
@@ -30,16 +33,16 @@ const circleCurrentClass =
 // ******************************************************
 
 interface IFormInput {
-  contentName: string;
+  title: string;
   contentDescription: string;
   hashtags: Array<string>;
-  linkAddressMain: string;
-  linkAddressSecond: string;
-  linkAddressThird: string;
+  url: string;
+  back_up_link_1st: string;
+  back_up_link_2nd: string;
   thumbnail: string;
-  categoryName: string;
-  usernameForAuthentication: string;
-  passwordForAuthentication: string;
+  category: string;
+  url_username: string;
+  url_pass: string;
   defaultPort: string;
   sharingAbility: boolean;
   externalSharingAbility: boolean;
@@ -52,6 +55,9 @@ interface IFormInput {
 
 // AddLinkForm
 export default function AddLinkForm() {
+  const { auth } = useContext(AuthContext);
+  console.log(auth);
+
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const delta = currentStep - previousStep;
@@ -60,19 +66,20 @@ export default function AddLinkForm() {
   );
   const [numberOfLinks, setNumberOfLinks] = useState(1);
 
-  function addMoreLinks() {
+  function addMoreLinks(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
     if (numberOfLinks < 3) {
       setNumberOfLinks(numberOfLinks + 1);
     }
   }
   function handleDeleteSecondLink() {
     setNumberOfLinks(numberOfLinks - 1);
-    register("linkAddressSecond", { value: "" });
+    register("back_up_link_1st", { value: "" });
   }
 
   function handleDeleteThirdLink() {
     setNumberOfLinks(numberOfLinks - 1);
-    register("linkAddressThird", { value: "" });
+    register("back_up_link_2nd", { value: "" });
   }
 
   function resetTheForm() {
@@ -117,7 +124,43 @@ export default function AddLinkForm() {
     if (isValid) {
       // Proceed with form submission
       setCurrentStep(3);
-      console.log(data);
+
+      const formData = new URLSearchParams();
+      formData.append("title", data.title);
+      formData.append("url", data.url);
+      formData.append("content_description", data.contentDescription);
+      formData.append("category", data.category);
+      formData.append("thumbnail", selectedImage);
+      formData.append("hashtags", selectedTags.join(","));
+      formData.append("url_username", data.url_username);
+      formData.append("url_pass", data.url_pass);
+      formData.append("default_port", data.defaultPort);
+      formData.append("sharing_dept_level", data.sharingDeptLevel);
+      formData.append("publication_date", data.publicationDate);
+      formData.append("publication_time", data.publicationTime);
+      formData.append("expiration_date", data.expirationDate);
+      formData.append("expiration_time", data.expirationTime);
+      formData.append("back_up_link_1st", data.back_up_link_1st);
+      formData.append("back_up_link_2nd", data.back_up_link_2nd);
+      formData.append("class_type", "link");
+
+      // const URL = "http://18.224.166.225:8000/link_management/create/";
+
+      try {
+        const response = await axiosInstance.post(
+          CREATE_URL,
+          formData.toString(),
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              auth: auth?.token,
+            },
+          }
+        );
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       // If there are errors, do not proceed with submission
       console.log("Form has errors. Please fill in all required fields.");
@@ -183,13 +226,13 @@ export default function AddLinkForm() {
                 type="text"
                 className={longTextInputClass}
                 placeholder="Content Name"
-                {...register("contentName", {
+                {...register("title", {
                   required: true,
                   maxLength: 20,
                   minLength: 3,
                 })}
               />
-              {errors.contentName && (
+              {errors.title && (
                 <p className="text-red-500 text-xs">
                   Name Should be between 3 and 20 characters
                 </p>
@@ -212,7 +255,7 @@ export default function AddLinkForm() {
                   placeholder="Link Address"
                   className={longTextInputClass}
                   id="linkAddress"
-                  {...register("linkAddressMain", {
+                  {...register("url", {
                     required: {
                       value: true,
                       message: "Link Address is required",
@@ -224,10 +267,8 @@ export default function AddLinkForm() {
                     },
                   })}
                 />
-                {errors.linkAddressMain && (
-                  <p className="text-red-500 text-xs">
-                    {errors.linkAddressMain.message}
-                  </p>
+                {errors.url && (
+                  <p className="text-red-500 text-xs">{errors.url.message}</p>
                 )}
                 <FadeInOut show={numberOfLinks >= 2}>
                   <div className="relative">
@@ -236,7 +277,7 @@ export default function AddLinkForm() {
                       placeholder="Link Address"
                       className={longTextInputClass}
                       id="linkAddress"
-                      {...register("linkAddressSecond")}
+                      {...register("back_up_link_1st")}
                     />
 
                     <IoCloseOutline
@@ -252,7 +293,7 @@ export default function AddLinkForm() {
                       placeholder="Link Address"
                       className={longTextInputClass}
                       id="linkAddress"
-                      {...register("linkAddressThird")}
+                      {...register("back_up_link_2nd")}
                     />
                     <IoCloseOutline
                       className="absolute left-0 top-0 h-full text-2xl text-red-500 cursor-pointer -translate-x-full"
@@ -263,7 +304,7 @@ export default function AddLinkForm() {
 
                 <button
                   className="uppercase text-xs   flex w-full text-blue-500 justify-end cursor-pointer "
-                  onClick={addMoreLinks}
+                  onClick={(event) => addMoreLinks(event)}
                   disabled={numberOfLinks >= 3}
                 >
                   + add another link
@@ -274,7 +315,7 @@ export default function AddLinkForm() {
                 type="text"
                 className={longTextInputClass}
                 placeholder="Category Name"
-                {...register("categoryName")}
+                {...register("category")}
               />
             </div>
             {/* Thumbnail */}
@@ -311,13 +352,13 @@ export default function AddLinkForm() {
             <input
               type="text"
               placeholder="Username For Authentication"
-              {...register("usernameForAuthentication")}
+              {...register("url_username")}
             />
 
             <input
               type="text"
               placeholder="Password For Authentication"
-              {...register("passwordForAuthentication")}
+              {...register("url_pass")}
             />
 
             <input

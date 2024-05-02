@@ -111,3 +111,51 @@ export const settingsMenuLinks: settingsMenuLinkInterface[] = [
     ],
   },
 ];
+
+type mainListType =
+  | "User Profile"
+  | "Notification"
+  | "Privacy & Security"
+  | "Display & interface"
+  | "Account Management";
+
+export const mainList: mainListType[] = [
+  "User Profile",
+  "Notification",
+  "Privacy & Security",
+  "Display & interface",
+  "Account Management",
+];
+
+type subListType =
+  | "Personal Information"
+  | "Organization Information"
+  | "Password & Security"
+  | "contact Information"
+  | "Email Notification"
+  | "Push Notification"
+  | "Sound Notification"
+  | "Privacy settings"
+  | "Data Management"
+  | "Theme & Appearance"
+  | "Language"
+  | "Accessibility"
+  | "Subscription Details"
+  | "Connected Accounts";
+
+export const subList: subListType[] = [
+  "Personal Information",
+  "Organization Information",
+  "Password & Security",
+  "contact Information",
+  "Email Notification",
+  "Push Notification",
+  "Sound Notification",
+  "Privacy settings",
+  "Data Management",
+  "Theme & Appearance",
+  "Language",
+  "Accessibility",
+  "Subscription Details",
+  "Connected Accounts",
+];

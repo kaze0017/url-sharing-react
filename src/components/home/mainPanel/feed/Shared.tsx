@@ -1,19 +1,23 @@
-"use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import CardSharedLg from "../../../cards/CardSharedLg";
 import { getSharedLinks } from "../../../../lib/actions";
 import Search from "./shared/Search";
 import Sort from "./shared/Sort";
 import GrabScroll from "../../../GrabScroll";
-import axios from "../../../../api/axios";
-
+import axiosInstance from "../../../../api/axios";
+import AuthContext from "../../../../context/AuthProvider";
+import { PUBLIC_URL } from "../../../../constants";
 export default function Shared() {
+  const { auth } = useContext(AuthContext);
+  console.log(auth);
+
   const [query, setQuery] = React.useState("");
   const [sort, setSort] = React.useState("saved");
   const [sharedLinksToDisplay, setSharedLinksToDisplay] =
     React.useState(getSharedLinks);
 
-  const URL = "http://18.224.166.225:8000/link_management/public_links/";
+  // const URL = "http://18.224.166.225:8000/link_management/public_links/";
+  // const URL = "http://18.224.166.225:8000/link_management/create/";
 
   useEffect(() => {
     // Filter the shared links based on the query
@@ -26,15 +30,46 @@ export default function Shared() {
     } else setSharedLinksToDisplay(filteredLinks);
   }, [query]);
 
-  async function getSharedLinksFromServer() {
-    try {
-      const response = await axios.get(URL);
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  getSharedLinksFromServer();
+  // async function createLink() {
+  //   const formData = new URLSearchParams();
+  //   formData.append("title", "test");
+  //   formData.append("url", "http://www.sdfsd.com");
+
+  //   const URL = "http://18.224.166.225:8000/link_management/create/";
+
+  //   try {
+  //     const response = await axiosInstance.post(URL, formData.toString(), {
+  //       headers: {
+  //         "Content-Type": "application/x-www-form-urlencoded",
+  //         auth: auth?.token,
+
+  //         // Authorization: "A8Q1AHYJm4MJt2RHuXgfYJJ1m1Q4UPVz",
+  //         // withCredentials: true,
+  //         // Cookie: `sessionid=${sessionId}`,
+  //       },
+  //     });
+
+  //     // const headers = {
+  //     //   "Content-Type": "application/x-www-form-urlencoded",
+  //     //   Authorization: `lMsGvTuefhJOgR9zV970LxUTNVUszorz`, // Include if required
+  //     //   Cookie: `sessionid=${sessionId}`, // Include sessionId as cookie
+  //     // };
+  //     // const response = await fetch(URL, {
+  //     //   method: "POST",
+  //     //   mode: "cors", // "no-cors" mode does not allow to read the response, but it is enough for "POST" requests
+  //     //   headers: {
+  //     //     "Content-Type": "application/x-www-form-urlencoded",
+  //     //     Authorization: `lMsGvTuefhJOgR9zV970LxUTNVUszorz`, // Include if required
+  //     //     Cookie: `sessionid=${sessionId}`, // Include sessionId as cookie
+  //     //   },
+  //     //   body: formData.toString(),
+  //     //   credentials: "include", // Include credentials (cookies)
+  //     // });
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   useEffect(() => {
     console.log(sort);
@@ -51,9 +86,29 @@ export default function Shared() {
     setSharedLinksToDisplay(sortedLinks);
   }, [sort]);
 
+  async function getSharedLinksFromServer() {
+    try {
+      const response = await axiosInstance.get(PUBLIC_URL, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          auth: auth?.token,
+        },
+      });
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getSharedLinksFromServer();
+  }, []);
+
   return (
     <div className="w-full flex flex-col gap-2 p-2">
       <Search query={query} setQuery={setQuery} />
+      {/* <button onClick={createLink}>create</button> */}
       <Sort setSort={setSort} />
       {/* <SliderGrid
         CardComponent={CardSharedLg}

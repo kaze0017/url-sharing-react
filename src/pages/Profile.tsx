@@ -1,16 +1,20 @@
 import { getPersonById } from "../lib/actions";
 import { Person } from "../lib/interfaces";
 import { getSharedLinks } from "../lib/actions";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import GrabScroll from "../components/GrabScroll";
 import CardSharedMd from "../components/cards/CardSharedMd";
 import CardSharedLg from "../components/cards/CardSharedLg";
 import PageTitle from "../components/profile/PageTitle";
-// import ControlBtn from "../components/profile/ControlBtn";
 import Controls from "../components/profile/Controls";
+import AuthContext from "../context/AuthProvider";
+import axiosInstance from "../api/axios";
+import { USER_URL } from "../constants";
 
 export default function Profile() {
+  const { auth } = useContext(AuthContext);
+
   const params = useParams();
   const { userId } = params as { userId: string };
 
@@ -27,6 +31,7 @@ export default function Profile() {
   const [activeType, setActiveType] = useState("all");
   const [query, setQuery] = useState<string>("");
 
+  // const URL = "http://18.224.166.225:8000/link_management/user_links/";
 
   function handleType(type: string) {
     if (type === "all") {
@@ -53,6 +58,24 @@ export default function Profile() {
     );
     setLinksToDisplay(filteredLinks);
   }, [query]);
+
+async function fetchUserLinksFromServer() {
+  try {
+    const response = await axiosInstance.get(USER_URL, {
+      headers: {
+        auth: auth?.token,
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+useEffect(() => {
+  fetchUserLinksFromServer();
+}, []);
+
 
   return (
     <div className="flex flex-col gap-2 flex-grow">

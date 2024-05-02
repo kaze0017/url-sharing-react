@@ -14,6 +14,35 @@ export interface Person {
 }
 
 export interface SharedLinkType {
+  // id: number;
+  // title: string;
+  // owner: string;
+  // audience: true | false | null;
+  // url: string;
+  // back_up_link_1st: string | null;
+  // back_up_link_2nd: string | null;
+  // back_up_link_3rd: string | null;
+  // category: string | null;
+  // class_type: "link" | "category";
+  // description: string | null;
+  // expirationDate: string | null;
+  // health_backup_1st: true | false | null;
+  // health_backup_2nd: true | false | null;
+  // health_backup_3rd: true | false | null;
+  // health_main_url: true | false | null;
+  // icon_id: string | null;
+  // likeCount: number;
+  // publicationDate: string;
+  // rankCount: number;
+  // savedCount: number;
+  // seenCount: number;
+  // sharedCount: number;
+  // tags: Array<string> | null;
+  // thumbnail: string | null;
+  // url_pass: string | null;
+  // url_type: "article" | "video" | "podcast" | "image" | "other";
+  // url_username: string | null;
+
   id: number;
   title: string;
   class?: "category" | "link"; //links for now
@@ -52,7 +81,7 @@ export interface SharedLinkType {
   publicationDate?: string;
   expirationDate?: string;
 
-  sharedLinks?: SharedLinkType[];  //Drop this
+  sharedLinks?: SharedLinkType[]; //Drop this
 
   tags?: string[] | ["tag1", "tag2", "tag3"];
   categories?: string | "category1";
@@ -63,9 +92,8 @@ export interface SharedLinkType {
   suggestedBy?: Person; //limited fields not the person object
   audience?: "public" | "private" | "protected";
 
-  QRCode?: string;  //Separate API for this
+  QRCode?: string; //Separate API for this
   ShortURL?: string; //Separate API for this
-
 }
 
 export interface CategoryType {

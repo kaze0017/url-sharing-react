@@ -13,6 +13,7 @@ import CreateLink from "./components/linkManagement/CreateLink";
 import MainPanel from "./components/linkManagement/MainPanel";
 import MemberManagement from "./pages/MemberManagement";
 import Profile from "./pages/Profile";
+import SharedLink from "./pages/SharedLink";
 
 function App() {
   const mainPanelWrapper =
@@ -37,6 +38,7 @@ function App() {
               <Route path="/MemberManagement" element={<MemberManagement />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/profile/:userId" element={<Profile />} />
+              <Route path="/sharedLink/:linkId" element={<SharedLink />} />
             </Route>
           </Route>
         </Route>

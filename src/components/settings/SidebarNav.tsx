@@ -1,10 +1,15 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import { settingsMenuLinks } from "../../lib/SettingMenus";
 import AccordionMenu from "../menus/AccordionMenu";
 import SearchBar from "../SearchBar";
 import { useDraggable } from "react-use-draggable-scroll";
+import { SettingContext } from "../../context/SettingsProvider";
 
 export default function SidebarNav() {
+
+  const { main, sub } = useContext(SettingContext);
+  const { setMain, setSub } = useContext(SettingContext);
+  
   const [query, setQuery] = React.useState("");
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;

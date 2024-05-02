@@ -1,4 +1,5 @@
 import { SharedLinkType } from "../../lib/interfaces";
+import { Link } from "react-router-dom";
 
 export interface CardHotProps {
   link: SharedLinkType;
@@ -37,12 +38,14 @@ function CardHot({ link, variant, placeholder }: CardHotProps) {
 
   return (
     <div className={cardWrapper}>
-      <img
-        className={cardImgClass}
-        src={thumbnail}
-        alt={link.title}
-        data-link={link.linkUrls.primary.url}
-      />
+      <Link to={`/sharedLink/${link.id}`} className="w-full h-full">
+        <img
+          className={cardImgClass}
+          src={thumbnail}
+          alt={link.title}
+          data-link={link.linkUrls.primary.url}
+        />
+      </Link>
     </div>
   );
 }

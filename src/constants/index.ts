@@ -2,6 +2,15 @@ export const USER_REGEX = /^[a-zA-Z0-9]{3,20}$/;
 
 export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
-export const REGISTER_URL = "http://18.224.166.225:8000/auth/register/";
+const IP = "3.143.146.42";
 
-export const LOGIN_URL = "http://18.224.166.225:8000/auth/login/";
+export const REGISTER_URL = "http://3.143.146.42:8000/auth/register/";
+
+export const LOGIN_URL = "http://3.143.146.42:8000/auth/login/";
+
+export const CREATE_URL = "http://3.143.146.42:8000/link_management/create/";
+
+export const PUBLIC_URL =
+  "http://3.143.146.42:8000/link_management/public_links/";
+
+export const USER_URL = "http://3.143.146.42:8000/link_management/user_links/";

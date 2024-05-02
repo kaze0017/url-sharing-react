@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { settingsMenuLinkInterface } from "../../lib/SettingMenus";
+import { SettingContext } from "../../context/SettingsProvider";
+import { mainList } from "../../lib/SettingMenus";
+import { subList } from "../../lib/SettingMenus";
 
 interface AccordionMenuProps {
   menu: settingsMenuLinkInterface;
@@ -9,6 +12,26 @@ interface AccordionMenuProps {
 export default function AccordionMenu({ menu, query }: AccordionMenuProps) {
   const [accordionOpen, setAccordionOpen] = useState(false);
   const submenuLength = menu.submenus?.length || 0;
+
+  const { main, setMain, sub, setSub } = useContext(SettingContext);
+
+  function handleMainMenuClick(title: string) {
+    mainList.forEach((main) => {
+      if (main === title) {
+        setMain(main);
+      }
+    });
+
+    setAccordionOpen(!accordionOpen);
+  }
+
+  function handleSubMenuClick(title: string) {
+    subList.forEach((submenu) => {
+      if (submenu === title) {
+        setSub(submenu);
+      }
+    });
+  }
 
   useEffect(() => {
     if (query) {
@@ -31,7 +54,7 @@ export default function AccordionMenu({ menu, query }: AccordionMenuProps) {
     <div className="py-1 uppercase">
       <button
         className="p-1 flex w-full font-bold text-sm items-center gap-2 text-gray-500 uppercase hover:bg-slate-300"
-        onClick={() => setAccordionOpen(!accordionOpen)}
+        onClick={() => handleMainMenuClick(menu.title)}
       >
         {menu.icon && <span>{React.createElement(menu.icon)}</span>}{" "}
         <span>{menu.title}</span>
@@ -53,14 +76,17 @@ export default function AccordionMenu({ menu, query }: AccordionMenuProps) {
             key={submenu.title}
             className="overflow-hidden hover:bg-slate-300"
           >
-            <a href={submenu.url}>
+            <button
+              onClick={() => handleSubMenuClick(submenu.title)}
+              className="p-1 w-full"
+            >
               <span>
                 {submenu.icon && (
                   <span>{React.createElement(submenu.icon)}</span>
                 )}
               </span>
               <span>{submenu.title}</span>
-            </a>
+            </button>
           </div>
         ))}
       </div>

@@ -11,7 +11,7 @@ export default function PanelMiddle() {
     <div className={wrapperClass}>
       <PanelTop mode={panelTopMode} />
       <PanelMain mode={panelMainMode} />
-      <ActionBtns setMode={setPanelMainMode} panelMainMode={panelMainMode} />
+      {/* <ActionBtns setMode={setPanelMainMode} panelMainMode={panelMainMode} /> */}
     </div>
   );
 }

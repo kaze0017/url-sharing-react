@@ -1,0 +1,1 @@
+ssh ec2-user@ec2-18-224-166-225.us-east-2.compute.amazonaws.com -i D:/FAC/UrlShare-1/key.pem

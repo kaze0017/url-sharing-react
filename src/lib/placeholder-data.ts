@@ -172,6 +172,43 @@ export const people: Person[] = [
 
 // Shared Links
 
+
+//  id: number;
+//  title: string;
+//  owner: string;
+//  audience: true | false | null;
+//  url: string;
+//  back_up_link_1st: string | null;
+//  back_up_link_2nd: string | null;
+//  back_up_link_3rd: string | null;
+//  category: string | null;
+//  class_type: "link" | "category";
+//  description: string | null;
+//  expirationDate: string | null;
+//  health_backup_1st: true | false | null;
+//  health_backup_2nd: true | false | null;
+//  health_backup_3rd: true | false | null;
+//  health_main_url: true | false | null;
+//  icon_id: string | null;
+//  likeCount: number;
+//  publicationDate: string;
+//  rankCount: number;
+//  savedCount: number;
+//  seenCount: number;
+//  sharedCount: number;
+//  tags: Array<string> | null;
+//  thumbnail: string | null;
+//  url_pass: string | null;
+//  url_type: "article" | "video" | "podcast" | "image" | "other";
+//  url_username: string | null;
+
+
+
+
+
+
+
+
 export const sharedLinks: SharedLinkType[] = [
   {
     id: 0,
