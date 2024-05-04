@@ -18,7 +18,7 @@ const PanelLeft: React.FC<PanelLeftProps> = ({ className }) => {
   const [toggledCollapse, setToggleCollapse] = useState(false);
 
   // panel css classes
-  const panelWrapper = `flex flex-col items-center gap-1 p-1 pb-2  transition-500 grow h-full overflow-x-hidden overflow-y-hidden scrollbar-hide
+  const panelWrapper = `flex flex-col items-center gap-1 p-1 pb-2  transition-300 grow h-full overflow-x-hidden overflow-y-hidden scrollbar-hide
   ${toggledCollapse ? "min-w-20 w-20 max-w-20" : "min-w-60 w-60 max-w-60"} relative
   panel-light
   text-gray-900

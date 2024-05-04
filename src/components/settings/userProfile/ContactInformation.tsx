@@ -1,14 +1,19 @@
+import { useState } from "react";
 import SubmenuTitle from "../SubmenuTitle";
+import EditableField from "../EditableField";
 
 export default function ContactInformation() {
+  const [email, setEmail] = useState<string>("Email");
+  const [phone, setPhone] = useState<string>("Phone");
+  const [address, setAddress] = useState<string>("Address");
   return (
     <div className="flex flex-col w-full">
       <SubmenuTitle title="Contact Information" />
       <div className="flex gap-2">
         <div className="flex flex-col">
-          <div className="">Email</div>
-          <div className="">Phone</div>
-          <div className="">Address</div>
+          <EditableField title="Email" value={email} setValue={setEmail} />
+          <EditableField title="Phone" value={phone} setValue={setPhone} />
+          <EditableField title="Address" value={address} setValue={setAddress} />
         </div>
       </div>
     </div>

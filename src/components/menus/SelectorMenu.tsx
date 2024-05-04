@@ -1,6 +1,6 @@
 
 interface SelectorMenuProps {
-  setSelected: React.Dispatch<React.SetStateAction<string>>;
+  setSelected: React.Dispatch<React.SetStateAction<any>>;
   setShow: React.Dispatch<React.SetStateAction<string>>;
   selection: string[];
 }

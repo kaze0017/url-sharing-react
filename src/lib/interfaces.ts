@@ -101,3 +101,12 @@ export interface CategoryType {
   title: string;
   owner: Person;
 }
+
+export interface groupType {
+  id: number;
+  name: string;
+  members: Person[];
+  description: string;
+  color: string;
+  tags: string[];
+}

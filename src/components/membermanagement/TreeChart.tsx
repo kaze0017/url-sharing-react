@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { select, hierarchy, tree, linkVertical, drag } from "d3";
 import { useDraggable } from "react-use-draggable-scroll";
+import { useDrop } from "react-dnd";
+import { Person } from "../../lib/interfaces";
 
 interface TreeNode {
   id: number;
@@ -14,13 +16,31 @@ interface TreeChartProps {
 }
 
 export default function TreeChart({ data }: TreeChartProps) {
+
   const svgRef = useRef<SVGSVGElement>(null);
+
   const [datatoRender, setDatatoRender] = useState<TreeNode>(data);
 
-
+// Scrollable div
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
+
+
+
+ const [{ isOver }, drop] = useDrop(() => ({
+   accept: "PERSON",
+   drop: (item: { type: string; person: Person }) => {
+     // Access the dropped person object
+     const { person } = item;
+     // Add the person to the deletedUsers array
+     console.log("Drop event", person);
+   },
+   collect: (monitor) => ({
+     isOver: !!monitor.isOver(),
+   }),
+ }));
+
 
 
   useEffect(() => {
@@ -43,7 +63,8 @@ export default function TreeChart({ data }: TreeChartProps) {
           .attr("y", event.y);
       })
       .on("end", function (event) {
-        // chech if the dragged element is in the trash area
+        
+        // Delete
         let deleteNode = false;
         if (
           event.x > 500 - 30 &&
@@ -86,6 +107,7 @@ export default function TreeChart({ data }: TreeChartProps) {
 
     // Links svg
     function update() {
+
       svg.selectAll("*").remove();
 
       svg
@@ -95,14 +117,14 @@ export default function TreeChart({ data }: TreeChartProps) {
         .append("path")
         .attr("class", "link")
         .attr("d", linkGenerator as any)
-        .attr("stroke-dasharray", function () {
-          const length: any = this.getTotalLength();
-          return `${length} ${length}`;
-        })
-        .attr("stroke-offset", function () {
-          const length: any = this.getTotalLength();
-          return `${length}`;
-        })
+        // .attr("stroke-dasharray", function () {
+        //   const length: any = this.getTotalLength();
+        //   return `${length} ${length}`;
+        // })
+        // .attr("stroke-offset", function () {
+        //   const length: any = this.getTotalLength();
+        //   return `${length}`;
+        // })
         .transition()
         .duration(1000)
         .attr("stroke-dashoffset", 0)
@@ -144,6 +166,9 @@ export default function TreeChart({ data }: TreeChartProps) {
         .call(dragHandler as any)
         .on("drop", (e, d) => handleDrop({ e, d }))
         .on("click", (e, d) => handleClick({ e, d }));
+        
+        
+
 
       // Add a indigo color trash icon to the bottom right corner of the svg
       svg
@@ -161,6 +186,9 @@ export default function TreeChart({ data }: TreeChartProps) {
     function handleDrop({ e, d }: any) {
       // 'd' represents the current data bound to the SVG element
       e.preventDefault(); // Prevent default drop behavior
+
+      console.log("Drop event", d, e);
+
 
       const dragDataString = e.dataTransfer.getData("application/json");
       const dragData = JSON.parse(dragDataString);

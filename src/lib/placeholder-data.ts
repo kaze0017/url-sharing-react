@@ -172,7 +172,6 @@ export const people: Person[] = [
 
 // Shared Links
 
-
 //  id: number;
 //  title: string;
 //  owner: string;
@@ -201,13 +200,6 @@ export const people: Person[] = [
 //  url_pass: string | null;
 //  url_type: "article" | "video" | "podcast" | "image" | "other";
 //  url_username: string | null;
-
-
-
-
-
-
-
 
 export const sharedLinks: SharedLinkType[] = [
   {
@@ -654,3 +646,118 @@ export const thumbnails = [
 ];
 
 export const user: Person = people[0];
+
+export const groupOne = {
+  id: 1,
+  name: "Group One",
+  members: [people[0], people[1], people[2]],
+  description: "This is the first group",
+  color: "red",
+  tags: ["group", "one", "red"],
+};
+
+export const groupTwo = {
+  id: 2,
+  name: "Group Two",
+  members: [people[3], people[4], people[5], people[6], people[7]],
+  description: "This is the second group",
+  color: "blue",
+  tags: ["group", "two", "blue"],
+};
+
+export const groupThree = {
+  id: 3,
+  name: "Group Three",
+  members: [people[8], people[9]],
+  description: "This is the third group",
+  color: "green",
+  tags: ["group", "three", "green"],
+};
+
+export const groupDefault = {
+  id: 0,
+  name: "Default Group",
+  members: [people[4]],
+  description: "This is the default group",
+  color: "gray",
+  tags: [],
+};
+
+export function getGroup(id: string | number) {
+  if (typeof id === "string") {
+    id = parseInt(id);
+  }
+  switch (id) {
+    case 0:
+      return groupDefault;
+    case 1:
+      return groupOne;
+    case 2:
+      return groupTwo;
+    case 3:
+      return groupThree;
+    default:
+      return null;
+  }
+}
+
+export const treeData = {
+  id: 31,
+  name: "John Doe",
+  photo: people[4].photo,
+  children: [
+    {
+      id: 32,
+      name: "Jane Smith",
+      photo: people[2].photo,
+      children: [
+        {
+          id: 33,
+          name: "John Smith",
+          photo: people[3].photo,
+          children: [
+            {
+              id: 34,
+              name: "Jane Doe",
+              photo: people[4].photo,
+            },
+            {
+              id: 35,
+              name: "Jane Doe",
+              photo: people[5].photo,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 36,
+      name: "Jane Smith",
+      photo: people[6].photo,
+    },
+    {
+      id: 37,
+      name: "Jane Smith",
+      photo: people[3].photo,
+      children: [
+        {
+          id: 38,
+          name: "John Smith",
+          photo: people[6].photo,
+          children: [
+            {
+              id: 39,
+              name: "Jane Doe",
+              photo: people[5].photo,
+            },
+            {
+              id: 40,
+              name: "Jane Doe",
+              photo: people[4].photo,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};

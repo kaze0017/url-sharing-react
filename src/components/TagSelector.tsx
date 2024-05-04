@@ -1,15 +1,17 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FadeInOut from "./login/FadeInOut";
 import { IoIosClose } from "react-icons/io";
 
 interface TagSelectorProps {
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   selectedTags: string[];
+  editMode?: boolean;
 }
 
 export default function TagSelector({
   setSelectedTags,
   selectedTags,
+  editMode = true,
 }: TagSelectorProps) {
   const MaxTag = 5;
   const [showWarning, setShowWarning] = useState<boolean>(false);
@@ -98,6 +100,9 @@ export default function TagSelector({
         }}
         className="text-xs w-full"
         placeholder="Add tags..."
+        readOnly={!editMode}
+        style={!editMode ? { display: "none" } : {}}
+        name="tags"
       />
 
       <FadeInOut show={showWarning} duration={1000}>

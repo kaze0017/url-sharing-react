@@ -1,7 +1,8 @@
 import React from 'react'
+import UnderConstruction from '../../UnderConstruction'
 
 export default function Notifications() {
   return (
-    <div>Notifications</div>
+    <UnderConstruction />
   )
 }

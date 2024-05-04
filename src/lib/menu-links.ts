@@ -25,8 +25,8 @@ const menuLinks: menuLinkInterface[] = [
   },
   {
     id: 3,
-    title: "Member Management",
-    url: "/membermanagement",
+    title: "Networks",
+    url: "/networks",
     icon: BiLogoGraphql,
   },
   {

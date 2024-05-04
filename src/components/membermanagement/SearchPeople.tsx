@@ -1,16 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { getNPeople } from "../../lib/actions";
 import ProfilePicture from "../ProfilePicture";
 import Draggable from "./Draggable";
 import { useDraggable } from "react-use-draggable-scroll";
+import DndPerson from "./editors/DnDPersonName";
+import SearchBar from "../SearchBar";
 
-interface Person {
-  id: number;
-  name: string;
-  photo: string;
-}
+import { Person } from "../../lib/interfaces";
 
 export default function SearchPeople() {
+  const [query, setQuery] = useState<string>("");
   const people = getNPeople(7);
   const [peopleToDisplay, setPeopleToDisplay] = useState<Person[]>([]);
 
@@ -25,6 +24,16 @@ export default function SearchPeople() {
     );
     setPeopleToDisplay(filteredPeople);
   }
+  useEffect(() => {
+    if (query === "") {
+      setPeopleToDisplay(people);
+      return;
+    }
+    const filteredPeople = people.filter((person) =>
+      person.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setPeopleToDisplay(filteredPeople);
+  }, [query]);
 
   // const ref =
   //   useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
@@ -34,29 +43,32 @@ export default function SearchPeople() {
 
   return (
     <div className="flex panel-light p-2 h-full w-[250px] items-center flex-col gap-2">
+      {/* <div className="flex panel-light p-2 h-full w-[250px] items-center flex-col gap-2 "> */}
       {/* search box */}
-      <input
+      {/* <input
         type="text"
         placeholder="Search people"
         onChange={handleSearch}
         className="w-[225] rounded-sm"
-      />
+      /> */}
+      <SearchBar query={query} setQuery={setQuery} />
 
       {/* display people */}
       {/* <div className={mainWrapperClass} {...events} ref={ref}> */}
       <div className={mainWrapperClass}>
         {peopleToDisplay?.map((person, index) => (
-          <Draggable dragObject={person} key={index}>
-            <div className="flex p-1 w-full items-center gap-1 border border-indigo-200">
-              <ProfilePicture
-                size={32}
-                imageUrl={person.photo}
-                alt={person.name}
-                id={person.id}
-              />
-              <p>{person.name}</p>
-            </div>
-          </Draggable>
+          // <Draggable dragObject={person} key={index}>
+          //   <div className="flex p-1 w-full items-center gap-1 border border-indigo-200">
+          //     <ProfilePicture
+          //       size={32}
+          //       imageUrl={person.photo}
+          //       alt={person.name}
+          //       id={person.id}
+          //     />
+          //     <p>{person.name}</p>
+          //   </div>
+          // </Draggable>
+          <DndPerson person={person} key={index} />
         ))}
       </div>
     </div>

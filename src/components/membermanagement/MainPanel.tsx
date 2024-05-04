@@ -1,82 +1,49 @@
-"use client";
-import React from "react";
-import { getNPeople } from "../../lib/actions";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import TreeChart from "./TreeChart";
-import SearchPeople from "./SearchPeople";
-const people = getNPeople(7);
-
-const orgData = {
-  id: 31,
-  name: "John Doe",
-  photo: people[4].photo,
-  children: [
-    {
-      id: 32,
-      name: "Jane Smith",
-      photo: people[2].photo,
-      children: [
-        {
-          id: 33,
-          name: "John Smith",
-          photo: people[3].photo,
-          children: [
-            {
-              id: 34,
-              name: "Jane Doe",
-              photo: people[4].photo,
-            },
-            {
-              id: 35,
-              name: "Jane Doe",
-              photo: people[5].photo,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 36,
-      name: "Jane Smith",
-      photo: people[6].photo,
-    },
-    {
-      id: 37,
-      name: "Jane Smith",
-      photo: people[3].photo,
-      children: [
-        {
-          id: 38,
-          name: "John Smith",
-          photo: people[6].photo,
-          children: [
-            {
-              id: 39,
-              name: "Jane Doe",
-              photo: people[5].photo,
-            },
-            {
-              id: 40,
-              name: "Jane Doe",
-              photo: people[4].photo,
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
+import { useContext, useEffect } from "react";
+import { NetworksContext } from "../../context/NetworksProvider";
+import FeedMenu from "./FeedMenu";
+import Graph from "./graphs/Graph";
+import GroupSm from "../groups/GroupSm";
+import { groupOne, groupTwo, groupThree } from "../../lib/placeholder-data";
+import { networkMenu } from "../../lib/NetworkMenu";
+import { Link } from "react-router-dom";
+import NetworksProvider from "../../context/NetworksProvider";
 
 export default function MainPanel() {
-  const data = orgData;
+  const groupsToDisplay = [groupOne, groupTwo, groupThree];
+
+  const { type, view } = useContext(NetworksContext);
+
+  useEffect(() => {
+    console.log("Type: ", type);
+  }, [type]);
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="overflow-hidden flex flex-grow w-full p-2 gap-2">
-        <SearchPeople />
-        <TreeChart data={data} />
-      </div>
-    </DndProvider>
+    <div className="flex flex-col gap-1 w-full h-full p-2 font-bold">
+      <FeedMenu query="" setQuery={() => {}} />
+      {type === "all" || type === "graphs" ? (
+        <div className="flex flex-col w-full gap-2">
+          <h2 className="text-gray-800 uppercase">Graphs</h2>
+          <div className="flex flex-wrap gap-2 w-full">
+            <Graph width={300} height={300} />
+            <Graph width={300} height={300} />
+          </div>
+        </div>
+      ) : null}
+
+      {type === "all" || type === "groups" ? (
+        <div className="flex flex-col w-full gap-2">
+          <h2 className="text-gray-800 uppercase">Groups</h2>
+          <div className="flex flex-wrap gap-2 w-full">
+            {groupsToDisplay.map((group) => {
+              return (
+                <Link to={`/networks/editor/${"g" + group.id}`} key={group.id}>
+                  <GroupSm group={group} />
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+    </div>
   );
 }
