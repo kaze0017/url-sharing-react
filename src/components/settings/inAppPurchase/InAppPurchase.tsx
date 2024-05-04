@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { SettingContext } from "../../../context/SettingsProvider";
-import SubscriptionDetails from "./SubscriptionDetails";
-import ConnectedAccounts from "./ConnectedAccounts";
 
-export default function AccountManagement() {
+import MyCredit from "./MyCredit";
+import MyPromotions from "./MyPromotions";
+
+export default function InAppPurchase() {
   const { sub, setSub } = useContext(SettingContext);
   const mainWrapperClass =
     "flex flex-col items-center justify-center w-full h-full uppercase text-2xl";
@@ -14,22 +15,16 @@ export default function AccountManagement() {
     <div className={mainWrapperClass}>
       {sub === "" && (
         <div className={menuWrapperClass}>
-          <button
-            className={btnClass}
-            onClick={() => setSub("Subscription Details")}
-          >
-            Subscription Details
+          <button className={btnClass} onClick={() => setSub("My Credit")}>
+            My Credit
           </button>
-          <button
-            className={btnClass}
-            onClick={() => setSub("Connected Accounts")}
-          >
-            Connected Accounts
+          <button className={btnClass} onClick={() => setSub("My Promotions")}>
+            My Promotions
           </button>
         </div>
       )}
-      {sub === "Subscription Details" && <SubscriptionDetails />}
-      {sub === "Connected Accounts" && <ConnectedAccounts />}
+      {sub === "My Credit" && <MyCredit />}
+      {sub === "My Promotions" && <MyPromotions />}
     </div>
   );
 }

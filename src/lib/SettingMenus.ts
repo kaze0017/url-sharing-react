@@ -7,10 +7,10 @@ import React from "react";
 
 export interface settingsMenuLinkInterface {
   id: number;
-  title: string;
+  title: mainListType;
   url: string;
   icon?: React.ComponentType;
-  submenus?: { title: string; url: string; icon?: IconType }[];
+  submenus?: { title: subListType; url: string; icon?: IconType }[];
 }
 
 export const settingsMenuLinks: settingsMenuLinkInterface[] = [
@@ -33,7 +33,7 @@ export const settingsMenuLinks: settingsMenuLinkInterface[] = [
         url: "/dashboard/settings/profile/password",
       },
       {
-        title: "contact Information",
+        title: "Contact Information",
         url: "/dashboard/settings/profile/contact",
       },
     ],
@@ -110,14 +110,112 @@ export const settingsMenuLinks: settingsMenuLinkInterface[] = [
       },
     ],
   },
+  {
+    id: 6,
+    title: "Communication",
+    url: "/dashboard/settings/communication",
+    icon: FaRegChartBar,
+    submenus: [
+      {
+        title: "Chat Settings",
+        url: "/dashboard/settings/communication/chat",
+      },
+      {
+        title: "Email Preferences",
+        url: "/dashboard/settings/communication/email",
+      },
+    ],
+  },
+  {
+    id: 7,
+    title: "Advanced Settings",
+    url: "/dashboard/settings/advanced",
+    icon: FaRegChartBar,
+    submenus: [
+      {
+        title: "Network Settings",
+        url: "/dashboard/settings/advanced/network",
+      },
+    ],
+  },
+  {
+    id: 8,
+    title: "Help & Support",
+    url: "/dashboard/settings/help",
+    icon: FaRegChartBar,
+    submenus: [
+      {
+        title: "FAQs and User Guides",
+        url: "/dashboard/settings/help/faqs",
+      },
+      {
+        title: "Customer Support",
+        url: "/dashboard/settings/help/support",
+      },
+    ],
+  },
+  {
+    id: 9,
+    title: "My Interests",
+    url: "/dashboard/settings/interests",
+    icon: FaRegChartBar,
+    submenus: [
+      {
+        title: "My Interests",
+        url: "/dashboard/settings/interests/myinterests",
+      },
+      {
+        title: "Blocked Contents",
+        url: "/dashboard/settings/interests/blocked",
+      },
+    ],
+  },
+  {
+    id: 10,
+    title: "Identity & Verification",
+    url: "/dashboard/settings/identity",
+    icon: FaRegChartBar,
+    submenus: [
+      {
+        title: "My Identity",
+        url: "/dashboard/settings/identity/myidentity",
+      },
+      {
+        title: "Verification Status",
+        url: "/dashboard/settings/identity/verification",
+      },
+    ],
+  },
+  {
+    id: 11,
+    title: "In-App Purchase",
+    url: "/dashboard/settings/purchase",
+    icon: FaRegChartBar,
+    submenus: [
+      {
+        title: "My Credit",
+        url: "/dashboard/settings/purchase/credit",
+      },
+      {
+        title: "My Promotions",
+        url: "/dashboard/settings/purchase/promotions",
+      },
+    ],
+  },
 ];
 
-type mainListType =
+export type mainListType =
   | "User Profile"
   | "Notification"
   | "Privacy & Security"
   | "Display & interface"
-  | "Account Management";
+  | "Account Management"
+  | "Communication"
+  | "Advanced Settings"
+  | "Help & Support"
+  | "My Interests"
+  | "Identity & Verification"
+  | "In-App Purchase";
 
 export const mainList: mainListType[] = [
   "User Profile",
@@ -125,13 +223,19 @@ export const mainList: mainListType[] = [
   "Privacy & Security",
   "Display & interface",
   "Account Management",
+  "Communication",
+  "Advanced Settings",
+  "Help & Support",
+  "My Interests",
+  "Identity & Verification",
+  "In-App Purchase",
 ];
 
-type subListType =
+export type subListType =
   | "Personal Information"
   | "Organization Information"
   | "Password & Security"
-  | "contact Information"
+  | "Contact Information"
   | "Email Notification"
   | "Push Notification"
   | "Sound Notification"
@@ -141,13 +245,24 @@ type subListType =
   | "Language"
   | "Accessibility"
   | "Subscription Details"
-  | "Connected Accounts";
+  | "Connected Accounts"
+  | "Chat Settings"
+  | "Email Preferences"
+  | "Network Settings"
+  | "FAQs and User Guides"
+  | "Customer Support"
+  | "My Interests"
+  | "Blocked Contents"
+  | "My Identity"
+  | "Verification Status"
+  | "My Credit"
+  | "My Promotions";
 
 export const subList: subListType[] = [
   "Personal Information",
   "Organization Information",
   "Password & Security",
-  "contact Information",
+  "Contact Information",
   "Email Notification",
   "Push Notification",
   "Sound Notification",
@@ -158,4 +273,15 @@ export const subList: subListType[] = [
   "Accessibility",
   "Subscription Details",
   "Connected Accounts",
+  "Chat Settings",
+  "Email Preferences",
+  "Network Settings",
+  "FAQs and User Guides",
+  "Customer Support",
+  "My Interests",
+  "Blocked Contents",
+  "My Identity",
+  "Verification Status",
+  "My Credit",
+  "My Promotions",
 ];

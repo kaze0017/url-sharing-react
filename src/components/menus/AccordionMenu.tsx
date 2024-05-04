@@ -2,35 +2,44 @@ import React, { useEffect, useState, useContext } from "react";
 import { settingsMenuLinkInterface } from "../../lib/SettingMenus";
 import { SettingContext } from "../../context/SettingsProvider";
 import { mainList } from "../../lib/SettingMenus";
+import { mainListType } from "../../lib/SettingMenus";
+import { subListType } from "../../lib/SettingMenus";
 import { subList } from "../../lib/SettingMenus";
+import { set } from "react-hook-form";
 
 interface AccordionMenuProps {
   menu: settingsMenuLinkInterface;
   query?: string;
+  setMain?: React.Dispatch<React.SetStateAction<mainListType>>;
+  setSub?: React.Dispatch<React.SetStateAction<subListType | "">>;
 }
 
-export default function AccordionMenu({ menu, query }: AccordionMenuProps) {
+export default function AccordionMenu({
+  menu,
+  query = "",
+  setMain,
+  setSub,
+}: AccordionMenuProps) {
   const [accordionOpen, setAccordionOpen] = useState(false);
   const submenuLength = menu.submenus?.length || 0;
 
-  const { main, setMain, sub, setSub } = useContext(SettingContext);
-
   function handleMainMenuClick(title: string) {
-    mainList.forEach((main) => {
-      if (main === title) {
-        setMain(main);
+    if (setMain) {
+      setMain(menu.title as mainListType);
+      if (setSub) {
+        setSub("");
       }
-    });
-
+    }
     setAccordionOpen(!accordionOpen);
   }
 
   function handleSubMenuClick(title: string) {
-    subList.forEach((submenu) => {
-      if (submenu === title) {
-        setSub(submenu);
-      }
-    });
+    if (setSub) {
+      setSub(title as subListType);
+    }
+    if (setMain) {
+      setMain(menu.title as mainListType);
+    }
   }
 
   useEffect(() => {
@@ -51,7 +60,7 @@ export default function AccordionMenu({ menu, query }: AccordionMenuProps) {
     }
   }, [query]);
   return (
-    <div className="py-1 uppercase">
+    <div className="py-1 uppercase text-left">
       <button
         className="p-1 flex w-full font-bold text-sm items-center gap-2 text-gray-500 uppercase hover:bg-slate-300"
         onClick={() => handleMainMenuClick(menu.title)}
@@ -74,11 +83,11 @@ export default function AccordionMenu({ menu, query }: AccordionMenuProps) {
         {menu.submenus?.map((submenu) => (
           <div
             key={submenu.title}
-            className="overflow-hidden hover:bg-slate-300"
+            className="overflow-hidden hover:bg-slate-300  "
           >
             <button
               onClick={() => handleSubMenuClick(submenu.title)}
-              className="p-1 w-full"
+              className="p-1 w-full  text-left"
             >
               <span>
                 {submenu.icon && (

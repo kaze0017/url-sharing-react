@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { SettingContext } from "../../../context/SettingsProvider";
-import SubscriptionDetails from "./SubscriptionDetails";
-import ConnectedAccounts from "./ConnectedAccounts";
 
-export default function AccountManagement() {
+import NetworkSettings from "./NetworkSettings";
+
+export default function AdvancedSettings() {
   const { sub, setSub } = useContext(SettingContext);
   const mainWrapperClass =
     "flex flex-col items-center justify-center w-full h-full uppercase text-2xl";
@@ -16,20 +16,13 @@ export default function AccountManagement() {
         <div className={menuWrapperClass}>
           <button
             className={btnClass}
-            onClick={() => setSub("Subscription Details")}
+            onClick={() => setSub("Network Settings")}
           >
-            Subscription Details
-          </button>
-          <button
-            className={btnClass}
-            onClick={() => setSub("Connected Accounts")}
-          >
-            Connected Accounts
+            Network Settings
           </button>
         </div>
       )}
-      {sub === "Subscription Details" && <SubscriptionDetails />}
-      {sub === "Connected Accounts" && <ConnectedAccounts />}
+      {sub === "Network Settings" && <NetworkSettings />}
     </div>
   );
 }

@@ -5,64 +5,20 @@ import React, {
   SetStateAction,
   ReactNode,
 } from "react";
+import { mainListType } from "../lib/SettingMenus";
+import { subListType } from "../lib/SettingMenus";
 
 interface SettingsContextType {
-  main:
-    | "User Profile"
-    | "Notification"
-    | "Notification"
-    | "Privacy & Security"
-    | "Display & interface"
-    | "Account Management";
-  setMain: Dispatch<
-    SetStateAction<
-      | "User Profile"
-      | "Notification"
-      | "Privacy & Security"
-      | "Display & interface"
-      | "Account Management"
-    >
-  >;
-  sub:
-    | "Personal Information"
-    | "Organization Information"
-    | "Password & Security"
-    | "contact Information"
-    | "Email Notification"
-    | "Push Notification"
-    | "Sound Notification"
-    | "Privacy settings"
-    | "Data Management"
-    | "Theme & Appearance"
-    | "Language"
-    | "Accessibility"
-    | "Subscription Details"
-    | "Connected Accounts";
-
-  setSub: Dispatch<
-    SetStateAction<
-      | "Personal Information"
-      | "Organization Information"
-      | "Password & Security"
-      | "contact Information"
-      | "Email Notification"
-      | "Push Notification"
-      | "Sound Notification"
-      | "Privacy settings"
-      | "Data Management"
-      | "Theme & Appearance"
-      | "Language"
-      | "Accessibility"
-      | "Subscription Details"
-      | "Connected Accounts"
-    >
-  >;
+  main: mainListType;
+  sub: subListType | "";
+  setMain: Dispatch<SetStateAction<mainListType>>;
+  setSub: Dispatch<SetStateAction<subListType | "">>;
 }
 
 const SettingContext = createContext<SettingsContextType>({
   main: "User Profile",
   setMain: () => {},
-  sub: "Personal Information",
+  sub: "",
   setSub: () => {},
 });
 
@@ -71,8 +27,8 @@ interface ModeProviderProps {
 }
 
 export default function SettingProvider({ children }: ModeProviderProps) {
-  const [main, setMain] = useState< "User Profile"  | "Notification" | "Privacy & Security" | "Display & interface" | "Account Management" >("User Profile");
-    const [sub, setSub] = useState< "Personal Information" | "Organization Information" | "Password & Security" | "contact Information" | "Email Notification" | "Push Notification" | "Sound Notification" | "Privacy settings" | "Data Management" | "Theme & Appearance" | "Language" | "Accessibility" | "Subscription Details" | "Connected Accounts" >("Personal Information");
+  const [main, setMain] = useState<mainListType>("User Profile");
+  const [sub, setSub] = useState<subListType | "">("Personal Information");
   return (
     <SettingContext.Provider value={{ main, setMain, sub, setSub }}>
       {children}

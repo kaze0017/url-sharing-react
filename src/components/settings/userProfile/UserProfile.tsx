@@ -1,30 +1,52 @@
-import { useRef } from "react";
-import { useDraggable } from "react-use-draggable-scroll";
 import PersonalInformation from "./PersonalInformation";
 import OrganizationInformation from "./OrganizationInformation";
 import PasswordAnsSecurity from "./PasswordAnsSecurity";
 import ContactInformation from "./ContactInformation";
-import { useContext } from "react";
+
+import React, { useContext } from "react";
 import { SettingContext } from "../../../context/SettingsProvider";
-import AuthContext from "../../../context/AuthProvider";
 
 export default function UserProfile() {
+  const { sub, setSub } = useContext(SettingContext);
   const mainWrapperClass =
-    "relative h-full w-full p-2 flex flex-col gap-2 overflow-x-scroll overflow-y-scroll scrollbar-hide";
-
-  const ref =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-  const { events } = useDraggable(ref);
+    "flex flex-col items-center justify-center w-full h-full uppercase text-2xl";
+  const menuWrapperClass =
+    "flex flex-col items-center justify-center w-full h-full gap-2 text-blue-950";
+  const btnClass = "hover:bg-blue-950 hover:text-white p-2 w-1/2 text-center";
   return (
-    <div className={mainWrapperClass} {...events} ref={ref}>
-      {/* Personal Information */}
-      <PersonalInformation />
-      {/* Organization Information */}
-      <OrganizationInformation />
-      {/* Password & Security */}
-      <PasswordAnsSecurity />
-      {/* Contact Information */}
-      <ContactInformation />
+    <div className={mainWrapperClass}>
+      {sub === "" && (
+        <div className={menuWrapperClass}>
+          <button
+            className={btnClass}
+            onClick={() => setSub("Personal Information")}
+          >
+            Personal Information
+          </button>
+          <button
+            className={btnClass}
+            onClick={() => setSub("Organization Information")}
+          >
+            Organization Information
+          </button>
+          <button
+            className={btnClass}
+            onClick={() => setSub("Password & Security")}
+          >
+            Password & Security
+          </button>
+          <button
+            className={btnClass}
+            onClick={() => setSub("Contact Information")}
+          >
+            Contact Information
+          </button>
+        </div>
+      )}
+      {sub === "Personal Information" && <PersonalInformation />}
+      {sub === "Organization Information" && <OrganizationInformation />}
+      {sub === "Password & Security" && <PasswordAnsSecurity />}
+      {sub === "Contact Information" && <ContactInformation />}
     </div>
   );
 }

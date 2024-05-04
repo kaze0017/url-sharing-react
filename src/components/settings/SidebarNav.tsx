@@ -7,8 +7,7 @@ import { SettingContext } from "../../context/SettingsProvider";
 
 export default function SidebarNav() {
 
-  const { main, sub } = useContext(SettingContext);
-  const { setMain, setSub } = useContext(SettingContext);
+  const { main, sub, setMain, setSub } = useContext(SettingContext);
   
   const [query, setQuery] = React.useState("");
   const ref =
@@ -23,7 +22,7 @@ export default function SidebarNav() {
       <SearchBar query={query} setQuery={setQuery} />
       <div className="w-full">
         {settingsMenuLinks.map((menu) => (
-          <AccordionMenu key={menu.id} menu={menu} query={query} />
+          <AccordionMenu key={menu.id} menu={menu} query={query} setMain={setMain} setSub={setSub} />
         ))}
       </div>
     </div>

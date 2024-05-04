@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { SettingContext } from "../../../context/SettingsProvider";
-import SubscriptionDetails from "./SubscriptionDetails";
-import ConnectedAccounts from "./ConnectedAccounts";
 
-export default function AccountManagement() {
+import ChatSettings from "./ChatSettings";
+import EmailPreference from "./EmailPreference";
+
+export default function Communication() {
   const { sub, setSub } = useContext(SettingContext);
   const mainWrapperClass =
     "flex flex-col items-center justify-center w-full h-full uppercase text-2xl";
@@ -14,22 +15,19 @@ export default function AccountManagement() {
     <div className={mainWrapperClass}>
       {sub === "" && (
         <div className={menuWrapperClass}>
-          <button
-            className={btnClass}
-            onClick={() => setSub("Subscription Details")}
-          >
-            Subscription Details
+          <button className={btnClass} onClick={() => setSub("Chat Settings")}>
+            Chat Settings
           </button>
           <button
             className={btnClass}
-            onClick={() => setSub("Connected Accounts")}
+            onClick={() => setSub("Email Preferences")}
           >
-            Connected Accounts
+            Email Preferences
           </button>
         </div>
       )}
-      {sub === "Subscription Details" && <SubscriptionDetails />}
-      {sub === "Connected Accounts" && <ConnectedAccounts />}
+      {sub === "Chat Settings" && <ChatSettings />}
+      {sub === "Email Preferences" && <EmailPreference />}
     </div>
   );
 }
