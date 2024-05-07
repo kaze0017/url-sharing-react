@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SubmenuTitle from "../SubmenuTitle";
 import EditableField from "../EditableField";
+import SubSettingContainer from "../SubSettingContainer";
 
 export default function OrganizationInformation() {
   const [organizationName, setOrganizationName] =
@@ -11,8 +12,7 @@ export default function OrganizationInformation() {
     useState<string>("Organization Field");
 
   return (
-    <div className="flex flex-col w-full">
-      <SubmenuTitle title="Organization Information" />
+    <SubSettingContainer title="Organization Information">
       <div className="flex gap-2">
         <div className="flex flex-col">
           <EditableField
@@ -32,6 +32,6 @@ export default function OrganizationInformation() {
           />
         </div>
       </div>
-    </div>
+    </SubSettingContainer>
   );
 }

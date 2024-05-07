@@ -1,11 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { settingsMenuLinkInterface } from "../../lib/SettingMenus";
-import { SettingContext } from "../../context/SettingsProvider";
-import { mainList } from "../../lib/SettingMenus";
 import { mainListType } from "../../lib/SettingMenus";
 import { subListType } from "../../lib/SettingMenus";
-import { subList } from "../../lib/SettingMenus";
-import { set } from "react-hook-form";
 
 interface AccordionMenuProps {
   menu: settingsMenuLinkInterface;

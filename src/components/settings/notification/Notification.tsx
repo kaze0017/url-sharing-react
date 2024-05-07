@@ -3,6 +3,8 @@ import { SettingContext } from "../../../context/SettingsProvider";
 import EmailNotification from "./EmailNotification";
 import PushNotification from "./PushNotification";
 import SoundNotification from "./SoundNotification";
+import PanelMenu from "../PanelMenu";
+import { settingsMenuLinks } from "../../../lib/SettingMenus";
 
 export default function Notification() {
   const { sub, setSub } = useContext(SettingContext);
@@ -11,37 +13,5 @@ export default function Notification() {
   const menuWrapperClass =
     "flex flex-col items-center justify-center w-full h-full gap-2 text-blue-950";
   const btnClass = "hover:bg-blue-950 hover:text-white p-2 w-1/2 text-center"
-  return (
-    <div className={mainWrapperClass}>
-      {sub === "" && (
-        <div className={menuWrapperClass}>
-          <button
-            className={btnClass}
-            onClick={() => setSub("Email Notification")}
-          >
-            Email Notification
-          </button>
-          <button
-            className={btnClass}
-            onClick={() => setSub("Push Notification")}
-          >
-            Push Notification
-          </button>
-          <button
-            className={btnClass}
-            onClick={() => setSub("Sound Notification")}
-          >
-            Sound Notification
-          </button>
-        </div>
-      )}
-      {sub.toLocaleLowerCase() === "email notification" && (
-        <EmailNotification />
-      )}
-      {sub.toLocaleLowerCase() === "push notification" && <PushNotification />}
-      {sub.toLocaleLowerCase() === "sound notification" && (
-        <SoundNotification />
-      )}
-    </div>
-  );
+  return <PanelMenu menu={settingsMenuLinks[1]} />;
 }

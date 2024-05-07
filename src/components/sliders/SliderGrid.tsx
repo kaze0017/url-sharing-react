@@ -1,4 +1,4 @@
-import  { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 
 interface SliderProps {
@@ -74,7 +74,7 @@ export default function SliderGrid({
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
 
-  const wrapperClass = `p-2 flex flex-wrap grow gap-1 w-[100%] overflow-x-hidden overflow-y-hidden scrollbar-hide`;
+  const wrapperClass = `p-2 flex flex-wrap grow gap-1 w-[100%] overflow-x-hidden overflow-y-hidden scrollbar-hide `;
 
   return (
     <div

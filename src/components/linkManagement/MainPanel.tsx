@@ -15,6 +15,7 @@ import CardSharedMd from "../cards/CardSharedMd";
 import CardSharedLg from "../cards/CardSharedLg";
 
 import GrabScroll from "../GrabScroll";
+import FeederBtn from "../FeederBtn";
 
 export default function MainPanel() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -93,7 +94,7 @@ export default function MainPanel() {
   };
 
   const btnConst = "uppercase p-2 text-2xs rounded-lg";
-  const mainBtnClass = `${btnConst} bg-gray-200 text-gray-800`;
+  // const mainBtnClass = `${btnConst} bg-gray-200 text-gray-800`;
   const selectedBtnClass = `${btnConst} bg-indigo-500 text-white`;
 
   useEffect(() => {
@@ -114,28 +115,26 @@ export default function MainPanel() {
     setSharedLinksToDisplay(filteredLinks);
   }, [linkClass, linkType, timeSensitive]);
 
+  const mainBtnClass =
+    "p-2 px-2 flex items-center justify-center text-xs bg-gray-300 h-10 rounded-xl min-w-24 max-w-24 uppercase hover:bg-gray-600 text-xs text-black hover:text-white";
+
   return (
     <div className={feedWrapperClass}>
       {selectedLinks.length === 0 && (
         <div className="flex w-full items-center uppercase p-4 gap-4 ">
           <div className="left flex gap-2 z-20">
             {/* Create Link Menu */}
+
             <Link to={"/linkmanagement/createlink"} className={mainBtnClass}>
               Create a link
             </Link>
             {/* View Menu */}
 
             <div className="relative">
-              <button
-                className={`${
-                  showSelector === "viewSize" ? selectedBtnClass : mainBtnClass
-                }`}
-                onClick={() =>
-                  setShowSelector(showSelector === "viewSize" ? "" : "viewSize")
-                }
-              >
-                View: {viewSize}
-              </button>
+              <FeederBtn
+                title="View"
+                onClick={() => setShowSelector("viewSize")}
+              />
               <FadeInOut show={showSelector === "viewSize"} duration={500}>
                 <SelectorMenu
                   selection={viewSelection}
@@ -148,18 +147,10 @@ export default function MainPanel() {
             {/* Class Menu */}
 
             <div className="relative">
-              <button
-                className={`${
-                  showSelector === "linkClass" ? selectedBtnClass : mainBtnClass
-                }`}
-                onClick={() =>
-                  setShowSelector(
-                    showSelector === "linkClass" ? "" : "linkClass"
-                  )
-                }
-              >
-                Class: {linkClass}
-              </button>
+              <FeederBtn
+                title={`Class: ${linkClass}`}
+                onClick={() => setShowSelector("linkClass")}
+              />
               <FadeInOut show={showSelector === "linkClass"} duration={500}>
                 <SelectorMenu
                   selection={linkClassSelection}
@@ -170,16 +161,10 @@ export default function MainPanel() {
             </div>
             {/* Type Menu */}
             <div className="relative">
-              <button
-                className={`${
-                  showSelector === "linkType" ? selectedBtnClass : mainBtnClass
-                }`}
-                onClick={() =>
-                  setShowSelector(showSelector === "linkType" ? "" : "linkType")
-                }
-              >
-                types: {linkType}
-              </button>
+              <FeederBtn
+                title={`Type: ${linkType}`}
+                onClick={() => setShowSelector("linkType")}
+              />
               <FadeInOut show={showSelector === "linkType"} duration={500}>
                 <SelectorMenu
                   selection={linkTypeSelection}
@@ -190,20 +175,10 @@ export default function MainPanel() {
             </div>
 
             <div className="relative">
-              <button
-                className={`${
-                  showSelector === "timeSensitive"
-                    ? selectedBtnClass
-                    : mainBtnClass
-                }`}
-                onClick={() =>
-                  setShowSelector(
-                    showSelector === "timeSensitive" ? "" : "timeSensitive"
-                  )
-                }
-              >
-                Time
-              </button>
+              <FeederBtn
+                title={`Time: ${timeSensitive}`}
+                onClick={() => setShowSelector("timeSensitive")}
+              />
               <FadeInOut show={showSelector === "timeSensitive"} duration={500}>
                 <SelectorMenu
                   selection={timeSensitiveSelection}
@@ -214,15 +189,22 @@ export default function MainPanel() {
             </div>
 
             {viewSize === "details" && (
-              <button
-                className={mainBtnClass}
+              // <button
+              //   className={mainBtnClass}
+              //   onClick={() => {
+              //     setShowFilter(true);
+              //     setShowSelector("");
+              //   }}
+              // >
+              //   Columns
+              // </button>
+              <FeederBtn
+                title="Columns"
                 onClick={() => {
                   setShowFilter(true);
                   setShowSelector("");
                 }}
-              >
-                Columns
-              </button>
+              />
             )}
           </div>
 

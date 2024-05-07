@@ -16,7 +16,7 @@ export default function FullScreenOverlay({
     : "hidden";
   return (
     <div className={wrapperClass}>
-      <div className="relative w-full h-full flex items-center border border-red-700">
+      <div className="relative w-full h-full flex items-center">
         <button
           onClick={() => setDisplay(false)}
           className="absolute bg-black bg-opacity-50 top-0 right-0 w-16 h-16 text-white"

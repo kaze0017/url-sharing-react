@@ -1,12 +1,12 @@
-
+import FeederBtn from "../../../../FeederBtn";
 export default function Actions() {
   return (
     <div className="flex gap-2 uppercase text-xs text-blue-950">
-      <button className="btn btn-primary">Create</button>
-      <button className="btn btn-primary">Filter</button>
-      <button className="btn btn-primary">Type</button>
-      <button className="btn btn-primary">Time</button>
-      <button className="btn btn-primary">View</button>
+      <FeederBtn title="Create" onClick={() => console.log("Create")} />
+      <FeederBtn title="Filter" onClick={() => console.log("Filter")} />
+      <FeederBtn title="Type" onClick={() => console.log("Type")} />
+      <FeederBtn title="Time" onClick={() => console.log("Time")} />
+      <FeederBtn title="View" onClick={() => console.log("View")} />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import React from "react";
 import { useContext } from "react";
 import { SettingContext } from "../../context/SettingsProvider";
 import AuthContext from "../../context/AuthProvider";
@@ -12,28 +13,37 @@ import HelpAndSupport from "./helpAndSupport/HelpAndSupport";
 import MyInterests from "./myInterests/MyInterests";
 import IdentityAndVerification from "./identityAndVerification/IdentityAndVerification";
 import InAppPurchase from "./inAppPurchase/InAppPurchase";
-import { mainListType } from "../../lib/SettingMenus";
+import { settingMap } from "../../lib/SettingMenus";
 
-const componentsMap: { [key in mainListType]: React.ComponentType<any> } = {
-  "User Profile": UserProfile,
-  "Notification": Notification,
-  "Privacy & Security": PrivacyAndSecurity,
-  "Display & interface": DisplayAndInterface,
-  "Account Management": AccountManagement,
-  "Communication": CommunicationComponent,
-  "Advanced Settings": AdvancedSettings,
-  "Help & Support": HelpAndSupport,
-  "My Interests": MyInterests,
-  "Identity & Verification": IdentityAndVerification,
-  "In-App Purchase": InAppPurchase,
-};
-
+// const componentsMap: { [key in mainListType]: React.ComponentType<any> } = {
+//   "User Profile": UserProfile,
+//   "Notification": Notification,
+//   "Privacy & Security": PrivacyAndSecurity,
+//   "Display & interface": DisplayAndInterface,
+//   "Account Management": AccountManagement,
+//   "Communication": CommunicationComponent,
+//   "Advanced Settings": AdvancedSettings,
+//   "Help & Support": HelpAndSupport,
+//   "My Interests": MyInterests,
+//   "Identity & Verification": IdentityAndVerification,
+//   "In-App Purchase": InAppPurchase,
+// };
 
 export default function MainPanel() {
   const { main, setMain, sub, setSub } = useContext(SettingContext);
   const { auth } = useContext(AuthContext);
-  const Component = componentsMap[main];
+  // const Component = componentsMap[main];
   const mainWrapperClass = "flex flex-grow panel-light overflow-hidden";
 
-  return <div className={mainWrapperClass}>{Component && <Component />}</div>;
+  return (
+    <div className={mainWrapperClass}>
+      {main && sub === "" ? (
+        React.createElement(settingMap[main])
+      ) : sub ? (
+        React.createElement(settingMap[sub])
+      ) : (
+        <h1>Not</h1>
+      )}
+    </div>
+  );
 }

@@ -16,8 +16,6 @@ export default function Shared() {
   const [sharedLinksToDisplay, setSharedLinksToDisplay] =
     React.useState(getSharedLinks);
 
-  // const URL = "http://18.224.166.225:8000/link_management/public_links/";
-  // const URL = "http://18.224.166.225:8000/link_management/create/";
 
   useEffect(() => {
     // Filter the shared links based on the query
@@ -30,46 +28,6 @@ export default function Shared() {
     } else setSharedLinksToDisplay(filteredLinks);
   }, [query]);
 
-  // async function createLink() {
-  //   const formData = new URLSearchParams();
-  //   formData.append("title", "test");
-  //   formData.append("url", "http://www.sdfsd.com");
-
-  //   const URL = "http://18.224.166.225:8000/link_management/create/";
-
-  //   try {
-  //     const response = await axiosInstance.post(URL, formData.toString(), {
-  //       headers: {
-  //         "Content-Type": "application/x-www-form-urlencoded",
-  //         auth: auth?.token,
-
-  //         // Authorization: "A8Q1AHYJm4MJt2RHuXgfYJJ1m1Q4UPVz",
-  //         // withCredentials: true,
-  //         // Cookie: `sessionid=${sessionId}`,
-  //       },
-  //     });
-
-  //     // const headers = {
-  //     //   "Content-Type": "application/x-www-form-urlencoded",
-  //     //   Authorization: `lMsGvTuefhJOgR9zV970LxUTNVUszorz`, // Include if required
-  //     //   Cookie: `sessionid=${sessionId}`, // Include sessionId as cookie
-  //     // };
-  //     // const response = await fetch(URL, {
-  //     //   method: "POST",
-  //     //   mode: "cors", // "no-cors" mode does not allow to read the response, but it is enough for "POST" requests
-  //     //   headers: {
-  //     //     "Content-Type": "application/x-www-form-urlencoded",
-  //     //     Authorization: `lMsGvTuefhJOgR9zV970LxUTNVUszorz`, // Include if required
-  //     //     Cookie: `sessionid=${sessionId}`, // Include sessionId as cookie
-  //     //   },
-  //     //   body: formData.toString(),
-  //     //   credentials: "include", // Include credentials (cookies)
-  //     // });
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 
   useEffect(() => {
     console.log(sort);

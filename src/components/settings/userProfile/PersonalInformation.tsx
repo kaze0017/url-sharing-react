@@ -1,10 +1,9 @@
-import { useRef, useState, useCallback } from "react";
-import SubmenuTitle from "../SubmenuTitle";
+import { useState, useEffect } from "react";
 import EditableField from "../EditableField";
 import { IoCameraReverseOutline } from "react-icons/io5";
 import FullScreenOverlay from "../../FullScreenOverlay";
-import FadeInOut from "../../login/FadeInOut";
 import ChangeProfilePicture from "./forms/ChangeProfilePicture";
+import SubSettingContainer from "../SubSettingContainer";
 
 export default function PersonalInformation() {
   const [name, setName] = useState<string>("John Doe");
@@ -12,12 +11,29 @@ export default function PersonalInformation() {
   const [userName, setUserName] = useState<string>("john_doe");
   const [bio, setBio] = useState<string>("Lorem ipsum dolor sit amet.");
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
+  const [mode, setMode] = useState<"camera" | "upload" | "select">("select");
+
+  useEffect(() => {
+    setMode("select");
+    console.log("From PI showOverlay: ", showOverlay);
+  }, [showOverlay]);
+
+  useEffect(() => {
+    if (mode !== "camera") {}
+
+  }, [mode]);
+
+  const mainWrapperClass =
+    "flex w-full h-full items-center justify-center uppercase";
 
   return (
-    <div className="relative flex w-full flex-col">
-      <SubmenuTitle title="Personal Information" />
+    <SubSettingContainer title="Personal Information">
       <FullScreenOverlay display={showOverlay} setDisplay={setShowOverlay}>
-        <ChangeProfilePicture />
+        <ChangeProfilePicture
+          mode={mode}
+          setMode={setMode}
+          showOverlay={showOverlay}
+        />
       </FullScreenOverlay>
 
       <div className="flex gap-2">
@@ -47,6 +63,6 @@ export default function PersonalInformation() {
           <EditableField title="Bio" value={bio} setValue={setBio} />
         </div>
       </div>
-    </div>
+    </SubSettingContainer>
   );
 }

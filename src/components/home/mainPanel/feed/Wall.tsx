@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getSharedLinks} from "../../../../lib/actions";
+import { getSharedLinks } from "../../../../lib/actions";
 import CardImgIconS from "../../../cards/CardImgIconS";
 import SliderFlexWrapper from "../../../sliders/SliderFlexWrapper";
-import { SharedLinkType} from "../../../../lib/interfaces";
+import { SharedLinkType } from "../../../../lib/interfaces";
 import Controls from "./wall/Controls";
 
 export default function Wall() {
@@ -22,21 +22,20 @@ export default function Wall() {
     }
   }, [isLoading]);
 
-useEffect(() => {
-  // Filter the shared links based on the query
-  const filteredLinks = getSharedLinks().filter((sharedLink) =>
-    sharedLink.title.toLowerCase().includes(query.toLowerCase())
-  );
-  setSharedLinks(filteredLinks);
-}, [query]);
-
+  useEffect(() => {
+    // Filter the shared links based on the query
+    const filteredLinks = getSharedLinks().filter((sharedLink) =>
+      sharedLink.title.toLowerCase().includes(query.toLowerCase())
+    );
+    setSharedLinks(filteredLinks);
+  }, [query]);
   return (
     <div className="w-full flex flex-col gap-2 p-2">
       <Controls query={query} setQuery={setQuery} />
       {isLoading ? (
         <div className="w-full h-full flex items-center justify-center">
           <img
-            src="/loading.svg"
+            src="/images/assets/loading.svg"
             alt="loading"
             width="200px"
             className="mx-auto"

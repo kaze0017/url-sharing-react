@@ -117,7 +117,7 @@ export default function SliderFlexWrapper({
     );
   }
 
-  const wrapperClass = `p-2 flex flex-wrap gap-2 overflow-x-hidden overflow-y-scroll scrollbar-hide items-center mx-auto`;
+  const wrapperClass = `p-2 flex flex-wrap gap-2 overflow-x-hidden overflow-y-scroll scrollbar-hide items-center mx-auto justify-center`;
   if (multi === true) {
     return (
       <div

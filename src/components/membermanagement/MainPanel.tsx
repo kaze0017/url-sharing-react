@@ -18,7 +18,7 @@ export default function MainPanel() {
   }, [type]);
 
   return (
-    <div className="flex flex-col gap-1 w-full h-full p-2 font-bold">
+    <div className="flex flex-col gap-1 w-full h-full p-2 ">
       <FeedMenu query="" setQuery={() => {}} />
       {type === "all" || type === "graphs" ? (
         <div className="flex flex-col w-full gap-2">

@@ -5,6 +5,7 @@ import SelectorMenu from "../menus/SelectorMenu";
 import { menuType } from "../../lib/NetworkMenu";
 import { useNavigate } from "react-router-dom";
 import { networkMenu } from "../../lib/NetworkMenu";
+import FeederBtn from "../FeederBtn";
 
 interface FeedMenuProps {
   query: string;
@@ -14,12 +15,11 @@ interface FeedMenuProps {
 export default function FeedMenu({ query, setQuery }: FeedMenuProps) {
   const { type, view, setType, setView } = useContext(NetworksContext);
 
-
   const [showViewSelector, setShowViewSelector] = useState<string>("");
   const [showTypeSelector, setShowTypeSelector] = useState<string>("");
 
   const mainBtnClass =
-    "p-2 px-4 text-xs text-white bg-indigo-500 rounded-xl w-24 uppercase hover:bg-indigo-600";
+    "p-2 px-2 flex items-center justify-center text-xs bg-gray-300 h-10 rounded-xl min-w-24 max-w-24 uppercase hover:bg-gray-600 text-xs text-black hover:text-white";
 
   const navigate = useNavigate();
   function handelNavigate(path: string | undefined) {
@@ -41,16 +41,12 @@ export default function FeedMenu({ query, setQuery }: FeedMenuProps) {
   return (
     <div className="flex w-full uppercase gap-2">
       <div className="flex gap-2 ">
-        <button
+        <FeederBtn
           onClick={() => handelNavigate(networkMenu[0]?.path)}
-          className={mainBtnClass}
-        >
-          {networkMenu[0]?.name}
-        </button>
+          title={networkMenu[0]?.name}
+        />
         <div className="flex relative z-10">
-          <button onClick={() => handelViewSelector()} className={mainBtnClass}>
-            View
-          </button>
+          <FeederBtn onClick={() => handelViewSelector()} title="View" />
           {showViewSelector && (
             <SelectorMenu
               setSelected={setView}
@@ -60,9 +56,7 @@ export default function FeedMenu({ query, setQuery }: FeedMenuProps) {
           )}
         </div>
         <div className="flex relative z-10">
-          <button onClick={() => handelTypeSelector()} className={mainBtnClass}>
-            Type
-          </button>
+          <FeederBtn onClick={() => handelTypeSelector()} title="Type" />
           {showTypeSelector && (
             <SelectorMenu
               setSelected={setType}
