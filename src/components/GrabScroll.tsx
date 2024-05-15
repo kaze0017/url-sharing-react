@@ -14,7 +14,7 @@ export default function GrabScroll({
   width,
 }: GrabScrollProps) {
   const mainWrapperClass =
-    "relative p-2 max-h-full row flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide min-w-full ";
+    "relative p-1 justify-center flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide min-w-full";
 
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;

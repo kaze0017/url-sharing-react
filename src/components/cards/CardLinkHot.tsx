@@ -1,13 +1,18 @@
 import { SharedLinkType } from "../../lib/interfaces";
 import { Link } from "react-router-dom";
+import FeaturedImage from "./featuredImages/FeaturedImage";
 
-export interface CardHotProps {
+export interface CardLinkHotProps {
   link: SharedLinkType;
   variant: "small" | "medium" | "large" | "xlarge";
   placeholder?: boolean;
 }
 
-function CardHot({ link, variant, placeholder }: CardHotProps) {
+export default function CardLinkHot({
+  link,
+  variant,
+  placeholder,
+}: CardLinkHotProps) {
   // CSS Classes
   let width;
   switch (variant) {
@@ -30,24 +35,11 @@ function CardHot({ link, variant, placeholder }: CardHotProps) {
   const cardWrapper = `border-solid border-1 border-gray-600 flex ${width} aspect-video bg-white shadow-md rounded-md mx-auto	my-0`;
   const cardImgClass = `w-full h-full object-cover rounded-md`;
 
-  const thumbnail =
-    link.thumbnail ||
-    (link.type == "image" && "/images/defaults/imageDefaultThumbnail.jpg") ||
-    (link.type == "video" && "/images/defaults/videoDefaultThumbnail.jpg") ||
-    "/images/defaults/generalDefaultThumbnail.jpg.jpg";
+  const thumbnail = link.thumbnail || "";
 
   return (
     <div className={cardWrapper}>
-      <Link to={`/sharedLink/${link.id}`} className="w-full h-full">
-        <img
-          className={cardImgClass}
-          src={thumbnail}
-          alt={link.title}
-          data-link={link.linkUrls.primary.url}
-        />
-      </Link>
+      <FeaturedImage sharedLink={link} twClass="w-full h-full" />
     </div>
   );
 }
-
-export default CardHot;

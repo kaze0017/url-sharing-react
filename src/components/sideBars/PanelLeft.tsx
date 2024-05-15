@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { getOwner } from "../../lib/actions";
 import menuLinks from "../../lib/menu-links";
 import LogoProfile from "../LogoProfile";
@@ -7,6 +7,7 @@ import { useDraggable } from "react-use-draggable-scroll";
 import UserInfo from "./panelLeft/UserInfo";
 import NavMenu from "./panelLeft/NavMenu";
 import Toggle from "./panelLeft/Toggle";
+import { UserProfileContext } from "../../context/UserProfileProvider";
 
 interface PanelLeftProps {
   className?: string;

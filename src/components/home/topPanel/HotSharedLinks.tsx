@@ -1,27 +1,38 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { getTopSharedLinks } from "../../../lib/actions";
-import CardHot from "../../cards/CardHot";
+import React, { useEffect, useState, useContext } from "react";
+import { getTopSharedLinks } from "../../../api/axios";
+import CardLinkHot from "../../cards/CardLinkHot";
 import SliderRow from "../../sliders/SliderRow";
+import { SharedLinkType } from "../../../lib/interfaces";
+import AuthContext from "../../../context/AuthProvider";
 
 interface HotSharedLinksProps {
   mode: "wall" | "link";
 }
 
 export default function HotSharedLinks({ mode }: HotSharedLinksProps) {
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
   const [numberOfDisplayedImages, setNumberOfDisplayedImages] =
     React.useState(0);
 
-  const [data, setData] = useState([]); // State to hold carousel data
   const [loading, setLoading] = useState(false); // State to manage loading state
-  const [hasMore, setHasMore] = useState(true); // State to track if there's more data to fetch
+  const [hasMore, setHasMore] = useState(false); // State to track if there's more data to fetch
 
   const numberOfimagesOnEachCal = 7;
 
   // get top shared links
-  const topSharedLinks = getTopSharedLinks();
+  const [topSharedLinks, setTopSharedLinks] = useState<SharedLinkType[] | null>(
+    []
+  );
+
+  useEffect(() => {
+    getTopSharedLinks(token).then((data) => {
+      setTopSharedLinks(data);
+    });
+  }, []);
+
   const wrapperClass = `w-[100%]`;
-  const CARDS = CARDS_DETAILS();
 
   // Develope Pagination
 
@@ -33,14 +44,6 @@ export default function HotSharedLinks({ mode }: HotSharedLinksProps) {
 
   const fetchData = () => {
     setLoading(true);
-    // setTimeout(() => {
-    //   const newData = [];
-    //   if (newData.length === 0) {
-    //     setHasMore(false);
-    //   }
-    //   setData((prevData) => [...prevData, ...newData]);
-    //   setLoading(false);
-    // }, 1000);
   };
 
   const handleScroll = (event: any) => {
@@ -56,57 +59,11 @@ export default function HotSharedLinks({ mode }: HotSharedLinksProps) {
   return (
     <div className={wrapperClass}>
       <SliderRow
-        CardComponent={CardHot}
+        CardComponent={CardLinkHot}
         getData={getTopSharedLinks}
         cardsSize="medium"
+        token={token}
       />
     </div>
   );
-}
-
-function CARDS_DETAILS() {
-  return [
-    {
-      image: "https://random.imagecdn.app/200/150",
-      title: "A beautiful image",
-      // description: "This is a beautiful image",
-      url: "https://unsplash.com/photos/4",
-    },
-    {
-      image: "https://random.imagecdn.app/200/150",
-      title: "A beautiful image",
-      // description: "This is a beautiful image",
-      url: "https://unsplash.com/photos/4",
-    },
-    {
-      image: "https://random.imagecdn.app/200/150",
-      title: "A beautiful image",
-      // description: "This is a beautiful image",
-      url: "https://unsplash.com/photos/4",
-    },
-    {
-      image: "https://random.imagecdn.app/200/150",
-      title: "A beautiful image",
-      // description: "This is a beautiful image",
-      url: "https://unsplash.com/photos/4",
-    },
-    {
-      image: "https://random.imagecdn.app/200/150",
-      title: "A beautiful image",
-      // description: "This is a beautiful image",
-      url: "https://unsplash.com/photos/4",
-    },
-    {
-      image: "https://random.imagecdn.app/200/150",
-      title: "A beautiful image",
-      // description: "This is a beautiful image",
-      url: "https://unsplash.com/photos/4",
-    },
-    {
-      image: "https://random.imagecdn.app/200/150",
-      title: "A beautiful image",
-      // description: "This is a beautiful image",
-      url: "https://unsplash.com/photos/4",
-    },
-  ];
 }

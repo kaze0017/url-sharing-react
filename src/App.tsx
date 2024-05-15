@@ -18,10 +18,9 @@ import SharedLink from "./pages/SharedLink";
 import Editor from "./components/membermanagement/Editor";
 import Reports from "./pages/Reports";
 import LogOut from "./pages/LogOut";
+import InitialProfile from "./pages/InitialProfile";
 
 function App() {
-  const mainPanelWrapper =
-    "border border-blue- 500 w-full h-full overflow-hidden flex flex-col items-center justify-center scrollbar-hide ";
 
   return (
     <Routes>
@@ -31,6 +30,7 @@ function App() {
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth />}>
             <Route path="/" element={<Home />}>
+              <Route path="/initialProfile" element={<InitialProfile />} />
               <Route path="/" element={<PanelMiddle />} />
               <Route path="/linkManagement" element={<LinkManagement />}>
                 <Route path="/linkManagement" element={<MainPanel />} />

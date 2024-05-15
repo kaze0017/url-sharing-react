@@ -6,9 +6,9 @@ export interface InfoReportProps {
 function InfoReport(props: InfoReportProps) {
   // InfoReport CSS Classes
 
-  const infoReportWrapperClass = `w-16 flex flex-col items-center justify-center capitalize text-center ${props.className}`;
-  const infoReportTitleClass = `uppercase text-2xs font-bold flex items-center justify-center w-full text-center`;
-  const infoReportDataClass = `uppercase text-2xs font-bold flex items-center justify-center w-full text-center`;
+  const infoReportWrapperClass = `w-16 flex flex-col items-center ${props.className}`;
+  const infoReportTitleClass = `uppercase text-2xs font-bold flex items-center max-w-full overflow-hidden `;
+  const infoReportDataClass = `uppercase text-2xs font-bold flex items-center max-w-full overflow-hidden `;
 
   return (
     <div className={infoReportWrapperClass}>

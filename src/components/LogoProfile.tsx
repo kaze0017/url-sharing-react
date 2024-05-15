@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { Person } from "../lib/interfaces";
-import ProfilePicture from "./ProfilePicture";
+import { PersonType } from "../lib/interfaces";
+import ProfilePicture from "./profilePictures/ProfilePicture";
 import { getTopPeople } from "../lib/actions";
 import InfoReport from "./InfoReport";
 function LogoProfile({ toggledCollapse = false }) {
-  const defaultPerson: Person = {
+  const defaultPerson: PersonType = {
     id: 0,
-    name: "FAC Logo",
+    firstName: "FAC ",
+    lastName: "Logo",
     title: "Circle",
     photo: "/images/logos/circle.png",
     publications: {
@@ -24,7 +25,7 @@ function LogoProfile({ toggledCollapse = false }) {
     },
   };
   //   three people all with the same data as defaultPerson
-  const [people, setPeople] = useState<Person[]>([
+  const [people, setPeople] = useState<PersonType[]>([
     defaultPerson,
     defaultPerson,
     defaultPerson,
@@ -46,31 +47,19 @@ function LogoProfile({ toggledCollapse = false }) {
   return (
     <div className={logoProfileContainer}>
       <InfoReport
-        title={people[0].name}
+        title={people[0].firstName + " " + people[0].lastName}
         data={people[0].publications.categories?.length}
       />
       {!toggledCollapse && (
         <div className={logoProfileWrapper}>
           <div className={logoProfilePersonTC}>
-            <ProfilePicture
-              imageUrl={people[0].photo}
-              alt={people[0].name}
-              size={48}
-            />
+            <ProfilePicture person={people[0]} />
           </div>
           <div className={logoProfilePersonBL}>
-            <ProfilePicture
-              imageUrl={people[1].photo}
-              alt={people[1].name}
-              size={48}
-            />
+            <ProfilePicture person={people[1]} />
           </div>
           <div className={logoProfilePersonBR}>
-            <ProfilePicture
-              imageUrl={people[2].photo}
-              alt={people[2].name}
-              size={48}
-            />
+            <ProfilePicture person={people[2]} />
           </div>
           <img
             src="/images/logos/fac-logo-bars.png"
@@ -82,11 +71,7 @@ function LogoProfile({ toggledCollapse = false }) {
       )}
       {toggledCollapse && (
         <div className="w-12">
-          <ProfilePicture
-            imageUrl={people[0].photo}
-            alt={people[0].name}
-            size={48}
-          />
+          <ProfilePicture person={people[0]} />
         </div>
       )}
     </div>

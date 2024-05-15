@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { motion } from "framer-motion";
 import ProgressBarComp from "../ProgressBarComp";
@@ -11,6 +11,7 @@ import TagSelector from "../TagSelector";
 import AuthContext from "../../context/AuthProvider";
 import axiosInstance from "../../api/axios";
 import { CREATE_URL } from "../../constants";
+import { useDraggable } from "react-use-draggable-scroll";
 
 // Steps
 
@@ -19,7 +20,7 @@ const steps = getSteps();
 //   Css Classes
 
 const formClass =
-  "relative w-full  w-full h-550 flex flex-col gap-2 mb-2 p-4 overflow-hidden ";
+  "relative w-full h-[500px] flex flex-col gap-2 mb-2 p-4 overflow-hidden  ";
 const longTextInputClass = "text-xs w-full ";
 const lineClass = "grow border border-2 border-blue-800";
 
@@ -51,6 +52,7 @@ interface IFormInput {
   publicationTime: string;
   expirationDate: string;
   expirationTime: string;
+  url_type: string;
 }
 
 // AddLinkForm
@@ -143,6 +145,7 @@ export default function AddLinkForm() {
       formData.append("back_up_link_1st", data.back_up_link_1st);
       formData.append("back_up_link_2nd", data.back_up_link_2nd);
       formData.append("class_type", "link");
+      formData.append("url_type", data.url_type);
 
       // const URL = "http://18.224.166.225:8000/link_management/create/";
 
@@ -202,8 +205,20 @@ export default function AddLinkForm() {
     register("hashtags", { value: selectedTags });
   }, [selectedTags]);
 
+  const ref =
+    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
+  const { events } = useDraggable(ref);
+    const mainWrapperClass =
+      "panel-light relative p-1 justify-center flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide w-[700px]";
+
+
   return (
-    <div className="flex flex-col w-700 panel-light gap-1 p-2">
+    <div
+      // className="flex flex-col w-700 panel-light gap-1 p-2"
+      className={mainWrapperClass}
+      // {...events}
+      ref={ref}
+    >
       <div className="px-2">
         <h2 className="uppercase">Link Definition</h2>
         <p className="text-xs text-gray-500">
@@ -316,6 +331,12 @@ export default function AddLinkForm() {
                 className={longTextInputClass}
                 placeholder="Category Name"
                 {...register("category")}
+              />
+              <input
+                type="text"
+                className={longTextInputClass}
+                placeholder="URL Type"
+                {...register("url_type")}
               />
             </div>
             {/* Thumbnail */}

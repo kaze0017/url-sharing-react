@@ -3,7 +3,7 @@ import { IconType } from "react-icons";
 
 interface GradientIconProps {
   icon?: IconType;
-  size?: number; // Size prop for icon size
+  size?: string; // Size prop for icon size
 }
 
 const GradientIcon: React.FC<GradientIconProps> = ({ icon, size }) => {

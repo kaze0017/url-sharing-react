@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
-import { Person } from "../../../lib/interfaces";
+import { PersonType } from "../../../lib/interfaces";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { groupType } from "../../../lib/interfaces";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ export default function DnDTreeConstructor({ setNewTree }: DnDTrashCanProps) {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "PERSON",
-    drop: (item: { type: string; person: Person }) => {
+    drop: (item: { type: string; person: PersonType }) => {
       // Access the dropped person object
       const { person } = item;
       // Add the person to the deletedUsers array
@@ -32,7 +32,7 @@ export default function DnDTreeConstructor({ setNewTree }: DnDTrashCanProps) {
     }),
   }));
 
-  function handelCreateGroup(person: Person) {
+  function handelCreateGroup(person: PersonType) {
     setNewTree(true);
     navigate(`/networks/editor/t0`);
   }

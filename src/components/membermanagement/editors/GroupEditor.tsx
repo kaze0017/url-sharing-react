@@ -5,7 +5,7 @@ import { CiFloppyDisk } from "react-icons/ci";
 import TagSelector from "../../TagSelector";
 import GroupDnD from "./GroupDnD";
 import DnDTrashCan from "./DnDTrashCan";
-import { Person } from "../../../lib/interfaces";
+import { PersonType } from "../../../lib/interfaces";
 
 interface GroupEditorProps {
   groupId: string;
@@ -13,7 +13,7 @@ interface GroupEditorProps {
 
 export default function GroupEditor({ groupId }: GroupEditorProps) {
   const group = getGroup(groupId);
-  const [userToDel, setUserToDel] = React.useState<Person[]>([]);
+  const [userToDel, setUserToDel] = React.useState<PersonType[]>([]);
 
   const [name, setName] = React.useState(group?.name);
   const [description, setDescription] = React.useState(group?.description);

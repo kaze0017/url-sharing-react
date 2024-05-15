@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
-import { Person } from "../../../lib/interfaces";
+import { PersonType } from "../../../lib/interfaces";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 interface DnDTrashCanProps {
-  setUserToDel: React.Dispatch<React.SetStateAction<Person[]>>;
+  setUserToDel: React.Dispatch<React.SetStateAction<PersonType[]>>;
 }
 
 export default function DnDTrashCan({ setUserToDel }: DnDTrashCanProps) {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "PERSON",
-    drop: (item: { type: string; person: Person }) => {
+    drop: (item: { type: string; person: PersonType }) => {
       // Access the dropped person object
       const { person } = item;
       // Add the person to the deletedUsers array

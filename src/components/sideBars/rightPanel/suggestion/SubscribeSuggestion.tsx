@@ -1,23 +1,19 @@
-import { Person } from "../../../../lib/interfaces";
-import ProfilePicture from "../../../ProfilePicture";
+import { PersonType } from "../../../../lib/interfaces";
+import ProfilePicture from "../../../profilePictures/ProfilePicture";
 import { RxDotFilled } from "react-icons/rx";
 
 export interface SubscribeSuggestionProps {
-  person: Person;
+  person: PersonType;
   variant: "expanded" | "collapsed";
 }
 
 export default function SubscribeSuggestion(props: SubscribeSuggestionProps) {
+  const fullName = `${props.person.firstName} ${props.person.lastName}`;
   return props.variant === "expanded" ? (
     <div className="text-xs h-20 p-1 w-full border border-gray-800 flex flex-col gap-1 justify-center rounded">
       <div className="flex items-center justify-between gap-1 text-center">
-        <ProfilePicture
-          size={32}
-          imageUrl={props.person.photo}
-          alt={props.person.name}
-          className="inline-block"
-        />
-        <h3 className="w-1/4">{props.person.name}</h3>
+        <ProfilePicture person={props.person} />
+        <h3 className="w-1/4">{fullName}</h3>
         <RxDotFilled />
         <p className="w-1/4">{props.person.followers}</p>
         <RxDotFilled />
@@ -33,11 +29,6 @@ export default function SubscribeSuggestion(props: SubscribeSuggestionProps) {
       </div>
     </div>
   ) : (
-    <ProfilePicture
-      size={32}
-      imageUrl={props.person.photo}
-      alt={props.person.name}
-      className="inline-block"
-    />
+    <ProfilePicture person={props.person} />
   );
 }

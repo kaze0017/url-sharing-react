@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import AuthContext from "../../context/AuthProvider";
 import { RiShareForwardLine } from "react-icons/ri";
 import { PiChartLineUp } from "react-icons/pi";
 import { TfiTag } from "react-icons/tfi";
@@ -8,16 +9,20 @@ import SearchBar from "../SearchBar";
 import Table from "./table/Table";
 import FadeInOut from "../login/FadeInOut";
 import { Link } from "react-router-dom";
-import { sharedLinks } from "../../lib/placeholder-data";
 import { SharedLinkType } from "../../lib/interfaces";
 import CardSharedSm from "../cards/CardSharedSm";
 import CardSharedMd from "../cards/CardSharedMd";
 import CardSharedLg from "../cards/CardSharedLg";
+import MainPanelWrapper from "../MainPanelWrapper";
+import { getSharedLinks } from "../../api/axios";
 
 import GrabScroll from "../GrabScroll";
 import FeederBtn from "../FeederBtn";
 
 export default function MainPanel() {
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
+
   const [searchQuery, setSearchQuery] = useState<string>("");
   const timeSensitiveSelection = [
     "all",
@@ -42,21 +47,22 @@ export default function MainPanel() {
   const [timeSensitive, setTimeSensitive] = useState<string>("all");
   const [viewSize, setViewSize] = useState<string>("details");
 
-  const [links, setLinks] = useState(sharedLinks);
+  const [sharedLinks, setSharedLinks] = useState<SharedLinkType[]>([]);
 
   const [showSelector, setShowSelector] = useState<string>("");
   const [showFilter, setShowFilter] = useState(false);
   // const [displayStyle, setDisplayStyle] = useState<"grid" | "list">("list");
 
-  const [sharedLinksToDisplay, setSharedLinksToDisplay] =
-    useState<SharedLinkType[]>(sharedLinks);
+  const [sharedLinksToDisplay, setSharedLinksToDisplay] = useState<
+    SharedLinkType[]
+  >([]);
 
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const searchValue = event.target.value;
     const filteredLinks = sharedLinks.filter((sharedLink) =>
       sharedLink.title.toLowerCase().includes(searchValue.toLowerCase())
     );
-    setLinks(filteredLinks);
+    setSharedLinks(filteredLinks);
   }
 
   useEffect(() => {
@@ -68,6 +74,13 @@ export default function MainPanel() {
           )
         );
   }, [searchQuery]);
+
+  useEffect(() => {
+    getSharedLinks(token).then((response) => {
+      setSharedLinks(response);
+      setSharedLinksToDisplay(response);
+    });
+  }, []);
 
   const mainWrapperClass =
     "h-full flex flex-col gap-1 panel-light overflow-hidden";
@@ -100,11 +113,11 @@ export default function MainPanel() {
   useEffect(() => {
     const filteredLinks = sharedLinks.filter((link) => {
       // Filter based on linkClass
-      if (linkClass !== "all" && link.class !== linkClass) {
+      if (linkClass !== "all" && link.class_type !== linkClass) {
         return false;
       }
       // Filter based on linkType
-      if (linkType !== "all" && link.type !== linkType) {
+      if (linkType !== "all" && link.class_type !== linkType) {
         return false;
       }
       // Filter based on timeSensitive
@@ -119,7 +132,8 @@ export default function MainPanel() {
     "p-2 px-2 flex items-center justify-center text-xs bg-gray-300 h-10 rounded-xl min-w-24 max-w-24 uppercase hover:bg-gray-600 text-xs text-black hover:text-white";
 
   return (
-    <div className={feedWrapperClass}>
+    <MainPanelWrapper>
+      {/* <div className={feedWrapperClass}> */}
       {selectedLinks.length === 0 && (
         <div className="flex w-full items-center uppercase p-4 gap-4 ">
           <div className="left flex gap-2 z-20">
@@ -284,7 +298,8 @@ export default function MainPanel() {
           </button>
         </div>
       </FadeInOut>
-    </div>
+      {/* </div> */}
+    </MainPanelWrapper>
   );
 }
 

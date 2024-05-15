@@ -1,8 +1,8 @@
 import { useDrag } from "react-dnd";
-import { Person } from "../../../lib/interfaces";
-import ProfilePictureLg from "../../ProfilePictureLg";
+import { PersonType } from "../../../lib/interfaces";
+import ProfilePictureLg from "../../profilePictures/ProfilePictureLg";
 
-export default function DndPerson({ person }: { person: Person }) {
+export default function DndPerson({ person }: { person: PersonType }) {
   const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
     type: "PERSON",
     item: { person },
@@ -11,6 +11,7 @@ export default function DndPerson({ person }: { person: Person }) {
     }),
   }));
 
+  const personFullName = person.firstName + " " + person.lastName;
   return (
     <div
       ref={dragPreview}
@@ -18,7 +19,7 @@ export default function DndPerson({ person }: { person: Person }) {
       className="flex items-center gap-2 text-xs uppercase h-9"
     >
       <div role="Handle" ref={drag}>
-        <ProfilePictureLg imageUrl={person.photo} alt={person.name} />
+        <ProfilePictureLg person={person} />
       </div>
     </div>
   );

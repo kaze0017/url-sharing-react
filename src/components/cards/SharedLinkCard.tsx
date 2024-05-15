@@ -5,8 +5,7 @@ import { PiChartLineUp } from "react-icons/pi";
 import { FiEye } from "react-icons/fi";
 import { TfiTag } from "react-icons/tfi";
 import { BsInfoLg } from "react-icons/bs";
-import ProfilePicture from "../ProfilePicture";
-import { Person } from "../../lib/interfaces";
+import ProfilePicture from "../profilePictures/ProfilePicture";
 import { useState } from "react";
 
 // Define prop interface for SharedLinkCard with parent width and variant
@@ -52,16 +51,12 @@ export default function SharedLinkCard({
 }: SharedLinkCardProps) {
   const regeneratedSharedLink = {
     ...sharedLink,
-    thumbnail:
-      sharedLink.thumbnail ||
-      (sharedLink.type === "image" && "/defaults/imageDefaultThumbnail.jpg") ||
-      (sharedLink.type === "video" && "/defaults/videoDefaultThumbnail.jpg") ||
-      "/defaults/generalDefaultThumbnail.jpg.jpg",
+    thumbnail: sharedLink.thumbnail || "",
     description: sharedLink.description || "No description available",
     title: sharedLink.title || "No title available",
     rankCount: sharedLink.rankCount || 0,
     sharedCount: sharedLink.sharedCount || 0,
-    views: sharedLink.views || 0,
+    views: sharedLink.seenCount || 0,
     savedCount: sharedLink.savedCount || 0,
     publicationDate: sharedLink.publicationDate || "NA",
     expirationDate: sharedLink.expirationDate || "NA",
@@ -85,7 +80,7 @@ function SharedLinkCardGrid({ sharedLink }: { sharedLink: SharedLinkType }) {
       <ToggleBtn onClick={() => setToggleOverlay(!toggleOverlay)} />
       <div className="flex">
         <img
-          src={sharedLink.thumbnail}
+          src={sharedLink.thumbnail || "/defaults/generalDefaultThumbnail.jpg"}
           alt={sharedLink.title}
           className="object-cover  w-[200px] h-[110px] rounded-md border border-blue-300 overflow-hidden shadow-md"
         />
@@ -110,7 +105,7 @@ function SharedLinkCardGrid({ sharedLink }: { sharedLink: SharedLinkType }) {
           />
           <SharedLinkCardIcons
             title="Seen"
-            value={sharedLink.views}
+            value={sharedLink.seenCount}
             icon={<FiEye />}
           />
           <SharedLinkCardIcons
@@ -134,7 +129,7 @@ function SharedLinkCardList({ sharedLink }: { sharedLink: SharedLinkType }) {
       <ToggleBtn onClick={() => setToggleOverlay(!toggleOverlay)} />
       {toggleOverlay && <OverlayActions />}
       <img
-        src={sharedLink.thumbnail}
+        src={sharedLink.thumbnail || "/defaults/generalDefaultThumbnail.jpg"}
         alt={sharedLink.title}
         className="shrink-0	 object-cover w-3/12 max-w-32 aspect-video rounded-md border border-blue-300 overflow-hidden shadow-md"
       />
@@ -142,9 +137,9 @@ function SharedLinkCardList({ sharedLink }: { sharedLink: SharedLinkType }) {
       <p className="text-ellipsis overflow-hidden text-xs max-w-32 w-4/12 h-max-full">
         {sharedLink.description}
       </p>
-      <ProfilePicture imageUrl={sharedLink.owner.photo} size={32} alt="owner" />
+      <ProfilePicture person={sharedLink.owner} />
       <p className="text-xs text-gray-500 p-1 w-[60px] justify-center items-center">
-        {sharedLink.type}
+        {sharedLink.seenCount}
       </p>
       <div className="flex flex-col items-center w-[90px]">
         <h3 className="text-xs">Published On</h3>
@@ -171,7 +166,7 @@ function SharedLinkCardList({ sharedLink }: { sharedLink: SharedLinkType }) {
           />
           <SharedLinkCardIcons
             title="Seen"
-            value={sharedLink.views}
+            value={sharedLink.seenCount}
             icon={<FiEye />}
           />
           <SharedLinkCardIcons

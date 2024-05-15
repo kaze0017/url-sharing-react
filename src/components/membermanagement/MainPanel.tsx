@@ -7,6 +7,7 @@ import { groupOne, groupTwo, groupThree } from "../../lib/placeholder-data";
 import { networkMenu } from "../../lib/NetworkMenu";
 import { Link } from "react-router-dom";
 import NetworksProvider from "../../context/NetworksProvider";
+import MainPanelWrapper from "../MainPanelWrapper";
 
 export default function MainPanel() {
   const groupsToDisplay = [groupOne, groupTwo, groupThree];
@@ -18,7 +19,7 @@ export default function MainPanel() {
   }, [type]);
 
   return (
-    <div className="flex flex-col gap-1 w-full h-full p-2 ">
+    <MainPanelWrapper>
       <FeedMenu query="" setQuery={() => {}} />
       {type === "all" || type === "graphs" ? (
         <div className="flex flex-col w-full gap-2">
@@ -44,6 +45,6 @@ export default function MainPanel() {
           </div>
         </div>
       ) : null}
-    </div>
+    </MainPanelWrapper>
   );
 }

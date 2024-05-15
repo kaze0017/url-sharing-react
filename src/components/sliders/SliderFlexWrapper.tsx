@@ -1,10 +1,11 @@
-import  {  useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { SharedLinkType } from "../../lib/interfaces";
 import { useDraggable } from "react-use-draggable-scroll";
 
 import CardSharedMd from "../cards/CardSharedMd";
 import CardSharedSm from "../cards/CardSharedSm";
 import CardSharedXs from "../cards/CardSharedXs";
+import LazyLoad from "react-lazyload";
 
 interface SliderFlexWrapperProps {
   CardComponent: React.ComponentType<any>;
@@ -19,8 +20,6 @@ export default function SliderFlexWrapper({
   setIsLoading,
   multi,
 }: SliderFlexWrapperProps) {
-
-
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
@@ -36,10 +35,8 @@ export default function SliderFlexWrapper({
       const clientHeight = ref.current.clientHeight;
 
       if (scrollTop === 0) {
-        console.log("Reached the top of the container");
         handleScrollEnd("up");
       } else if (scrollTop + clientHeight === scrollHeight) {
-        console.log("Reached the bottom of the container");
         handleScrollEnd("down");
       } else {
         clearTimeout(scrollTimeout as NodeJS.Timeout);
@@ -89,35 +86,33 @@ export default function SliderFlexWrapper({
 
   const gridItems = [];
 
-  const width = 320;
-
   for (let i = 0; i < sharedLinks.length; i += 8) {
     const currentGroup = sharedLinks.slice(i, i + 8);
     gridItems.push(
       // <div key={i} className="flex flex-wrap gap-2">
       <>
-        <CardSharedMd sharedLink={currentGroup[0]} width={width} />
-        <div className="flex flex-col gap-2">
+        <CardSharedMd sharedLink={currentGroup[0]} />
+        <div className="flex flex-col gap-1 justify-between">
           <div className="flex justify-between w-full">
-            <CardSharedXs sharedLink={currentGroup[1]} width={width} />
-            <CardSharedXs sharedLink={currentGroup[2]} width={width} />
+            <CardSharedXs sharedLink={currentGroup[1]} />
+            <CardSharedXs sharedLink={currentGroup[2]} />
           </div>
-          <CardSharedSm sharedLink={currentGroup[3]} width={width} />
+          <CardSharedSm sharedLink={currentGroup[3]} />
           <div className="flex justify-between w-full">
-            <CardSharedXs sharedLink={currentGroup[4]} width={width} />
-            <CardSharedXs sharedLink={currentGroup[5]} width={width} />
+            <CardSharedXs sharedLink={currentGroup[4]} />
+            <CardSharedXs sharedLink={currentGroup[5]} />
           </div>
         </div>
-        <div className="flex flex-col justify-between gap-2">
-          <CardSharedSm sharedLink={currentGroup[6]} width={width} />
-          <CardSharedSm sharedLink={currentGroup[7]} width={width} />
+        <div className="flex flex-col gap-2">
+          <CardSharedSm sharedLink={currentGroup[6]} />
+          <CardSharedSm sharedLink={currentGroup[7]} />
         </div>
       </>
       // </div>
     );
   }
 
-  const wrapperClass = `p-2 flex flex-wrap gap-2 overflow-x-hidden overflow-y-scroll scrollbar-hide items-center mx-auto justify-center`;
+  const wrapperClass = `p-2 h-full  flex flex-wrap gap-2 overflow-x-hidden overflow-y-scroll scrollbar-hide items-center mx-auto justify-center`;
   if (multi === true) {
     return (
       <div
@@ -139,11 +134,7 @@ export default function SliderFlexWrapper({
         onScroll={handleScroll}
       >
         {sharedLinks.map((sharedLink) => (
-          <CardComponent
-            width={width}
-            key={sharedLink.id}
-            sharedLink={sharedLink}
-          />
+          <CardComponent key={sharedLink.id} sharedLink={sharedLink} />
         ))}
       </div>
     );

@@ -1,15 +1,15 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { SharedLinkType } from "../../../lib/interfaces";
-import ProfilePicture from "../../ProfilePicture";
+import ProfilePictureSm from "../../profilePictures/ProfilePictureSm";
 import { LuDownload } from "react-icons/lu";
 import { LuUpload } from "react-icons/lu";
-import Status from "./body/Status";
 import Type from "./body/Type";
 import PublicationDate from "./body/PublicationDate";
 import ExpirationDate from "./body/ExpirationDate";
 import Count from "./body/Count";
 import QrCode from "./body/QrCode";
 import ShortLink from "./body/ShortLink";
+import NotFound from "../../NotFound";
 
 interface BodyProps {
   columns: Array<{
@@ -81,7 +81,10 @@ const Body: React.FC<BodyProps> = ({
                       case "THUMBNAIL":
                         return (
                           <img
-                            src={sharedLink.thumbnail}
+                            src={
+                              sharedLink.thumbnail ||
+                              "/images/defaults/imageDefaultThumbnail.jpg"
+                            }
                             alt="thumbnail"
                             className="max-w-32 object-cover aspect-video mx-auto"
                           />
@@ -100,27 +103,36 @@ const Body: React.FC<BodyProps> = ({
                       case "OWNER":
                         return (
                           <div className="flex flex-col items-center justify-center">
-                            <ProfilePicture
-                              size={22}
-                              imageUrl={sharedLink.owner.photo}
-                              alt={sharedLink.owner.name}
-                            />
-                            <p className="text-3xs">{sharedLink.owner.name}</p>
+                            <ProfilePictureSm person={sharedLink.owner} />
+                            <p className="text-3xs">
+                              {sharedLink.owner.firstName +
+                                " " +
+                                sharedLink.owner.lastName}
+                            </p>
                           </div>
                         );
                       case "SUGGESTEDBY":
                         return (
                           <div className="flex flex-col items-center justify-center">
-                            <ProfilePicture
-                              size={22}
-                              imageUrl={sharedLink.owner.photo}
-                              alt={sharedLink.owner.name}
-                            />
-                            <p className="text-3xs">{sharedLink.owner.name}</p>
+                            {sharedLink.suggestedBy ? (
+                              <>
+                                <ProfilePictureSm
+                                  person={sharedLink.suggestedBy}
+                                />
+                                <p className="text-3xs">
+                                  {sharedLink.owner.firstName +
+                                    " " +
+                                    sharedLink.owner.lastName}{" "}
+                                </p>
+                              </>
+                            ) : (
+                              <NotFound title="NA" size="text-xl" />
+                            )}
                           </div>
                         );
+
                       case "SHARED":
-                        return sharedLink.sharedBy !== "user" ? (
+                        return sharedLink.sharedBy !== sharedLink.owner ? (
                           <div className="flex flex-col items-center justify-center">
                             <LuDownload className="text-xl text-indigo-700" />
                             <p className="text-3xs uppercase">For Me</p>
@@ -132,7 +144,8 @@ const Body: React.FC<BodyProps> = ({
                           </div>
                         );
                       case "STATUS":
-                        return <Status linkUrls={sharedLink.linkUrls} />;
+                        // return <Status linkUrls={sharedLink.linkUrls} />;
+                        return <NotFound title="Status" size="text-xl" />;
                       case "AUDIENCE":
                         return (
                           <div className="flex">
@@ -142,7 +155,7 @@ const Body: React.FC<BodyProps> = ({
                           </div>
                         );
                       case "TYPE":
-                        return <Type type={sharedLink.type} />;
+                        return <Type type={sharedLink.url_type} />;
 
                       case "PUBLICATIONDATE":
                         return (

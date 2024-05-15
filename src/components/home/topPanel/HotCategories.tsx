@@ -1,14 +1,18 @@
-import CategoryHot from "../../cards/CategoryHot";
-import { getTopCategories } from "../../../lib/actions";
+import CardCategoryHot from "../../cards/CardCategoryHot";
+import { getTopSharedCategories } from "../../../api/axios";
 import SliderRow from "../../sliders/SliderRow";
+import { useContext } from "react";
+import AuthContext from "../../../context/AuthProvider";
 
-export default function HotCategories() {
-  const categoryHotWrapperClass = `flex overflow-auto w-full p-2`;
+export default function CardHotCategories() {
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
+
   return (
-
     <SliderRow
-      CardComponent={CategoryHot}
-      getData={getTopCategories}
+      CardComponent={CardCategoryHot}
+      getData={getTopSharedCategories}
+      token={token}
       cardsSize="medium"
       cardType="category"
     />

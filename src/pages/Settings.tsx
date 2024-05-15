@@ -3,9 +3,10 @@ import PageTitle from "../components/PageTitle";
 import menuLinks from "../lib/menu-links";
 import SettingProvider from "../context/SettingsProvider";
 import MainPanel from "../components/settings/MainPanel";
+import MainPanelWrapper from "../components/MainPanelWrapper";
 export default function Settings() {
   return (
-    <div className="panel-light w-full h-full overflow-hidden flex flex-col">
+    <MainPanelWrapper>
       <PageTitle menu={menuLinks[3]} />
       <div className="flex flex-grow  gap-2 overflow-hidden px-2 pb-2">
         <SettingProvider>
@@ -13,6 +14,6 @@ export default function Settings() {
           <MainPanel />
         </SettingProvider>
       </div>
-    </div>
+    </MainPanelWrapper>
   );
 }

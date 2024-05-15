@@ -18,19 +18,9 @@ export default function SliderGrid({
   query,
   sort,
 }: SliderProps) {
-  const cardWidth =
-    cardSize === "small"
-      ? 100
-      : cardSize === "medium"
-      ? 200
-      : cardSize === "large"
-      ? 300
-      : 400;
 
-  const cardHeight = cardType === "category" ? 80 : 150;
 
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(0);
+
 
   const [cardsData, setCardsData] = useState<any[]>([]);
   const [cardsDataToDisplay, setCardsDataToDisplay] = useState<any[]>([]);

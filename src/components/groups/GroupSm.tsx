@@ -1,7 +1,7 @@
 import React from "react";
 
 import { groupType } from "../../lib/interfaces";
-import ProfilePictureMd from "../ProfilePictureMd";
+import ProfilePictureMd from "../profilePictures/ProfilePictureMd";
 
 export default function GroupSm({ group }: { group: groupType }) {
   const wrapperClass =
@@ -15,11 +15,7 @@ export default function GroupSm({ group }: { group: groupType }) {
         {group.name}
       </h3>
       {group.members.map((member, index) => (
-        <ProfilePictureMd
-          key={index}
-          imageUrl={member.photo}
-          alt={member.name}
-        />
+        <ProfilePictureMd key={index} person={member} />
       ))}
     </div>
   );

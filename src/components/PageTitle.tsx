@@ -9,7 +9,7 @@ interface PageTitleProps {
 
 export default function PageTitle({ menu, component }: PageTitleProps) {
   return (
-    <div className="uppercase flex p-4  border-b-2 border-indigo-700 mx-2 mb-1">
+    <div className="uppercase flex items-center border-b-2 border-indigo-700 mx-2 mb-1 h-20 max-h-20 min-h-20 ">
       <Link
         to={menu.url}
         className="text-indigo-600 text-3xl font-bold ml-2 uppercase"

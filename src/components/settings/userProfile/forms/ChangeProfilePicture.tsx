@@ -8,7 +8,6 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { GoUpload } from "react-icons/go";
 import Camera from "../../../camera/Camera";
 import { ProfilePictureContext } from "../../../../context/ProfilePictureProvider";
-import { set } from "react-hook-form";
 
 const uploader = Uploader({
   apiKey: "free", // Get production API keys from Bytescale

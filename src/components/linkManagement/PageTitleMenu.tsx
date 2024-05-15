@@ -2,15 +2,17 @@ import { FiLink } from "react-icons/fi";
 import { MdOutlineCategory } from "react-icons/md";
 
 export default function PageTitleMenu() {
+  const iconsClass = "text-indigo-600 text-xl font-bold ml-2";
+  const MainWrapperClass = "flex gap-5 uppercase"
   return (
-    <div className="flex gap-5">
+    <div className={MainWrapperClass}>
       <div className="flex flex-col items-center">
-        <FiLink className="text-indigo-600 text-2xl font-bold ml-2" />
-        <h2>Links</h2>
+        <FiLink className={iconsClass} />
+        <h2 className="text-sm">Links</h2>
       </div>
       <div className="flex flex-col items-center">
-        <MdOutlineCategory className="text-indigo-600 text-2xl font-bold ml-2" />
-        <h2>Categories</h2>
+        <MdOutlineCategory className={iconsClass} />
+        <h2 className="text-sm">Categories</h2>
       </div>
     </div>
   );

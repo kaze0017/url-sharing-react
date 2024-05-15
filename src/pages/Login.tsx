@@ -1,4 +1,4 @@
-import LoginForm from "../components/login/LoginForm";
+import LoginPanel from "../components/login/LoginPanel";
 import FooterNav from "../components/login/FooterNav";
 import { useDraggable } from "react-use-draggable-scroll";
 import { useRef  } from "react";
@@ -21,7 +21,7 @@ export default function LoginPage() {
         <span className="text-gray-500">.li</span>
       </h2>
       <div className="h-900">
-        <LoginForm />
+        <LoginPanel />
       </div>
       <div className="flex grow"></div>
       {/* App stores */}

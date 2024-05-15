@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { select, hierarchy, tree, linkVertical, drag } from "d3";
 import { useDraggable } from "react-use-draggable-scroll";
 import { useDrop } from "react-dnd";
-import { Person } from "../../lib/interfaces";
+import { PersonType } from "../../lib/interfaces";
 
 interface TreeNode {
   id: number;
@@ -30,7 +30,7 @@ export default function TreeChart({ data }: TreeChartProps) {
 
  const [{ isOver }, drop] = useDrop(() => ({
    accept: "PERSON",
-   drop: (item: { type: string; person: Person }) => {
+   drop: (item: { type: string; person: PersonType }) => {
      // Access the dropped person object
      const { person } = item;
      // Add the person to the deletedUsers array

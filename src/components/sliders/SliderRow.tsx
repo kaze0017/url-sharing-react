@@ -1,16 +1,20 @@
+import { get } from "http";
 import React, { useRef, useEffect, useState } from "react";
 import { FcNext, FcPrevious } from "react-icons/fc";
 
+
 interface SliderProps {
   CardComponent: React.ComponentType<any>; // Accepts any React component
-  getData: () => void | any; // Function that returns data for the cards
+  getData: (token: string) => Promise<void | any>; // Function that returns data for the cards
   cardsSize: "small" | "medium" | "large" | "xlarge";
   cardType?: "category" | "link";
+  token: string;
 }
 
 export default function SliderRow({
   CardComponent,
   getData,
+  token,
   cardsSize,
   cardType,
 }: SliderProps) {
@@ -36,7 +40,9 @@ export default function SliderRow({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setCardsData(getData());
+    getData(token).then((data) => {
+      setCardsData(data);
+    });
   }, [getData]);
 
   useEffect(() => {

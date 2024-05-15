@@ -1,37 +1,36 @@
 import React from "react";
 import { SharedLinkType } from "../../lib/interfaces";
 import { IoIosLink } from "react-icons/io";
-import ProfilePicture from "../ProfilePicture";
+import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
 import CardDetailIcons from "./CardDetailIcons";
+import FeaturedImage from "./featuredImages/FeaturedImage";
 
 interface CardSharedSmProps {
   sharedLink: SharedLinkType;
-  width: number;
 }
 
-export default function CardSharedSm({ sharedLink, width }: CardSharedSmProps) {
+export default function CardSharedSm({ sharedLink }: CardSharedSmProps) {
   if (!sharedLink) {
     return null;
   }
-  const imgUrl =
-    sharedLink.type === "image"
-      ? "/images/defaults/imageDefaultThumbnail.jpg"
-      : "/images/defaults/videoDefaultThumbnail.jpg";
+  const height = 128;
+  const width = 250;
+
+  const firstName = sharedLink.owner.firstName || "NA";
+  const lastName = sharedLink.owner.lastName || "NA";
+
+  const imgUrl = sharedLink.thumbnail || "";
   const mainWrapperClass = `text-center flex flex-col gap-1 p-1 panel-light  border border-gray-300 rounded-sm`;
+  const mainWrapperStyle = {
+    width: `${width}px`,
+    height: `${height}px`,
+  };
   return (
-    <div
-      className={mainWrapperClass}
-      style={{ width: `${width}px`, height: `${Math.floor(width / 2 - 6)}px` }}
-    >
-      <div className="flex w-full">
-        <div className="flex w-3/5 aspect-video">
-          <img
-            src={imgUrl}
-            className="object-cover rounded-md"
-            alt={sharedLink.title}
-          />
-        </div>
-        <div className="flex flex-col w-2/5">
+    <div className={mainWrapperClass} style={mainWrapperStyle}>
+      <div className="flex w-full gap-1 h-3/5">
+        <FeaturedImage sharedLink={sharedLink} twClass="h-full w-[110px] " />
+
+        <div className="flex flex-col flex-grow overflow-hidden">
           <h2 className="truncate  font-bold text-xs uppercase ">
             {sharedLink.title}
           </h2>
@@ -39,20 +38,21 @@ export default function CardSharedSm({ sharedLink, width }: CardSharedSmProps) {
         </div>
       </div>
 
-      <div className="flex gap-1 items-center">
+      <div className="flex items-center gap-1 h-1/3 text-2xs">
         <IoIosLink />
-        <ProfilePicture
-          size={32}
-          imageUrl={sharedLink.owner.photo}
-          alt={sharedLink.owner.name}
-        />
-        <h5 className="text-xs">{sharedLink.owner.name}</h5>
+        <ProfilePictureSm person={sharedLink.owner} />
+        <div className="flex flex-col">
+          <p>{firstName}</p>
+          <p>{lastName}</p>
+        </div>
         <div className="flex grow"></div>
-        <CardDetailIcons
-          rank={sharedLink.rankCount || 0}
-          shared={sharedLink.sharedCount || 0}
-          saved={sharedLink.savedCount || 0}
-        />
+        <div className="w-1/2">
+          <CardDetailIcons
+            rank={sharedLink.rankCount || 0}
+            shared={sharedLink.sharedCount || 0}
+            saved={sharedLink.savedCount || 0}
+          />
+        </div>
       </div>
     </div>
   );

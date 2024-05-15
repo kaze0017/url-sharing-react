@@ -1,17 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
 import { getNPeople } from "../../lib/actions";
-import ProfilePicture from "../ProfilePicture";
+import ProfilePicture from "../profilePictures/ProfilePicture";
 import Draggable from "./Draggable";
 import { useDraggable } from "react-use-draggable-scroll";
 import DndPerson from "./editors/DnDPersonName";
 import SearchBar from "../SearchBar";
 
-import { Person } from "../../lib/interfaces";
+import { PersonType } from "../../lib/interfaces";
 
 export default function SearchPeople() {
   const [query, setQuery] = useState<string>("");
   const people = getNPeople(7);
-  const [peopleToDisplay, setPeopleToDisplay] = useState<Person[]>([]);
+  const [peopleToDisplay, setPeopleToDisplay] = useState<PersonType[]>([]);
 
   function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
     const search = e.target.value;
@@ -20,7 +20,9 @@ export default function SearchPeople() {
       return;
     }
     const filteredPeople = people.filter((person) =>
-      person.name.toLowerCase().includes(search.toLowerCase())
+      (person.firstName + person.lastName)
+        .toLowerCase()
+        .includes(search.toLowerCase())
     );
     setPeopleToDisplay(filteredPeople);
   }
@@ -30,7 +32,9 @@ export default function SearchPeople() {
       return;
     }
     const filteredPeople = people.filter((person) =>
-      person.name.toLowerCase().includes(query.toLowerCase())
+      (person.firstName + person.lastName)
+        .toLowerCase()
+        .includes(query.toLowerCase())
     );
     setPeopleToDisplay(filteredPeople);
   }, [query]);

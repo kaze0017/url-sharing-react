@@ -9,12 +9,13 @@ interface Props {
 }
 
 export default function CardDetailIcons(props: Props) {
-  const wrapperClass = "flex flex-col gap-1 justify-center items-center";
+  const wrapperClass =
+    "flex items-center justify-around px-2 uppercase text-center h-full w-full";
   const iconCol =
     "text-gray-600 flex flex-col gap-1 justify-center items-center";
-  const iconStyle = "text-lg border ";
+  const iconStyle = "";
   return (
-    <div className="flex gap-4 px-2 text-xs uppercase text-center">
+    <div className={wrapperClass}>
       <div className={iconCol}>
         <p>{props.rank}</p>
         <FiTrendingUp className={iconStyle} />

@@ -13,7 +13,6 @@ export default function PanelMenu({ menu }: PanelMenuProps) {
   const menuWrapperClass =
     "flex flex-col items-center justify-center w-full h-full gap-2 text-blue-950";
   const btnClass = "hover:bg-blue-950 hover:text-white p-2 w-1/2 text-center";
-  console.log(menu);
   return (
     <div className={mainWrapperClass}>
       {sub === "" && (

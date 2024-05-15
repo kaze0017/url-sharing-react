@@ -1,7 +1,8 @@
 // get owner
 import { people } from "../lib/placeholder-data";
-import { sharedLinks } from "../lib/placeholder-data";
+// import { sharedLinks } from "../lib/placeholder-data";
 import { SharedLinkType } from "../lib/interfaces";
+// import { getSharedLinks } from "../api/axios";
 export function getOwner() {
   return people[0];
 }
@@ -14,9 +15,9 @@ export function getNPeople(n: number) {
   return people.slice(0, n);
 }
 // get three top sharedLinks
-export function getTopSharedLinks(): SharedLinkType[] {
-  return sharedLinks.slice(0, 12);
-}
+// export function getTopSharedLinks(): SharedLinkType[] {
+//   return sharedLinks.slice(0, 12);
+// }
 
 // convert youtube link to embed
 export function getEmbedId(link: string) {
@@ -63,9 +64,9 @@ export function getTopCategories() {
 }
 
 // get shared links
-export function getSharedLinks() {
-  return sharedLinks;
-}
+// export function getSharedLinks() {
+//   return sharedLinks;
+// }
 
 export function getPersonById(id: number) {
   return people.find((person) => person.id === id);
