@@ -24,7 +24,6 @@ export default function ResizableCell({ children }: ResizableCellProps) {
       xCord = e.clientX;
       width += dx;
       resizableCell.style.width = `${width}px`;
-      console.log("dx", dx);
     };
 
     const onMouseUpLeftResize = () => {

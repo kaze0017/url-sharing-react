@@ -7,7 +7,6 @@ import { useDraggable } from "react-use-draggable-scroll";
 import UserInfo from "./panelLeft/UserInfo";
 import NavMenu from "./panelLeft/NavMenu";
 import Toggle from "./panelLeft/Toggle";
-import { UserProfileContext } from "../../context/UserProfileProvider";
 
 interface PanelLeftProps {
   className?: string;

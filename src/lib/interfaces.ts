@@ -1,26 +1,52 @@
 export type PersonType = {
   id: number;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   title: string;
-  photo: string;
+  profile_picture: string;
   followers?: number;
   publications: {
     links?: Array<{ title: string; url: string }> | null;
-    categories?: string[];
+    categories?: string | string[] | null;
   };
   rankCount?: number;
   sharesCount?: number;
   subscribersCount?: number;
-}
+};
 
-export type  SharedLinkType = {
+export type UserProfileType = {
+  id: number;
+  first_name: string;
+  profile_picture: string;
+  last_name: string;
+  title: string;
+  email: string;
+  user_name: string;
+  org_email: string;
+  org_foa: string;
+  org_name: string;
+  org_picture: string;
+  payment_info: string;
+  payment_method: string;
+  sub_name: string;
+  sub_remaining_days: number;
+  user_id: number;
+  publications?: {
+    links: { title: string; url: string }[];
+    categories: string | string[];
+  };
+  sharesCount?: number;
+  rankCount?: number;
+  subscribersCount?: number;
+};
+
+export type SharedLinkType = {
   id: number;
   title: string;
 
   owner: PersonType;
-  sharedBy: PersonType | null;
-  suggestedBy: PersonType | null;
+  sharedby: PersonType | null;
+  suggestedby: PersonType | null;
 
   audience: true | false | null;
   url: string;
@@ -99,7 +125,7 @@ export type  SharedLinkType = {
 
   // QRCode?: string; //Separate API for this
   // ShortURL?: string; //Separate API for this
-}
+};
 
 export interface CategoryType {
   id?: number;

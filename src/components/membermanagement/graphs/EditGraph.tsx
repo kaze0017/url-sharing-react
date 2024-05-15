@@ -9,27 +9,27 @@ const people = getNPeople(7);
 const orgData = {
   id: 31,
   name: "John Doe",
-  photo: people[4].photo,
+  profile_picture: people[4].profile_picture,
   children: [
     {
       id: 32,
       name: "Jane Smith",
-      photo: people[2].photo,
+      profile_picture: people[2].profile_picture,
       children: [
         {
           id: 33,
           name: "John Smith",
-          photo: people[3].photo,
+          profile_picture: people[3].profile_picture,
           children: [
             {
               id: 34,
               name: "Jane Doe",
-              photo: people[4].photo,
+              profile_picture: people[4].profile_picture,
             },
             {
               id: 35,
               name: "Jane Doe",
-              photo: people[5].photo,
+              profile_picture: people[5].profile_picture,
             },
           ],
         },
@@ -38,27 +38,27 @@ const orgData = {
     {
       id: 36,
       name: "Jane Smith",
-      photo: people[6].photo,
+      profile_picture: people[6].profile_picture,
     },
     {
       id: 37,
       name: "Jane Smith",
-      photo: people[3].photo,
+      profile_picture: people[3].profile_picture,
       children: [
         {
           id: 38,
           name: "John Smith",
-          photo: people[6].photo,
+          profile_picture: people[6].profile_picture,
           children: [
             {
               id: 39,
               name: "Jane Doe",
-              photo: people[5].photo,
+              profile_picture: people[5].profile_picture,
             },
             {
               id: 40,
               name: "Jane Doe",
-              photo: people[4].photo,
+              profile_picture: people[4].profile_picture,
             },
           ],
         },

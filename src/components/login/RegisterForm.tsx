@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
+import { UserProfileContext } from "../../context/UserProfileProvider";
 import axiosInstance from "../../api/axios";
 import { REGISTER_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +14,7 @@ interface LoginFormProps {
 export function RegisterForm({ showRegister }: LoginFormProps) {
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
+  const { setUserProfile } = useContext(UserProfileContext);
 
   const userRef = useRef<HTMLInputElement>(null);
   const errRef = useRef<HTMLParagraphElement>(null);
@@ -46,7 +48,13 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
         {}
       );
 
-      setAuth({ user: user, token: response.data.auth });
+      setAuth({
+        userProfile: response.data.userProfile,
+        token: response.data.auth,
+      });
+
+      // setUserProfile(response.data.userProfile);
+
       navigate("/initialProfile");
 
       setUser("");

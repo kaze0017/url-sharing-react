@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { PersonType } from "../lib/interfaces";
-import ProfilePicture from "./profilePictures/ProfilePicture";
+import ProfilePicture from "./profilePictures/ProfilePictureLg";
 import { getTopPeople } from "../lib/actions";
 import InfoReport from "./InfoReport";
 function LogoProfile({ toggledCollapse = false }) {
   const defaultPerson: PersonType = {
     id: 0,
-    firstName: "FAC ",
-    lastName: "Logo",
+    first_name: "FAC ",
+    last_name: "Logo",
     title: "Circle",
-    photo: "/images/logos/circle.png",
+    profile_picture: "/images/logos/circle.png",
     publications: {
       links: [
         {
@@ -21,7 +21,7 @@ function LogoProfile({ toggledCollapse = false }) {
           url: "",
         },
       ],
-      categories: ["Business", "Leadership"],
+      categories: "",
     },
   };
   //   three people all with the same data as defaultPerson
@@ -47,7 +47,7 @@ function LogoProfile({ toggledCollapse = false }) {
   return (
     <div className={logoProfileContainer}>
       <InfoReport
-        title={people[0].firstName + " " + people[0].lastName}
+        title={people[0].first_name + " " + people[0].last_name}
         data={people[0].publications.categories?.length}
       />
       {!toggledCollapse && (

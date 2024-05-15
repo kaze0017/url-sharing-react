@@ -134,6 +134,5 @@ function checkData({ sharedLinks }: CheckDataProps) {
         sharedLink.thumbnail = "/images/defaults/generalDefaultThumbnail.jpg";
     }
   });
-  console.log("sharedLinks", sharedLinks);
   return sharedLinks;
 }

@@ -1,14 +1,18 @@
 import React, { createContext, useState } from "react";
+import { UserProfileType } from "../lib/interfaces";
 
 interface AuthContextType {
-  auth: { user: string; token: string } | null;
+  auth: { userProfile: UserProfileType | null; token: string | null } | null;
   setAuth: React.Dispatch<
-    React.SetStateAction<{ user: string; token: string } | null>
+    React.SetStateAction<{
+      userProfile: UserProfileType | null;
+      token: string | null;
+    } | null>
   >;
 }
 
 const AuthContext = createContext<AuthContextType>({
-  auth: { user: "", token: "" },
+  auth: null,
   setAuth: () => {},
 });
 
@@ -17,9 +21,12 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [auth, setAuth] = useState<{ user: string; token: string } | null>({
-    user: "",
-    token: "",
+  const [auth, setAuth] = useState<{
+    userProfile: UserProfileType | null;
+    token: string | null;
+  } | null>({
+    userProfile: null,
+    token: null,
   });
 
   return (

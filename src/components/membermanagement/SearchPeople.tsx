@@ -20,7 +20,7 @@ export default function SearchPeople() {
       return;
     }
     const filteredPeople = people.filter((person) =>
-      (person.firstName + person.lastName)
+      (person.first_name + person.last_name)
         .toLowerCase()
         .includes(search.toLowerCase())
     );
@@ -32,7 +32,7 @@ export default function SearchPeople() {
       return;
     }
     const filteredPeople = people.filter((person) =>
-      (person.firstName + person.lastName)
+      (person.first_name + person.last_name)
         .toLowerCase()
         .includes(query.toLowerCase())
     );

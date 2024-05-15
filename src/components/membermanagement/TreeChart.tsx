@@ -7,7 +7,7 @@ import { PersonType } from "../../lib/interfaces";
 interface TreeNode {
   id: number;
   name: string;
-  photo: string;
+  profile_picture: string;
   children?: TreeNode[];
   collapsed?: boolean;
 }

@@ -23,7 +23,6 @@ const Header: React.FC<HeaderProps> = ({ columns, columnsWidth }) => {
         }
       });
       // setColumnsWidth(newColumnsWidth); // This line seems to be from the previous version, should it be removed?
-      console.log("col width from header", newColumnsWidth);
     }
 
     // Call the function to get initial column widths
@@ -48,7 +47,6 @@ const Header: React.FC<HeaderProps> = ({ columns, columnsWidth }) => {
       tableElement?.removeEventListener("resize", getAllColumnsWidth);
     };
   }, [columns]);
-  console.log("columnsWidth from header", columnsWidth);
 
   return (
     <div className="sticky flex top-0 z-10 h-14">

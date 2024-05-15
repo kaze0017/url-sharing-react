@@ -19,8 +19,8 @@ export default function CardSharedMd({ sharedLink }: CardSharedMdProps) {
   const height = 264;
   const width = 264;
 
-  const firstName = sharedLink.owner.firstName || "NA";
-  const lastName = sharedLink.owner.lastName || "NA";
+  const firstName = sharedLink.owner.first_name || "NA";
+  const lastName = sharedLink.owner.last_name || "NA";
 
   const imgUrl = sharedLink.thumbnail || "";
   const mainWrapperClass = `flex flex-col justify-between items-center p-2 panel-light border border-gray-300 rounded-sm my-0 `;

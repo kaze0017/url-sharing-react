@@ -12,8 +12,10 @@ const ProfilePictureSm: React.FC<ProfilePictureProps> = ({ person }) => {
   return person ? (
     <Link to={`/profile/${person.id}`}>
       <img
-        src={person.photo || "/images/defaults/personDefaultImage.png"}
-        alt={person.firstName + " " + person.lastName}
+        src={
+          person.profile_picture || "/images/defaults/personDefaultImage.png"
+        }
+        alt={person.first_name + " " + person.last_name}
         width={size}
         height={size}
         className="object-cover transition-transform transform hover:scale-110 rounded-full border-2 border-blue-500"

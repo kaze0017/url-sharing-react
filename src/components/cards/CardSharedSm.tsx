@@ -16,8 +16,8 @@ export default function CardSharedSm({ sharedLink }: CardSharedSmProps) {
   const height = 128;
   const width = 250;
 
-  const firstName = sharedLink.owner.firstName || "NA";
-  const lastName = sharedLink.owner.lastName || "NA";
+  const firstName = sharedLink.owner.first_name || "NA";
+  const lastName = sharedLink.owner.last_name || "NA";
 
   const imgUrl = sharedLink.thumbnail || "";
   const mainWrapperClass = `text-center flex flex-col gap-1 p-1 panel-light  border border-gray-300 rounded-sm`;

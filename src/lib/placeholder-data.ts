@@ -5,10 +5,10 @@ import { SharedLinkType } from "./interfaces";
 export const people: PersonType[] = [
   {
     id: 1,
-    firstName: "John Doe",
-    lastName: "Smith",
+    first_name: "John Doe",
+    last_name: "Smith",
     title: "CEO",
-    photo: "https://randomuser.me/api/portraits/men/97.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/men/97.jpg",
     followers: 100,
     publications: {
       links: [
@@ -26,10 +26,10 @@ export const people: PersonType[] = [
   },
   {
     id: 2,
-    firstName: "Jane",
-    lastName: "Doe",
+    first_name: "Jane",
+    last_name: "Doe",
     title: "Individual Public Figure",
-    photo: "https://randomuser.me/api/portraits/men/93.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/men/93.jpg",
     followers: 200,
     publications: {
       links: [
@@ -43,10 +43,10 @@ export const people: PersonType[] = [
   },
   {
     id: 3,
-    firstName: "Michael",
-    lastName: "Johnson",
+    first_name: "Michael",
+    last_name: "Johnson",
     title: "CTO",
-    photo: "https://randomuser.me/api/portraits/women/93.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/women/93.jpg",
     followers: 300,
     publications: {
       links: [
@@ -60,10 +60,10 @@ export const people: PersonType[] = [
   },
   {
     id: 4,
-    firstName: "Jane",
-    lastName: "Smith",
+    first_name: "Jane",
+    last_name: "Smith",
     title: "CFO",
-    photo: "https://randomuser.me/api/portraits/women/95.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/women/95.jpg",
     followers: 400,
     publications: {
       links: [
@@ -77,10 +77,10 @@ export const people: PersonType[] = [
   },
   {
     id: 5,
-    firstName: "John",
-    lastName: "Doe",
+    first_name: "John",
+    last_name: "Doe",
     title: "COO",
-    photo: "https://randomuser.me/api/portraits/men/90.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/men/90.jpg",
     followers: 500,
     publications: {
       links: [
@@ -95,10 +95,10 @@ export const people: PersonType[] = [
   // New people
   {
     id: 6,
-    firstName: "Jane",
-    lastName: "Taylor",
+    first_name: "Jane",
+    last_name: "Taylor",
     title: "CMO",
-    photo: "https://randomuser.me/api/portraits/women/83.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/women/83.jpg",
     followers: 600,
     publications: {
       links: [
@@ -112,10 +112,10 @@ export const people: PersonType[] = [
   },
   {
     id: 7,
-    firstName: "Michael",
-    lastName: "White",
+    first_name: "Michael",
+    last_name: "White",
     title: "Marketing Manager",
-    photo: "https://randomuser.me/api/portraits/men/91.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/men/91.jpg",
     followers: 700,
     publications: {
       links: [
@@ -129,10 +129,10 @@ export const people: PersonType[] = [
   },
   {
     id: 8,
-    firstName: "Jane",
-    lastName: "Brown",
+    first_name: "Jane",
+    last_name: "Brown",
     title: "HR Manager",
-    photo: "https://randomuser.me/api/portraits/women/85.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/women/85.jpg",
     followers: 800,
     publications: {
       links: [
@@ -146,10 +146,10 @@ export const people: PersonType[] = [
   },
   {
     id: 9,
-    firstName: "Michael",
-    lastName: "Green",
+    first_name: "Michael",
+    last_name: "Green",
     title: "Software Engineer",
-    photo: "https://randomuser.me/api/portraits/men/92.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/men/92.jpg",
     followers: 900,
     publications: {
       links: [
@@ -163,10 +163,10 @@ export const people: PersonType[] = [
   },
   {
     id: 10,
-    firstName: "Jane",
-    lastName: "Black",
+    first_name: "Jane",
+    last_name: "Black",
     title: "Product Manager",
-    photo: "https://randomuser.me/api/portraits/women/87.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/women/87.jpg",
     followers: 1000,
     publications: {
       links: [
@@ -219,7 +219,7 @@ export const people: PersonType[] = [
 //     type: "image",
 //     linkUrls: {
 //       primary: {
-//         url: "https://www.pexels.com/photo/sunset-dawn-sun-dusk-17679/",
+//         url: "https://www.pexels.com/profile_picture/sunset-dawn-sun-dusk-17679/",
 //         health: "healthy",
 //       },
 //     },
@@ -272,7 +272,7 @@ export const people: PersonType[] = [
 //     type: "image",
 //     linkUrls: {
 //       primary: {
-//         url: "https://www.pexels.com/photo/adorable-animal-beagle-canine-302083/",
+//         url: "https://www.pexels.com/profile_picture/adorable-animal-beagle-canine-302083/",
 //         health: "healthy",
 //       },
 //     },
@@ -321,7 +321,7 @@ export const people: PersonType[] = [
 //     type: "image",
 //     linkUrls: {
 //       primary: {
-//         url: "https://www.pexels.com/photo/starry-night-102733/",
+//         url: "https://www.pexels.com/profile_picture/starry-night-102733/",
 //         health: "healthy",
 //       },
 //     },
@@ -372,7 +372,7 @@ export const people: PersonType[] = [
 //     type: "image",
 //     linkUrls: {
 //       primary: {
-//         url: "https://www.pexels.com/photo/green-mountain-photography-3641348/",
+//         url: "https://www.pexels.com/profile_picture/green-mountain-profile_picturegraphy-3641348/",
 //         health: "healthy",
 //       },
 //     },
@@ -426,7 +426,7 @@ export const people: PersonType[] = [
 //     rankCount: 5,
 //     linkUrls: {
 //       primary: {
-//         url: "https://www.pexels.com/photo/autumn-leaves-1092751/",
+//         url: "https://www.pexels.com/profile_picture/autumn-leaves-1092751/",
 //         health: "healthy",
 //       },
 //     },
@@ -497,7 +497,7 @@ export const people: PersonType[] = [
 //     type: "video",
 //     linkUrls: {
 //       primary: {
-//         url: "https://www.pexels.com/photo/green-mountain-photography-3641348/",
+//         url: "https://www.pexels.com/profile_picture/green-mountain-profile_picturegraphy-3641348/",
 //         health: "healthy",
 //       },
 //     },
@@ -547,7 +547,7 @@ export const people: PersonType[] = [
 //     type: "image",
 //     linkUrls: {
 //       primary: {
-//         url: "https://www.pexels.com/photo/autumn-leaves-1092751/",
+//         url: "https://www.pexels.com/profile_picture/autumn-leaves-1092751/",
 //         health: "healthy",
 //       },
 //     },
@@ -714,27 +714,27 @@ export function getGroup(id: string | number) {
 export const treeData = {
   id: 31,
   name: "John Doe",
-  photo: people[4].photo,
+  profile_picture: people[4].profile_picture,
   children: [
     {
       id: 32,
       name: "Jane Smith",
-      photo: people[2].photo,
+      profile_picture: people[2].profile_picture,
       children: [
         {
           id: 33,
           name: "John Smith",
-          photo: people[3].photo,
+          profile_picture: people[3].profile_picture,
           children: [
             {
               id: 34,
               name: "Jane Doe",
-              photo: people[4].photo,
+              profile_picture: people[4].profile_picture,
             },
             {
               id: 35,
               name: "Jane Doe",
-              photo: people[5].photo,
+              profile_picture: people[5].profile_picture,
             },
           ],
         },
@@ -743,27 +743,27 @@ export const treeData = {
     {
       id: 36,
       name: "Jane Smith",
-      photo: people[6].photo,
+      profile_picture: people[6].profile_picture,
     },
     {
       id: 37,
       name: "Jane Smith",
-      photo: people[3].photo,
+      profile_picture: people[3].profile_picture,
       children: [
         {
           id: 38,
           name: "John Smith",
-          photo: people[6].photo,
+          profile_picture: people[6].profile_picture,
           children: [
             {
               id: 39,
               name: "Jane Doe",
-              photo: people[5].photo,
+              profile_picture: people[5].profile_picture,
             },
             {
               id: 40,
               name: "Jane Doe",
-              photo: people[4].photo,
+              profile_picture: people[4].profile_picture,
             },
           ],
         },

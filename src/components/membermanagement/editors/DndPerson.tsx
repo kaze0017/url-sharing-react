@@ -11,7 +11,7 @@ export default function DndPerson({ person }: { person: PersonType }) {
     }),
   }));
 
-  const personFullName = person.firstName + " " + person.lastName;
+  const personFullName = person.first_name + " " + person.last_name;
   return (
     <div
       ref={dragPreview}

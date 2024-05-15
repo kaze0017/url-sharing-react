@@ -5,7 +5,7 @@ import { useDraggable } from "react-use-draggable-scroll";
 interface TreeNode {
   id: number;
   name: string;
-  photo: string;
+  profile_picture: string;
   children?: TreeNode[];
   collapsed?: boolean;
 }
@@ -78,7 +78,7 @@ export default function Tree({ data, width, height }: TreeChartProps) {
         .attr("fill", "none")
         .attr("stroke", "indigo");
 
-      // Nodes photo
+      // Nodes profile_picture
 
       svg
         .selectAll<SVGCircleElement, d3.HierarchyPointNode<any>>(
@@ -100,7 +100,7 @@ export default function Tree({ data, width, height }: TreeChartProps) {
         .enter()
         .append("g")
         .append("image")
-        .attr("xlink:href", (node) => (node.data as any).photo)
+        .attr("xlink:href", (node) => (node.data as any).profile_picture)
         .attr("x", (node) => (node as any).x - 25)
         .attr("y", (node) => (node as any).y - 25 + offset)
         .attr("width", 50)

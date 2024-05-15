@@ -135,9 +135,9 @@ function regenerateUser({ userId }: { userId: string }): PersonType {
   const person = getPersonById(parseInt(userId));
   const regeneratedPerson: PersonType = {
     ...person,
-    firstName: person?.firstName || "NA",
-    lastName: person?.lastName || "NA",
-    photo: person?.photo || "/images/defaults/personDefaultImage.png",
+    first_name: person?.first_name || "NA",
+    last_name: person?.last_name || "NA",
+    profile_picture: person?.profile_picture || "/images/defaults/personDefaultImage.png",
     id: person?.id || 0,
     title: person?.title || "NA",
     rankCount: person?.rankCount || 0,
@@ -146,7 +146,7 @@ function regenerateUser({ userId }: { userId: string }): PersonType {
     followers: person?.followers || 0,
     publications: person?.publications || {
       links: [],
-      categories: [],
+      categories: "",
     },
   };
   return regeneratedPerson;

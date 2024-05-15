@@ -40,9 +40,8 @@ const Body: React.FC<BodyProps> = ({
     setSelectedLinks(newSelectedLinks);
   }
 
-  useEffect(() => {
-    console.log("columnsWidth from body", columnsWidth);
-  }, [columnsWidth]);
+  useEffect(() => {}, [columnsWidth]);
+  console.log("sharedLinks", sharedLinks);
 
   const mainWrapperClass = "mt-1 flex  flex-col z-0";
 
@@ -105,24 +104,24 @@ const Body: React.FC<BodyProps> = ({
                           <div className="flex flex-col items-center justify-center">
                             <ProfilePictureSm person={sharedLink.owner} />
                             <p className="text-3xs">
-                              {sharedLink.owner.firstName +
+                              {sharedLink.owner.first_name +
                                 " " +
-                                sharedLink.owner.lastName}
+                                sharedLink.owner.last_name}
                             </p>
                           </div>
                         );
                       case "SUGGESTEDBY":
                         return (
                           <div className="flex flex-col items-center justify-center">
-                            {sharedLink.suggestedBy ? (
+                            {sharedLink.suggestedby ? (
                               <>
                                 <ProfilePictureSm
-                                  person={sharedLink.suggestedBy}
+                                  person={sharedLink.suggestedby}
                                 />
                                 <p className="text-3xs">
-                                  {sharedLink.owner.firstName +
+                                  {sharedLink.owner.first_name +
                                     " " +
-                                    sharedLink.owner.lastName}{" "}
+                                    sharedLink.owner.last_name}{" "}
                                 </p>
                               </>
                             ) : (
@@ -132,7 +131,7 @@ const Body: React.FC<BodyProps> = ({
                         );
 
                       case "SHARED":
-                        return sharedLink.sharedBy !== sharedLink.owner ? (
+                        return sharedLink.sharedby !== sharedLink.owner ? (
                           <div className="flex flex-col items-center justify-center">
                             <LuDownload className="text-xl text-indigo-700" />
                             <p className="text-3xs uppercase">For Me</p>

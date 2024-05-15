@@ -2,6 +2,7 @@ import FadeInOut from "./FadeInOut";
 import SubmitBtn from "./SubmitBtn";
 import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
+import { UserProfileContext } from "../../context/UserProfileProvider";
 import axiosInstance from "../../api/axios";
 import { LOGIN_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +14,8 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
   const navigate = useNavigate();
 
   const { setAuth } = useContext(AuthContext);
+  const { setUserProfile } = useContext(UserProfileContext);
+
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState("");
   const [userName, setUserName] = useState("");
@@ -35,7 +38,14 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
           withCredentials: true,
         }
       );
-      setAuth({ user: "mina", token: response.data.auth });
+
+      setAuth({
+        userProfile: response.data.profile,
+        token: response.data.auth,
+      });
+
+      setUserProfile(response.data.profile);
+
       navigate("/");
 
       setUserName(response.data.username);

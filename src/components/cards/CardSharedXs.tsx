@@ -15,8 +15,8 @@ export default function CardSharedXs({ sharedLink }: CardSharedXsProps) {
   const height = 64;
 
 
-  const firstName = sharedLink.owner.firstName || "NA";
-  const lastName = sharedLink.owner.lastName || "NA";
+  const firstName = sharedLink.owner.first_name || "NA";
+  const lastName = sharedLink.owner.last_name || "NA";
   const ownerFullName = `${firstName} ${lastName}`;
 
   const mainWrapperClass =

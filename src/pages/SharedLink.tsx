@@ -8,6 +8,7 @@ import { SharedLinkType } from "../lib/interfaces";
 import NotFound from "../components/NotFound";
 
 export default function SharedLink() {
+  const [isLoading, setIsLoading] = useState(true);
   const { auth } = useContext(AuthContext);
   const [sharedLink, setSharedLink] = useState<SharedLinkType>(
     {} as SharedLinkType
@@ -19,6 +20,7 @@ export default function SharedLink() {
 
   async function fetchSharedLink() {
     const response = await getSharedLinks(token);
+
     const link = response?.find(
       (link: SharedLinkType) => link.id.toString() === linkId
     );
@@ -26,11 +28,16 @@ export default function SharedLink() {
       setSharedLink(link);
     }
   }
+
   useEffect(() => {
     fetchSharedLink();
   }, [linkId]);
 
-  return sharedLink ? (
+  useEffect(() => {
+    sharedLink.title ? setIsLoading(false) : setIsLoading(true);
+  }, [sharedLink]);
+
+  return !isLoading ? (
     <div className="flex flex-col h-full flex-grow gap-1">
       <PanelTop mode="link" />
       <CardSingle sharedLink={sharedLink} />

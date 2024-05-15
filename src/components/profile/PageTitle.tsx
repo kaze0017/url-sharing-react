@@ -8,7 +8,7 @@ interface ProfilePageProps {
 }
 
 export default function PageTitle({ person }: ProfilePageProps) {
-  const fullName = person.firstName + " " + person.lastName;
+  const fullName = person.first_name + " " + person.last_name;
   const rankShareClass = "flex flex-col items-center ";
   const iconTextClass =
     "text-xs text-gray-500 flex items-center justify-center gap-1 border-t-2 border-indigo-500";

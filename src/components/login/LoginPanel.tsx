@@ -1,14 +1,11 @@
 import Social from "./Social";
-import FadeInOut from "./FadeInOut";
 
 import { useEffect, useState, useRef } from "react";
 import useAuth from "../../hooks/useAuth";
 
 import {
-  REGISTER_URL,
   USER_REGEX,
   PASSWORD_REGEX,
-  LOGIN_URL,
 } from "../../constants";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -39,12 +36,7 @@ export default function LoginPanel() {
 
   // Login
 
-  const loginUserRef = useRef<HTMLInputElement>(null);
-  const loginPwdRef = useRef<HTMLInputElement>(null);
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
 
   useEffect(() => {
     userRef.current?.focus();
@@ -67,11 +59,8 @@ export default function LoginPanel() {
     setError("");
   }, [user, email, pwd, matchPwd]);
 
-  const [userName, setUserName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const [showLogin, setShowLogin] = useState<boolean>(true);
   const [showRegister, setShowRegister] = useState<boolean>(false);
-  const [isPending, setIsPending] = useState<boolean>(false);
 
   const [formType, setFormType] = useState<"login" | "register">("login");
 
@@ -90,7 +79,6 @@ export default function LoginPanel() {
       ? "login-wrapper-translate transition-transform duration-1000"
       : "translate-x-0 transition-transform duration-1000 ";
 
-  const inputClass = `rounded-md border-gray-300 w-full`;
 
   function handleShowRegister() {
     setFormType("register");
@@ -106,69 +94,6 @@ export default function LoginPanel() {
       setShowLogin(true);
     }, 500);
   }
-
-  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setIsPending(true);
-    try {
-      const formData = new URLSearchParams();
-      formData.append("username", userName);
-      formData.append("password", password);
-
-      const response = await axiosInstance.post(
-        LOGIN_URL,
-        formData.toString(),
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          withCredentials: true,
-        }
-      );
-      setAuth({ user: "mina", token: response.data.auth });
-      navigate("/");
-
-      // Assuming setUser is a function to set the logged-in user in your application state
-      setUser(response.data.username);
-      // Clear any input fields or states related to login
-      setUserName("");
-      setPassword("");
-    } catch (err: any) {
-      setError(err.response.data.message);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
-      setIsPending(false);
-    }
-  }
-
-  async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    console.log("Registering...");
-
-    try {
-      const formData = new URLSearchParams();
-      formData.append("username", user);
-      formData.append("password", pwd);
-      formData.append("email", email);
-
-      const response = await axiosInstance.post(
-        REGISTER_URL,
-        formData.toString(),
-        {}
-      );
-
-      setAuth({ user: user, token: response.data.auth });
-      // navigate to  /
-      navigate("/");
-
-      setUser("");
-      setPwd("");
-      setMatchPwd("");
-    } catch (err) {
-      console.log("err:", err);
-    }
-  }
-
   return (
     <div className={mainWrapperClass}>
       <div className={`${childDivClass} transform ${childDivTransformClass}`}>

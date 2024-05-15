@@ -8,8 +8,8 @@ interface CategoryHotProps {
 }
 
 export default function CategoryHot({ link }: CategoryHotProps) {
-  const firstName = link.owner.firstName || "NA";
-  const lastName = link.owner.lastName || "NA";
+  const firstName = link.owner.first_name || "NA";
+  const lastName = link.owner.last_name || "NA";
   const ownerFullName = `${firstName} ${lastName}`;
   // css classes
   const categoryHotWrapperClass = `flex flex-row items-center w-1/4 h-10 flex-shrink-0 min-w-48 max-w-72`;

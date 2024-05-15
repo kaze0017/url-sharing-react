@@ -11,7 +11,7 @@ interface CardSharedLgProps {
 
 export default function CardSharedLg({ sharedLink }: CardSharedLgProps) {
   const ownerFullName =
-    sharedLink.owner.firstName + " " + sharedLink.owner.lastName;
+    sharedLink.owner.first_name + " " + sharedLink.owner.last_name;
   const mainWrapperClass = `flex flex-col gap-2 p-2 h-[200px] w-[600px] mx-auto panel-light`;
   const imgUrl = sharedLink.thumbnail || "";
   const tags =

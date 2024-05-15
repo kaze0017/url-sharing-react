@@ -10,7 +10,7 @@ export default function DndPerson({ person }: { person: PersonType }) {
       isDragging: monitor.isDragging(),
     }),
   }));
-  const personFullName = person.firstName + " " + person.lastName;
+  const personFullName = person.first_name + " " + person.last_name;
 
   return (
     <div ref={dragPreview} style={{ opacity: isDragging ? 0.5 : 1 }}>

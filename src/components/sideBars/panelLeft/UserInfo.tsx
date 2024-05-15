@@ -1,9 +1,11 @@
-import { useContext } from "react";
-import { UserProfileContext } from "../../../context/UserProfileProvider";
 import ProfilePictureLg from "../../profilePictures/ProfilePictureLg";
 import InfoReport from "../../InfoReport";
 import { PersonType } from "../../../lib/interfaces";
 import { GoDotFill } from "react-icons/go";
+import { useContext } from "react";
+import { UserProfileContext } from "../../../context/UserProfileProvider";
+import AuthContext from "../../../context/AuthProvider";
+import { getUserProfile } from "../../../api/axios";
 
 interface Props {
   user: PersonType;
@@ -11,32 +13,27 @@ interface Props {
 }
 
 export default function UserInfo({ user, toggledCollapse }: Props) {
+  const { auth } = useContext(AuthContext);
   const { userProfile } = useContext(UserProfileContext);
-  console.log("userProfile:", userProfile);
 
   let person: PersonType = {
-    id: 0,
-    firstName: userProfile.first_name || "",
-    lastName: userProfile.last_name || "",
-    photo:
-      userProfile.profile_picture === "null"
-        ? "images/defaults/personDefaultImage.png"
-        : userProfile.profile_picture || "",
-    title: userProfile.user_name || "",
-    subscribersCount: 0,
-    publications: {
-      categories: [],
+    id: userProfile.user_id || 0,
+    first_name: userProfile.first_name || "NA",
+    last_name: userProfile.last_name || "NA",
+    profile_picture:
+      userProfile.profile_picture || "images/defaults/personDefaultImage.png",
+    title: userProfile.title || "NA",
+    subscribersCount: userProfile.subscribersCount,
+    publications: userProfile.publications || {
       links: [],
+      categories: "",
     },
   };
-  console.log("person:", person);
 
-  const fullName = person.firstName + " " + person.lastName;
+  const fullName = person.first_name + " " + person.last_name;
   const publishedCategories = person.publications.categories || [];
   const publishedLinks = person.publications.links || [];
 
-  const publicationsCount =
-    publishedCategories?.length + publishedLinks?.length;
   return (
     <div className="flex flex-col gap-2 items-center justify-center uppercase">
       <ProfilePictureLg person={person} />
@@ -44,7 +41,7 @@ export default function UserInfo({ user, toggledCollapse }: Props) {
       {!toggledCollapse && (
         <>
           <p>{fullName}</p>
-          <p>{user.title}</p>
+          <p>{person.title}</p>
           <GoDotFill />
 
           <p className="text-xs font-bold">Publications</p>

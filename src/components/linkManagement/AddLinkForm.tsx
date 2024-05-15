@@ -58,8 +58,6 @@ interface IFormInput {
 // AddLinkForm
 export default function AddLinkForm() {
   const { auth } = useContext(AuthContext);
-  console.log(auth);
-
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const delta = currentStep - previousStep;
@@ -160,7 +158,6 @@ export default function AddLinkForm() {
             },
           }
         );
-        console.log(response);
       } catch (error) {
         console.error(error);
       }
