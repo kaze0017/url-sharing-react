@@ -19,9 +19,11 @@ import Editor from "./components/membermanagement/Editor";
 import Reports from "./pages/Reports";
 import LogOut from "./pages/LogOut";
 import InitialProfile from "./pages/InitialProfile";
+import ShareLinks from "./pages/ShareLinks";
+import ShareWithGroups from "./components/shareLinks/ShareWithGroups";
+import Controller from "./components/shareLinks/Controller";
 
 function App() {
-
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -37,6 +39,13 @@ function App() {
                 <Route
                   path="/linkManagement/createLink"
                   element={<CreateLink />}
+                />
+              </Route>
+              <Route path="/shareLinks" element={<ShareLinks />}>
+                <Route path="/shareLinks" element={<Controller />} />
+                <Route
+                  path="/shareLinks/shareWithGroups"
+                  element={<ShareWithGroups />}
                 />
               </Route>
               <Route path="/networks" element={<MemberManagement />}>

@@ -47,6 +47,12 @@ const menuLinks: menuLinkInterface[] = [
     url: "/logout",
     icon: FiLogOut,
   },
+  {
+    id: 7,
+    title: "Share Links",
+    url: "/shareLinks",
+    icon: FiLink,
+  },
 ];
 
 export default menuLinks;

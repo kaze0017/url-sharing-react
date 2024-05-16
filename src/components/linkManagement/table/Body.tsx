@@ -33,15 +33,20 @@ const Body: React.FC<BodyProps> = ({
   setSelectedLinks,
   selectedLinks,
 }) => {
-  function toggleSelectedLink(sharedLink: SharedLinkType) {
-    const newSelectedLinks = selectedLinks.includes(sharedLink)
-      ? selectedLinks.filter((link) => link !== sharedLink)
+
+
+function toggleSelectedLink(sharedLink: SharedLinkType) {
+  const linkIds = selectedLinks.map((link) => link.id);
+  const linkIndex = linkIds.indexOf(sharedLink.id);
+  const newSelectedLinks =
+    linkIndex !== -1
+      ? selectedLinks.filter((_, index) => index !== linkIndex)
       : [...selectedLinks, sharedLink];
-    setSelectedLinks(newSelectedLinks);
-  }
+  setSelectedLinks(newSelectedLinks);
+}
+
 
   useEffect(() => {}, [columnsWidth]);
-  console.log("sharedLinks", sharedLinks);
 
   const mainWrapperClass = "mt-1 flex  flex-col z-0";
 
@@ -55,7 +60,7 @@ const Body: React.FC<BodyProps> = ({
         >
           <div
             className={`absolute top-0 left-0 w-full h-full ${
-              selectedLinks.includes(sharedLink)
+              selectedLinks.some((link) => link.id === sharedLink.id)
                 ? "bg-green-200 opacity-20"
                 : ""
             }`}

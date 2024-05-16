@@ -11,7 +11,6 @@ const ProfilePictureSm: React.FC<ProfilePictureProps> = ({
   person,
 }: ProfilePictureProps) => {
   const size = 26;
-  console.log("person", person);
   return (
     <Link to={`/profile/${person.id}`}>
       <img

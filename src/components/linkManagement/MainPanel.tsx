@@ -15,6 +15,8 @@ import CardSharedMd from "../cards/CardSharedMd";
 import CardSharedLg from "../cards/CardSharedLg";
 import MainPanelWrapper from "../MainPanelWrapper";
 import { getSharedLinks } from "../../api/axios";
+import LinkManagementContext from "../../context/LinkManagementProvider";
+import LinksSelectedMenu from "./controlers/LinksSelectedMenu";
 
 import GrabScroll from "../GrabScroll";
 import FeederBtn from "../FeederBtn";
@@ -22,6 +24,8 @@ import FeederBtn from "../FeederBtn";
 export default function MainPanel() {
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
+
+  const { selectedLinks, setSelectedLinks } = useContext(LinkManagementContext);
 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const timeSensitiveSelection = [
@@ -92,7 +96,7 @@ export default function MainPanel() {
 
   const nodes = sharedLinks.map((sharedLink) => sharedLink);
 
-  const [selectedLinks, setSelectedLinks] = useState<SharedLinkType[]>([]);
+  // const [selectedLinks, setSelectedLinks] = useState<SharedLinkType[]>([]);
 
   const [columns, setColumns] = useState(getColumns());
 
@@ -130,6 +134,8 @@ export default function MainPanel() {
 
   const mainBtnClass =
     "p-2 px-2 flex items-center justify-center text-xs bg-gray-300 h-10 rounded-xl min-w-24 max-w-24 uppercase hover:bg-gray-600 text-xs text-black hover:text-white";
+
+
 
   return (
     <MainPanelWrapper>
@@ -228,11 +234,7 @@ export default function MainPanel() {
         </div>
       )}
       {selectedLinks.length !== 0 && (
-        <div className="left flex gap-2 z-20 p-4">
-          <button className={mainBtnClass}>Move to a category</button>
-          <button className={mainBtnClass}>Share</button>
-          <button className={mainBtnClass}>Move to trash</button>
-        </div>
+        <LinksSelectedMenu/>
       )}
       {viewSize === "details" && (
         <Table
