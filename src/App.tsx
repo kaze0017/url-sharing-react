@@ -22,6 +22,7 @@ import InitialProfile from "./pages/InitialProfile";
 import ShareLinks from "./pages/ShareLinks";
 import ShareWithGroups from "./components/shareLinks/ShareWithGroups";
 import Controller from "./components/shareLinks/Controller";
+import Approval from "./components/shareLinks/Approval";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
                   path="/shareLinks/shareWithGroups"
                   element={<ShareWithGroups />}
                 />
+                <Route path="/shareLinks/approval" element={<Approval />} />
               </Route>
               <Route path="/networks" element={<MemberManagement />}>
                 <Route path="/networks" element={<NetworkMainPanel />} />

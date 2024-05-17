@@ -1,10 +1,8 @@
-import React from 'react'
-import TreeChart from '../TreeChart'
-import { treeData } from '../../../lib/placeholder-data'
+import RawTree from "./RawTree";
 export default function TreeEditor() {
   return (
     <div>
-      <TreeChart data={treeData} />
+      <RawTree />
     </div>
-  )
+  );
 }

@@ -5,6 +5,7 @@ import Draggable from "./Draggable";
 import { useDraggable } from "react-use-draggable-scroll";
 import DndPerson from "./editors/DnDPersonName";
 import SearchBar from "../SearchBar";
+import Person from "./Person";
 
 import { PersonType } from "../../lib/interfaces";
 
@@ -72,7 +73,8 @@ export default function SearchPeople() {
           //     <p>{person.name}</p>
           //   </div>
           // </Draggable>
-          <DndPerson person={person} key={index} />
+          // <DndPerson person={person} key={index} />
+          <Person person={person} key={index} />
         ))}
       </div>
     </div>

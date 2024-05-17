@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import { PersonType } from "../../../lib/interfaces";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { groupType } from "../../../lib/interfaces";
 import { useNavigate } from "react-router-dom";
+import ChartDragAndDropContext from "../../../context/ChartDragAndDropProvider";
+import { TreeNode, TreeData } from "../graphs/TreeData";
 
 const group: groupType = {
   id: Math.floor(Math.random() * 1000),
@@ -18,6 +20,7 @@ interface DnDTrashCanProps {
 }
 export default function DnDTreeConstructor({ setNewTree }: DnDTrashCanProps) {
   const navigate = useNavigate();
+  const { draggedPerson, setTreeData, treeData } = useContext(ChartDragAndDropContext);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "PERSON",
@@ -33,9 +36,23 @@ export default function DnDTreeConstructor({ setNewTree }: DnDTrashCanProps) {
   }));
 
   function handelCreateGroup(person: PersonType) {
+    console.log("Drop eventsss", person);
+    const newNode = new TreeNode(
+      person.id || 1,
+      person.first_name || "",
+      person.profile_picture || ""
+    );
+
+    const newTreeData = new TreeData(newNode);
+
+    setTreeData(newTreeData);
+
     setNewTree(true);
-    navigate(`/networks/editor/t0`);
   }
+  useEffect(() => {
+    navigate(`/networks/editor/t0`);
+
+  }, [treeData]);
   return (
     <div className="p-1 flex h-1/2 w-full panel-light items-center  justify-center">
       <div

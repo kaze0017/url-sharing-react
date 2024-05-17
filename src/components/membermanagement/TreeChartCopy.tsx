@@ -1,8 +1,12 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import { select, hierarchy, tree, linkVertical, drag } from "d3";
 import { useDraggable } from "react-use-draggable-scroll";
 import { useDrop } from "react-dnd";
 import { PersonType } from "../../lib/interfaces";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import Search from "./Search";
+import ChartDragAndDropContext from "../../context/ChartDragAndDropProvider";
 
 interface TreeNode {
   id: number;
@@ -15,35 +19,42 @@ interface TreeChartProps {
   data: TreeNode;
 }
 
-
-
 export default function TreeChart({ data }: TreeChartProps) {
-
   const svgRef = useRef<SVGSVGElement>(null);
 
   const [datatoRender, setDatatoRender] = useState<TreeNode>(data);
+  const { draggedPerson, setDraggedPerson } = useContext(
+    ChartDragAndDropContext
+  );
+  const [updateTheTree, setUpdateTheTree] = useState(false);
+  // Scrollable div
+  // const ref =
+  //   useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
+  // const { events } = useDraggable(ref);
 
-// Scrollable div
-  const ref =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-  const { events } = useDraggable(ref);
+  //  const [{ isOver }, drop] = useDrop(() => ({
+  //    accept: "PERSON",
+  //    drop: (item: { type: string; person: PersonType }) => {
+  //      // Access the dropped person object
+  //      const { person } = item;
+  //      // Add the person to the deletedUsers array
+  //      console.log("Drop event", person);
+  //    },
+  //    collect: (monitor) => ({
+  //      isOver: !!monitor.isOver(),
+  //    }),
+  //  }));
 
+  function addChildrenToNode(node: TreeNode) {
+    if (node.children) {
+      node.children.push(draggedPerson);
+    } else {
+      node.children = [draggedPerson];
+    }
 
-
- const [{ isOver }, drop] = useDrop(() => ({
-   accept: "PERSON",
-   drop: (item: { type: string; person: PersonType }) => {
-     // Access the dropped person object
-     const { person } = item;
-     // Add the person to the deletedUsers array
-     console.log("Drop event", person);
-   },
-   collect: (monitor) => ({
-     isOver: !!monitor.isOver(),
-   }),
- }));
-
-
+    // update dataToRender
+    setDatatoRender({ ...datatoRender });
+  }
 
   useEffect(() => {
     const offset = 35;
@@ -65,7 +76,6 @@ export default function TreeChart({ data }: TreeChartProps) {
           .attr("y", event.y);
       })
       .on("end", function (event) {
-        
         // Delete
         let deleteNode = false;
         if (
@@ -109,7 +119,6 @@ export default function TreeChart({ data }: TreeChartProps) {
 
     // Links svg
     function update() {
-
       svg.selectAll("*").remove();
 
       svg
@@ -155,7 +164,7 @@ export default function TreeChart({ data }: TreeChartProps) {
         .enter()
         .append("g")
         .append("image")
-        .attr("xlink:href", (node) => (node.data as any).photo)
+        .attr("xlink:href", (node) => (node.data as any).profile_picture)
         .attr("x", (node) => (node as any).x - 25)
         .attr("y", (node) => (node as any).y - 25 + offset)
         .attr("width", 50)
@@ -168,9 +177,6 @@ export default function TreeChart({ data }: TreeChartProps) {
         .call(dragHandler as any)
         .on("drop", (e, d) => handleDrop({ e, d }))
         .on("click", (e, d) => handleClick({ e, d }));
-        
-        
-
 
       // Add a indigo color trash icon to the bottom right corner of the svg
       svg
@@ -188,24 +194,18 @@ export default function TreeChart({ data }: TreeChartProps) {
     function handleDrop({ e, d }: any) {
       // 'd' represents the current data bound to the SVG element
       e.preventDefault(); // Prevent default drop behavior
+      addChildrenToNode(d.data);
 
-      console.log("Drop event", d, e);
-
-
-      const dragDataString = e.dataTransfer.getData("application/json");
-      const dragData = JSON.parse(dragDataString);
-      console.log(dragData.dragObject);
-
-      const tempdata = { ...datatoRender };
-      const node = findByID({ item: tempdata, id: d.data.id });
-      if (node) {
-        if (node.children) {
-          node.children.push(dragData.dragObject);
-        } else {
-          node.children = [dragData.dragObject];
-        }
-      }
-      setDatatoRender(tempdata);
+      // const tempdata = { ...datatoRender };
+      // const node = findByID({ item: tempdata, id: d.data.id });
+      // if (node) {
+      //   if (node.children) {
+      //     node.children.push(draggedItem);
+      //   } else {
+      //     node.children = [draggedItem];
+      //   }
+      // }
+      // setDatatoRender(tempdata);
     }
     function handleClick({ e, d }: any) {
       e.preventDefault();
@@ -238,18 +238,30 @@ export default function TreeChart({ data }: TreeChartProps) {
   const mainWrapperClass =
     "relative p-2 max-h-full row flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide min-w-full";
 
+  // <div className={mainWrapperClass} {...events} ref={ref}
+
+  //   // onDrop={(e) => onDrop(e)}
+  //   onDragLeave={(e) => onDragLeave(e)}
+  //   onDragOver={(e) => onDragOver(e)}
+  // >
+
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: "PERSON",
+
+    drop: (item) => {},
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
 
   return (
-    <div className={mainWrapperClass} {...events} ref={ref}
-
-      // onDrop={(e) => onDrop(e)}
-      onDragLeave={(e) => onDragLeave(e)}
-      onDragOver={(e) => onDragOver(e)}
-    >
-      <svg ref={svgRef} width={900} height={900}>
-        {/* Render tree chart here */}
-      </svg>
+    <div className="flex">
+      <Search />
+      <div ref={drop}>
+        <svg ref={svgRef} width={900} height={900}></svg>
+      </div>
     </div>
+    // </div>
   );
 }
 

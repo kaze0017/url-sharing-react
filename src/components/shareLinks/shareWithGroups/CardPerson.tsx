@@ -1,8 +1,6 @@
-import React, { useState } from "react";
 import { useContext } from "react";
 import ShareWithGroupsContext from "../../../context/ShareWithGroupsProvider";
 import { PersonType } from "../../../lib/interfaces";
-import { set } from "react-hook-form";
 import ProfilePicture from "../../profilePictures/ProfilePicture";
 
 interface CardPersonProps {

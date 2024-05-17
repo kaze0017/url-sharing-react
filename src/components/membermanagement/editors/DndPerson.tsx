@@ -19,8 +19,8 @@ export default function DndPerson({ person }: { person: PersonType }) {
       className="flex items-center gap-2 text-xs uppercase h-9"
     >
       <div role="Handle" ref={drag}>
+    </div>
         <ProfilePictureLg person={person} />
       </div>
-    </div>
   );
 }

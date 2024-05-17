@@ -1,4 +1,5 @@
 // person model
+import { groups } from "d3";
 import { PersonType } from "./interfaces";
 import { SharedLinkType } from "./interfaces";
 // data
@@ -692,6 +693,8 @@ export const groupDefault = {
   color: "gray",
   tags: [],
 };
+
+export const groupsPH = [groupOne, groupTwo, groupThree];
 
 export function getGroup(id: string | number) {
   if (typeof id === "string") {

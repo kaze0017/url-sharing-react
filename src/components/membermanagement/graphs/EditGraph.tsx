@@ -71,11 +71,9 @@ export default function EditGraph() {
   const data = orgData;
 
   return (
-    <DndProvider backend={HTML5Backend}>
       <div className="overflow-hidden flex flex-grow w-full p-2 gap-2">
         <SearchPeople />
         <TreeChart data={data} />
       </div>
-    </DndProvider>
   );
 }

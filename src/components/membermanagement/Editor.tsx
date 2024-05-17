@@ -38,13 +38,12 @@ export default function Editor() {
   }, [newGroup, newTree]);
 
   return (
-    <DndProvider backend={HTML5Backend}>
       <div className="flex  gap-2 w-full h-full p-2">
         <SearchPeople />
         {type === "group" && <GroupEditor groupId={id} />}
         {type === "tree" && <TreeEditor />}
         {type === "neural" && <NeutralEditor setNewGroup={setNewGroup} setNewTree={setNewTree} />}
       </div>
-    </DndProvider>
+
   );
 }

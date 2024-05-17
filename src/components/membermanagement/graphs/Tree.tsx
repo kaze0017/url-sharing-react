@@ -16,12 +16,10 @@ interface TreeChartProps {
 }
 
 export default function Tree({ data, width, height }: TreeChartProps) {
-
   let treeSize = {
     w: 350,
     h: 400,
   };
-
 
   width && (treeSize.w = width);
   height && (treeSize.h = height);
@@ -31,9 +29,9 @@ export default function Tree({ data, width, height }: TreeChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [datatoRender, setDatatoRender] = useState<TreeNode>(data);
 
-  const ref =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-  const { events } = useDraggable(ref);
+  // const ref =
+  //   useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
+  // const { events } = useDraggable(ref);
 
   useEffect(() => {
     const svg = select(svgRef.current);
@@ -50,8 +48,9 @@ export default function Tree({ data, width, height }: TreeChartProps) {
       .target((link) => link.target)
       .x((node) => (node as any).x)
       .y((node) => (node as any).y + offset);
+      // .y((node) => (node as any).y);
 
-      const ref = React
+    // const ref = React;
 
     // Links svg
     function update() {
@@ -111,7 +110,6 @@ export default function Tree({ data, width, height }: TreeChartProps) {
         .attr("data-y", (node) => (node as any).y - 25 + offset)
         .attr("data-type", "node");
     }
-    console.log("rendering");
     update();
   }, []);
 
@@ -119,7 +117,10 @@ export default function Tree({ data, width, height }: TreeChartProps) {
     "relative p-2 max-h-full row flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide min-w-full";
 
   return (
-    <div className={mainWrapperClass} {...events} ref={ref}>
+    <div
+      className={mainWrapperClass}
+      // {...events} ref={ref}
+    >
       <svg
         ref={svgRef}
         width={treeSize.w + 2 * offset}

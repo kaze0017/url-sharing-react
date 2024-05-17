@@ -1,56 +1,95 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext, Children, memo } from "react";
 import { select, hierarchy, tree, linkVertical, drag } from "d3";
 import { useDraggable } from "react-use-draggable-scroll";
 import { useDrop } from "react-dnd";
-import { PersonType } from "../../lib/interfaces";
+import { PersonType } from "../../../lib/interfaces";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import ChartDragAndDropContext from "../../../context/ChartDragAndDropProvider";
+import { set } from "react-hook-form";
+import { TreeNode, TreeData } from "../graphs/TreeData";
+// interface TreeNode {
+//   id: number;
+//   name: string;
+//   profile_picture: string;
+//   children?: TreeNode[];
+//   collapsed?: boolean;
+// }
 
-interface TreeNode {
-  id: number;
-  name: string;
-  profile_picture: string;
-  children?: TreeNode[];
-  collapsed?: boolean;
-}
-interface TreeChartProps {
-  data: TreeNode;
-}
+export default function RawTree() {
+  const [dropOneIsCompleted, setDropOneIsCompleted] = useState(false);
+  const [droppedItem, setDroppedItem] = useState<any>(null);
+  const [dropTwoIsCompleted, setDropTwoIsCompleted] = useState(false);
+  const [nodeId, setNodeId] = useState<any>(null);
+  const [updateTree, setUpdateTree] = useState(false);
 
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: "PERSON",
 
+    drop: (item) => {
+      setDroppedItem(item);
+      setDropOneIsCompleted(true);
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+  function addChildrenToNode(e: any, d: any) {
+    if (e instanceof DragEvent) {
+      setNodeId(d.data.id);
+      setDropTwoIsCompleted(true);
+    }
+  }
+  function checkForCompletion() {
+    if (dropOneIsCompleted && dropTwoIsCompleted) {
+      const newNode = new TreeNode(
+        droppedItem.person.id,
+        droppedItem.person.first_name,
+        droppedItem.person.profile_picture
+      );
 
-export default function TreeChart({ data }: TreeChartProps) {
+      // Create a new instance of TreeData with updated data
+      const updatedTreeData = new TreeData(treeData.root);
+      updatedTreeData.addPerson(newNode, nodeId);
 
-  const svgRef = useRef<SVGSVGElement>(null);
+      // Update the state with the new treeData
+      setTreeData(updatedTreeData);
 
-  const [datatoRender, setDatatoRender] = useState<TreeNode>(data);
-
-// Scrollable div
-  const ref =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-  const { events } = useDraggable(ref);
-
-
-
- const [{ isOver }, drop] = useDrop(() => ({
-   accept: "PERSON",
-   drop: (item: { type: string; person: PersonType }) => {
-     // Access the dropped person object
-     const { person } = item;
-     // Add the person to the deletedUsers array
-     console.log("Drop event", person);
-   },
-   collect: (monitor) => ({
-     isOver: !!monitor.isOver(),
-   }),
- }));
-
-
+      // Reset completion flags
+      setDropOneIsCompleted(false);
+      setDropTwoIsCompleted(false);
+      setUpdateTree(!updateTree);
+    }
+  }
 
   useEffect(() => {
+    checkForCompletion();
+  }, [nodeId, droppedItem]);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  const { draggedPerson, treeData, setTreeData } = useContext(
+    ChartDragAndDropContext
+  );
+
+  const [datatoRender, setDatatoRender] = useState<TreeNode | null>(null);
+
+  let id = 0;
+
+  useEffect(() => {
+    id = draggedPerson.id;
+  }, [draggedPerson]);
+
+  useEffect(() => {
+    if (!treeData) {
+      return;
+    }
+    setDatatoRender(treeData.root);
     const offset = 35;
     const svg = select(svgRef.current);
     svg.selectAll("*").remove();
 
-    const root = hierarchy(datatoRender);
+    const root = hierarchy(treeData.root);
+
     const treeLayout = tree<TreeNode>();
     treeLayout.size([400, 500]);
 
@@ -58,14 +97,42 @@ export default function TreeChart({ data }: TreeChartProps) {
     interface dragHandler {
       (event: any): void;
     }
+
+    let cstartX = 0;
+    let cstartY = 0;
+    let cendX = 0;
+    let cendY = 0;
     const dragHandler = drag<SVGGElement, d3.HierarchyPointNode<any>>()
-      .on("drag", function (event) {
+      .on("start", function (event, d) {
+        cstartX = event.x;
+        cstartY = event.y;
+      })
+
+      .on("drag", function (event, d) {
         select(this)
           .attr("x", event.x - 25)
           .attr("y", event.y);
       })
-      .on("end", function (event) {
-        
+      .on("end", function (event, d) {
+        cendX = event.x;
+        cendY = event.y;
+
+        if (Math.abs(cstartX - cendX) < 5 && Math.abs(cstartY - cendY) < 5) {
+          if (d.children) {
+            // Collapse the d if it's expanded
+            d.data._children = d.data.children;
+            d.data.children = null;
+            console.log(d.data);
+            // sett collapsed
+            d.data.collapsed = true;
+          } else {
+            // Expand the d if it's collapsed
+            d.data.children = d.data._children;
+            d.data._children = null;
+            d.data.collapsed = false;
+          }
+        }
+
         // Delete
         let deleteNode = false;
         if (
@@ -78,25 +145,15 @@ export default function TreeChart({ data }: TreeChartProps) {
         }
 
         if (deleteNode) {
-          const id = select(this).attr("data-id");
-          setDatatoRender((prevData) => {
-            const deleteNode = (node: TreeNode) => {
-              if (node.children) {
-                node.children = node.children.filter(
-                  (child) => child.id !== +id
-                );
-                node.children.forEach(deleteNode);
-              }
-            };
-            const newTree = { ...prevData };
-            deleteNode(newTree);
-            update();
-            return newTree;
-          });
+          const id = event.subject.data.id;
+          let temTreeData = treeData;
+          temTreeData.removePerson(id);
+          setTreeData(temTreeData);
         } else {
           select(this).attr("x", select(this).attr("data-x"));
           select(this).attr("y", select(this).attr("data-y"));
         }
+        setUpdateTree(!updateTree);
       });
 
     treeLayout(root);
@@ -109,7 +166,7 @@ export default function TreeChart({ data }: TreeChartProps) {
 
     // Links svg
     function update() {
-
+      console.log("update");
       svg.selectAll("*").remove();
 
       svg
@@ -119,14 +176,6 @@ export default function TreeChart({ data }: TreeChartProps) {
         .append("path")
         .attr("class", "link")
         .attr("d", linkGenerator as any)
-        // .attr("stroke-dasharray", function () {
-        //   const length: any = this.getTotalLength();
-        //   return `${length} ${length}`;
-        // })
-        // .attr("stroke-offset", function () {
-        //   const length: any = this.getTotalLength();
-        //   return `${length}`;
-        // })
         .transition()
         .duration(1000)
         .attr("stroke-dashoffset", 0)
@@ -155,7 +204,7 @@ export default function TreeChart({ data }: TreeChartProps) {
         .enter()
         .append("g")
         .append("image")
-        .attr("xlink:href", (node) => (node.data as any).photo)
+        .attr("xlink:href", (node) => (node.data as any).profile_picture)
         .attr("x", (node) => (node as any).x - 25)
         .attr("y", (node) => (node as any).y - 25 + offset)
         .attr("width", 50)
@@ -165,12 +214,11 @@ export default function TreeChart({ data }: TreeChartProps) {
         .attr("data-x", (node) => (node as any).x - 25)
         .attr("data-y", (node) => (node as any).y - 25 + offset)
         .attr("data-type", "node")
+        .on("click", (e, d) => {
+          handleClick({ e, d });
+        })
         .call(dragHandler as any)
-        .on("drop", (e, d) => handleDrop({ e, d }))
-        .on("click", (e, d) => handleClick({ e, d }));
-        
-        
-
+        .on("drop", (e, d) => handleDrop({ e, d }));
 
       // Add a indigo color trash icon to the bottom right corner of the svg
       svg
@@ -186,29 +234,12 @@ export default function TreeChart({ data }: TreeChartProps) {
     }
 
     function handleDrop({ e, d }: any) {
-      // 'd' represents the current data bound to the SVG element
-      e.preventDefault(); // Prevent default drop behavior
-
-      console.log("Drop event", d, e);
-
-
-      const dragDataString = e.dataTransfer.getData("application/json");
-      const dragData = JSON.parse(dragDataString);
-      console.log(dragData.dragObject);
-
-      const tempdata = { ...datatoRender };
-      const node = findByID({ item: tempdata, id: d.data.id });
-      if (node) {
-        if (node.children) {
-          node.children.push(dragData.dragObject);
-        } else {
-          node.children = [dragData.dragObject];
-        }
-      }
-      setDatatoRender(tempdata);
-    }
-    function handleClick({ e, d }: any) {
       e.preventDefault();
+      addChildrenToNode(e, d);
+    }
+    function handleClick({ event, d }: any) {
+      event.preventDefault();
+      console.log("click", d);
 
       if (d.children) {
         // Collapse the d if it's expanded
@@ -225,7 +256,7 @@ export default function TreeChart({ data }: TreeChartProps) {
       update();
     }
     update();
-  }, [datatoRender]);
+  }, [updateTree]);
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -238,18 +269,20 @@ export default function TreeChart({ data }: TreeChartProps) {
   const mainWrapperClass =
     "relative p-2 max-h-full row flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide min-w-full";
 
+  // <div className={mainWrapperClass} {...events} ref={ref}
+
+  //   // onDrop={(e) => onDrop(e)}
+  //   onDragLeave={(e) => onDragLeave(e)}
+  //   onDragOver={(e) => onDragOver(e)}
+  // >
 
   return (
-    <div className={mainWrapperClass} {...events} ref={ref}
-
-      // onDrop={(e) => onDrop(e)}
-      onDragLeave={(e) => onDragLeave(e)}
-      onDragOver={(e) => onDragOver(e)}
-    >
-      <svg ref={svgRef} width={900} height={900}>
-        {/* Render tree chart here */}
-      </svg>
+    <div className="flex">
+      <div ref={drop}>
+        <svg ref={svgRef} width={900} height={900}></svg>
+      </div>
     </div>
+    // </div>
   );
 }
 
