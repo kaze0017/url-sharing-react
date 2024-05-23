@@ -13,7 +13,7 @@ interface LoginFormProps {
 export default function LoginForm({ showLogin }: LoginFormProps) {
   const navigate = useNavigate();
 
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth, auth } = useContext(AuthContext);
   const { setUserProfile } = useContext(UserProfileContext);
 
   const [isPending, setIsPending] = useState(false);
@@ -53,6 +53,7 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
       setUserName("");
       setPassword("");
     } catch (err: any) {
+      console.log(err.response);
       setError(err.response.data.message);
       setTimeout(() => {
         setError("");

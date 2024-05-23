@@ -43,12 +43,12 @@ export default function ShareWithGroups() {
               <SelectionPanel title="Selected Groups" name="selectedGroups" />
               <SelectionPanel title="Available Groups" name="groups" />
             </div>
-          ) : mode === "search or invite" ? null : (
+          ) : mode === "selected" ? (
             <div className={panelsWrapperClasses}>
               <SelectionPanel title="Selected Users" name="selectedUsers" />
               <SelectionPanel title="Selected Groups" name="selectedGroups" />
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </MainPanelWrapper>

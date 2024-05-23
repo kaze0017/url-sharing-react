@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { select, hierarchy, tree, linkVertical, drag } from "d3";
 import { useDraggable } from "react-use-draggable-scroll";
 import { useDrop } from "react-dnd";
-import { PersonType } from "../../lib/interfaces";
+import { PersonType } from "../../../lib/interfaces";
 
 interface TreeNode {
   id: number;
@@ -15,35 +15,28 @@ interface TreeChartProps {
   data: TreeNode;
 }
 
-
-
 export default function TreeChart({ data }: TreeChartProps) {
-
   const svgRef = useRef<SVGSVGElement>(null);
 
   const [datatoRender, setDatatoRender] = useState<TreeNode>(data);
 
-// Scrollable div
+  // Scrollable div
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
 
-
-
- const [{ isOver }, drop] = useDrop(() => ({
-   accept: "PERSON",
-   drop: (item: { type: string; person: PersonType }) => {
-     // Access the dropped person object
-     const { person } = item;
-     // Add the person to the deletedUsers array
-     console.log("Drop event", person);
-   },
-   collect: (monitor) => ({
-     isOver: !!monitor.isOver(),
-   }),
- }));
-
-
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: "PERSON",
+    drop: (item: { type: string; person: PersonType }) => {
+      // Access the dropped person object
+      const { person } = item;
+      // Add the person to the deletedUsers array
+      console.log("Drop event", person);
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
 
   useEffect(() => {
     const offset = 35;
@@ -65,7 +58,6 @@ export default function TreeChart({ data }: TreeChartProps) {
           .attr("y", event.y);
       })
       .on("end", function (event) {
-        
         // Delete
         let deleteNode = false;
         if (
@@ -109,7 +101,6 @@ export default function TreeChart({ data }: TreeChartProps) {
 
     // Links svg
     function update() {
-
       svg.selectAll("*").remove();
 
       svg
@@ -168,9 +159,6 @@ export default function TreeChart({ data }: TreeChartProps) {
         .call(dragHandler as any)
         .on("drop", (e, d) => handleDrop({ e, d }))
         .on("click", (e, d) => handleClick({ e, d }));
-        
-        
-
 
       // Add a indigo color trash icon to the bottom right corner of the svg
       svg
@@ -190,7 +178,6 @@ export default function TreeChart({ data }: TreeChartProps) {
       e.preventDefault(); // Prevent default drop behavior
 
       console.log("Drop event", d, e);
-
 
       const dragDataString = e.dataTransfer.getData("application/json");
       const dragData = JSON.parse(dragDataString);
@@ -238,17 +225,17 @@ export default function TreeChart({ data }: TreeChartProps) {
   const mainWrapperClass =
     "relative p-2 max-h-full row flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide min-w-full";
 
-
   return (
-    <div className={mainWrapperClass} {...events} ref={ref}
-
+    <div
+      className={mainWrapperClass}
+      {...events}
+      ref={ref}
       // onDrop={(e) => onDrop(e)}
       onDragLeave={(e) => onDragLeave(e)}
       onDragOver={(e) => onDragOver(e)}
     >
-      <svg ref={svgRef} width={900} height={900}>
-        {/* Render tree chart here */}
-      </svg>
+      {/* <svg ref={svgRef} width={900} height={900}>
+      </svg> */}
     </div>
   );
 }

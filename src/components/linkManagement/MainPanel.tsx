@@ -308,6 +308,14 @@ export default function MainPanel() {
 function getColumns() {
   return [
     {
+      id: "SELECT",
+      title: "select",
+      icon: "",
+      display: true,
+      width: 0,
+      grow: 0,
+    },
+    {
       id: "THUMBNAIL",
       title: "thumbnail",
       icon: "",

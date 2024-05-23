@@ -1,8 +1,5 @@
-import React from "react";
 import { getNPeople } from "../../../lib/actions";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import TreeChart from "../TreeChart";
+import TreeChart from "./TreeChart";
 import SearchPeople from "../SearchPeople";
 const people = getNPeople(7);
 
@@ -71,9 +68,9 @@ export default function EditGraph() {
   const data = orgData;
 
   return (
-      <div className="overflow-hidden flex flex-grow w-full p-2 gap-2">
-        <SearchPeople />
-        <TreeChart data={data} />
-      </div>
+    <div className="overflow-hidden flex flex-grow w-full p-2 gap-2">
+      <SearchPeople />
+      <TreeChart data={data} />
+    </div>
   );
 }

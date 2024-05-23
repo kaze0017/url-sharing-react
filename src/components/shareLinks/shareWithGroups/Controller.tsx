@@ -50,10 +50,7 @@ export default function Controller() {
   return (
     <div className="flex flex-col w-full items-center font-semibold">
       <div className="flex items-center justify-between h-[35px] w-full">
-        <TabBtnText
-          selectedCount={selectedPeople.length}
-          name={"search or invite"}
-        />
+
         <TabBtnText selectedCount={selectedPeople.length} name={"users"} />
         <TabBtnText selectedCount={selectedGroups.length} name={"groups"} />
         <TabBtnText

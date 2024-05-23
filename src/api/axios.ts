@@ -44,7 +44,7 @@ export async function postUserProfile({
       formData.toString(),
       config
     );
-    return response.data;
+    return response;
   } catch (error) {
     console.error(error);
   }

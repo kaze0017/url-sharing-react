@@ -10,6 +10,7 @@ import TreeChart from "../components/membermanagement/TreeChartCopy";
 import { data } from "../lib/data2";
 import { getNPeople } from "../lib/actions";
 import { ChartDragAndDropProvider } from "../context/ChartDragAndDropProvider";
+import PageTitleComponent from "../components/membermanagement/PageTitleComponent";
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -80,7 +81,7 @@ export default function MemberManagement() {
     <NetworksProvider>
       <MainPanelWrapper>
         <ChartDragAndDropProvider>
-          <PageTitle menu={menuLinks[2]} />
+          <PageTitle menu={menuLinks[2]} component={PageTitleComponent} />
           <DndProvider backend={HTML5Backend}>
             <Outlet />
           </DndProvider>

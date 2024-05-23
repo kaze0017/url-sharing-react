@@ -3,9 +3,9 @@ import { PersonType } from "../lib/interfaces";
 import { groupType } from "../lib/interfaces";
 
 interface ShareWithGroupsContextType {
-  mode: "users" | "groups" | "search or invite" | "selected";
+  mode: "users" | "groups"  | "selected";
   status: "loading" | "error" | "success" | "noLinks" | "approval" | "sharingOptions" | "selectingRecipients";
-  setMode: React.Dispatch<React.SetStateAction<"users" | "groups" | "search or invite" | "selected">>;
+  setMode: React.Dispatch<React.SetStateAction<"users" | "groups" |  "selected">>;
   setStatus: React.Dispatch<
     React.SetStateAction<
       "loading" | "error" | "success" | "noLinks" | "approval" | "sharingOptions" | "selectingRecipients"
@@ -29,7 +29,7 @@ interface ShareWithGroupsContextType {
 
 const ShareWithGroupsContext = createContext<ShareWithGroupsContextType>({
   query: "",
-  mode: "search or invite",
+  mode: "users",
   status: "sharingOptions",
   setQuery: () => {},
   selectedPeople: [],
@@ -54,9 +54,7 @@ export function ShareWithGroupsProvider({
   children: React.ReactNode;
 }) {
   const [selectedPeople, setSelectedPeople] = useState<PersonType[]>([]);
-  const [mode, setMode] = useState<
-    "search or invite" | "users" | "groups" | "selected"
-  >("search or invite");
+  const [mode, setMode] = useState<"users" | "groups" | "selected">("users");
   const [query, setQuery] = useState<string>("");
   const [peopleToDisplay, setPeopleToDisplay] = useState<PersonType[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<groupType[]>([]);

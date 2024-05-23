@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 interface TabBtnProps {
   selectedCount?: number;
-  name: "users" | "groups" | "search or invite" | "selected";
+  name: "users" | "groups" | "selected";
 }
 export default function TabBtnText({ selectedCount, name }: TabBtnProps) {
   const navigate = useNavigate();
@@ -20,13 +20,9 @@ export default function TabBtnText({ selectedCount, name }: TabBtnProps) {
       }`}
       onClick={handleTabClick}
     >
-      {name === "search or invite" ? (
-        <p>{name}</p>
-      ) : (
-        <p>
-          {name} ({selectedCount})
-        </p>
-      )}
+      <p>
+        {name} ({selectedCount})
+      </p>
     </div>
   );
 }

@@ -256,7 +256,7 @@ export default function TreeChart({ data }: TreeChartProps) {
 
   return (
     <div className="flex">
-      <Search />
+      {/* <Search /> */}
       <div ref={drop}>
         <svg ref={svgRef} width={900} height={900}></svg>
       </div>

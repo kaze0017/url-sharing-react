@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function FooterController() {
   const navigate = useNavigate();
-  const { status, setStatus } = useContext(ShareWithGroupsContext);
+  const { status, setStatus , selectedGroups, selectedPeople} = useContext(ShareWithGroupsContext);
   const [progress, setProgress] = useState(0);
 
   const goToLinkManagement = () => {
@@ -26,7 +26,7 @@ export default function FooterController() {
     }
   }, [status]);
 
-  const mainBtnClass = "font-bold text-blue-950  px-2 cursor-pointer uppercase";
+  const mainBtnClass = "font-bold text-blue-950  px-2 cursor-pointer uppercase disabled:opacity-50";
 
   return (
     <div className="flex flex-col">
@@ -39,9 +39,9 @@ export default function FooterController() {
         </div>
         {/* {status === "sharingOptions" && <div>Next</div>} */}
         {status === "selectingRecipients" && (
-          <div className={mainBtnClass} onClick={handelShareNow}>
+          <button className={mainBtnClass} onClick={handelShareNow} disabled={selectedPeople.length + selectedGroups.length === 0}>
             Share Now
-          </div>
+          </button>
         )}
         {status === "success" && (
           <div className={mainBtnClass} onClick={goToLinkManagement}>

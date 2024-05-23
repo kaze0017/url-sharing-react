@@ -1,13 +1,11 @@
 import {
   useState,
   createContext,
-  useEffect,
   Dispatch,
   SetStateAction,
   ReactNode,
   useContext,
 } from "react";
-import { getUserProfile } from "../api/axios";
 import { UserProfileType } from "../lib/interfaces";
 import AuthContext from "./AuthProvider";
 
@@ -40,6 +38,8 @@ const UserProfileContext = createContext<UserProfileContextType>({
     },
     sharesCount: 0,
     subscribersCount: 0,
+    connections: [],
+    pendingConnections: [],
   },
   setUserProfile: () => {},
 });
@@ -57,8 +57,8 @@ export default function UserProfileProvider({
     auth?.userProfile || {
       id: 0,
       first_name: "",
-      profile_picture: "",
       last_name: "",
+      profile_picture: "",
       title: "",
       email: "",
       user_name: "",
@@ -75,16 +75,10 @@ export default function UserProfileProvider({
         links: [],
         categories: "",
       },
+      connections: [],
+      pendingConnections: [],
     }
   );
-
-  // async function fetchUserProfile() {
-  //   const response = await getUserProfile(auth?.token || "");
-  //   setUserProfile(response);
-  // }
-  // useEffect(() => {
-  //   fetchUserProfile();
-  // }, []);
 
   return (
     <UserProfileContext.Provider value={{ userProfile, setUserProfile }}>
@@ -93,4 +87,32 @@ export default function UserProfileProvider({
   );
 }
 
-export { UserProfileContext };
+function initializeUserProfile() {
+  const userProfile = {
+    id: 4,
+    first_name: "...",
+    last_name: "...",
+    profile_picture: "",
+    title: "",
+    email: "",
+    user_name: "",
+    org_email: "",
+    org_foa: "",
+    org_name: "",
+    org_picture: "",
+    payment_info: "",
+    payment_method: "",
+    sub_name: "basic",
+    sub_remaining_days: 0,
+    user_id: 40,
+    publications: { links: [], categories: "" },
+    sharesCount: 0,
+    subscribersCount: 0,
+    connections: [],
+    pendingConnections: [],
+  };
+
+  return userProfile;
+}
+
+export { UserProfileContext, initializeUserProfile };

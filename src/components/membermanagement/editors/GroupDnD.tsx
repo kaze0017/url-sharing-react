@@ -9,6 +9,7 @@ interface GroupDnDProps {
 }
 
 export default function GroupDnD({ members, setMembers }: GroupDnDProps) {
+  console.log(members);
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "PERSON",
     drop: (item: { type: string; person: PersonType }) => {

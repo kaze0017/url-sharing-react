@@ -12,6 +12,9 @@ export type PersonType = {
   rankCount?: number;
   sharesCount?: number;
   subscribersCount?: number;
+  org_name?: string;
+  org_picture?: string;
+  connections?: PersonType[];
 };
 
 export type UserProfileType = {
@@ -39,6 +42,7 @@ export type UserProfileType = {
   rankCount?: number;
   subscribersCount?: number;
   connections?: PersonType[];
+  pendingConnections?: PersonType[];
   groups?: groupType[];
 };
 

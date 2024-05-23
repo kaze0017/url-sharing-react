@@ -27,23 +27,24 @@ export default function Editor() {
   const [newTree, setNewTree] = useState(false);
 
   useEffect(() => {
-    if (newGroup){
-      id="0";
+    if (newGroup) {
+      id = "0";
       setType("group");
     }
-    if (newTree){
-      id="0";
+    if (newTree) {
+      id = "0";
       setType("tree");
     }
   }, [newGroup, newTree]);
 
   return (
-      <div className="flex  gap-2 w-full h-full p-2">
-        <SearchPeople />
-        {type === "group" && <GroupEditor groupId={id} />}
-        {type === "tree" && <TreeEditor />}
-        {type === "neural" && <NeutralEditor setNewGroup={setNewGroup} setNewTree={setNewTree} />}
-      </div>
-
+    <div className="flex  gap-2 w-full h-full p-2">
+      <SearchPeople />
+      {type === "group" && <GroupEditor groupId={id} />}
+      {type === "tree" && <TreeEditor treeId={id} />}
+      {type === "neural" && (
+        <NeutralEditor setNewGroup={setNewGroup} setNewTree={setNewTree} />
+      )}
+    </div>
   );
 }

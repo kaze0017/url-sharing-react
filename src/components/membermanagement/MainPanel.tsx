@@ -8,19 +8,50 @@ import { networkMenu } from "../../lib/NetworkMenu";
 import { Link } from "react-router-dom";
 import NetworksProvider from "../../context/NetworksProvider";
 import MainPanelWrapper from "../MainPanelWrapper";
+import MenuBtnCard from "../menus/btns/MenuBtnCard";
+import { HiOutlineUserGroup } from "react-icons/hi2";
+import { PiGraphLight } from "react-icons/pi";
+import { TbWorldUpload } from "react-icons/tb";
+import Relations from "./Relations";
+import Groups from "./Groups";
+import Graphs from "./Graphs";
+import RelationsProvider from "../../context/RelationsProvider";
 
 export default function MainPanel() {
   const groupsToDisplay = [groupOne, groupTwo, groupThree];
 
-  const { type, view } = useContext(NetworksContext);
-
+  const { type, view, setType } = useContext(NetworksContext);
   useEffect(() => {
-    console.log("Type: ", type);
-  }, [type]);
+    setType("none");
+  }, []);
 
   return (
-    <MainPanelWrapper>
-      <FeedMenu query="" setQuery={() => {}} />
+    <RelationsProvider>
+      <MainPanelWrapper>
+        {type === "none" && (
+          <div className="flex flex-wrap gap-5 flex-grow items-center justify-center">
+            <MenuBtnCard
+              icon={HiOutlineUserGroup}
+              title="Groups"
+              callBacFunc={() => setType("groups")}
+            />
+            <MenuBtnCard
+              icon={PiGraphLight}
+              title="Graphs"
+              callBacFunc={() => setType("graphs")}
+            />
+            <MenuBtnCard
+              icon={TbWorldUpload}
+              title="Relations"
+              callBacFunc={() => setType("relations")}
+            />
+          </div>
+        )}
+        {type === "relations" && <Relations />}
+        {type === "graphs" && <Graphs />}
+        {type === "groups" && <Groups />}
+
+        {/* <FeedMenu query="" setQuery={() => {}} />
       {type === "all" || type === "graphs" ? (
         <div className="flex flex-col w-full gap-2">
           <h2 className="text-gray-800 uppercase">Graphs</h2>
@@ -44,7 +75,8 @@ export default function MainPanel() {
             })}
           </div>
         </div>
-      ) : null}
-    </MainPanelWrapper>
+      ) : null} */}
+      </MainPanelWrapper>
+    </RelationsProvider>
   );
 }

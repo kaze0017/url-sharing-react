@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({ columns, columnsWidth }) => {
                 column.icon
               ) : (
                 <p className="uppercase text-2xs w-full font-semibold">
-                  {column.title}
+                  {column.title !== "SELECT"  ? column.title : ""}
                 </p>
               )}
             </div>

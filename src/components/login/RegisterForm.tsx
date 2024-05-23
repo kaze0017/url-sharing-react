@@ -1,6 +1,9 @@
 import React, { useState, useRef, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
-import { UserProfileContext } from "../../context/UserProfileProvider";
+import {
+  UserProfileContext,
+  initializeUserProfile,
+} from "../../context/UserProfileProvider";
 import axiosInstance from "../../api/axios";
 import { REGISTER_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
@@ -38,28 +41,29 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
 
     try {
       const formData = new URLSearchParams();
-      formData.append("username", user);
       formData.append("password", pwd);
       formData.append("email", email);
+      formData.append("username", user);
 
       const response = await axiosInstance.post(
         REGISTER_URL,
         formData.toString(),
         {}
       );
+      console.log(response.data);
+      const tempUserProfile = {...initializeUserProfile(), email: email, username: user}
 
       setAuth({
-        userProfile: response.data.userProfile,
+        userProfile: tempUserProfile,
         token: response.data.auth,
       });
 
-      // setUserProfile(response.data.userProfile);
-
-      navigate("/initialProfile");
-
+      setUserProfile(tempUserProfile);
       setUser("");
       setPwd("");
       setMatchPwd("");
+
+      navigate("/initialProfile");
     } catch (err: any) {
       setIsPending(false);
 
@@ -81,7 +85,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
           id="name"
           className="rounded-md border-gray-300"
           type="text"
-          placeholder="Name"
+          placeholder="User Name"
           disabled={isPending}
           ref={userRef}
           onChange={(e) => setUser(e.target.value)}

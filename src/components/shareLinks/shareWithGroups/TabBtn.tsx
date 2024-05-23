@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 interface TabBtnProps {
   icon: IconType;
   selectedCount?: number;
-  name: "users" | "groups" | "search or invite" | "selected";
+  name: "users" | "groups" |  "selected";
 }
 export default function TabBtn({ icon, selectedCount, name }: TabBtnProps) {
   const navigate = useNavigate();

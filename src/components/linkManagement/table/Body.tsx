@@ -33,18 +33,15 @@ const Body: React.FC<BodyProps> = ({
   setSelectedLinks,
   selectedLinks,
 }) => {
-
-
-function toggleSelectedLink(sharedLink: SharedLinkType) {
-  const linkIds = selectedLinks.map((link) => link.id);
-  const linkIndex = linkIds.indexOf(sharedLink.id);
-  const newSelectedLinks =
-    linkIndex !== -1
-      ? selectedLinks.filter((_, index) => index !== linkIndex)
-      : [...selectedLinks, sharedLink];
-  setSelectedLinks(newSelectedLinks);
-}
-
+  function toggleSelectedLink(sharedLink: SharedLinkType) {
+    const linkIds = selectedLinks.map((link) => link.id);
+    const linkIndex = linkIds.indexOf(sharedLink.id);
+    const newSelectedLinks =
+      linkIndex !== -1
+        ? selectedLinks.filter((_, index) => index !== linkIndex)
+        : [...selectedLinks, sharedLink];
+    setSelectedLinks(newSelectedLinks);
+  }
 
   useEffect(() => {}, [columnsWidth]);
 
@@ -82,6 +79,17 @@ function toggleSelectedLink(sharedLink: SharedLinkType) {
                 >
                   {(() => {
                     switch (column.id) {
+                      case "SELECT":
+                        return (
+                          <input
+                            type="checkbox"
+                            className="mx-auto checked:bg-blue-950"
+                            checked={selectedLinks.some(
+                              (link) => link.id === sharedLink.id
+                            )}
+                            onChange={() => toggleSelectedLink(sharedLink)}
+                          />
+                        );
                       case "THUMBNAIL":
                         return (
                           <img

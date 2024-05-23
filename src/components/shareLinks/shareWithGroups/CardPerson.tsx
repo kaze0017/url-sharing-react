@@ -1,7 +1,9 @@
-import { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { UserProfileContext } from "../../../context/UserProfileProvider";
 import ShareWithGroupsContext from "../../../context/ShareWithGroupsProvider";
 import { PersonType } from "../../../lib/interfaces";
 import ProfilePicture from "../../profilePictures/ProfilePicture";
+import { set } from "react-hook-form";
 
 interface CardPersonProps {
   person: PersonType;
@@ -12,8 +14,14 @@ export default function CardPerson({ person, selected }: CardPersonProps) {
   const { selectedPeople, setSelectedPeople, setPeopleToDisplay } = useContext(
     ShareWithGroupsContext
   );
+  const { userProfile, setUserProfile } = useContext(UserProfileContext);
+  const [relationState, setRelationState] = useState<
+    "connected" | "not-connected" | "pending"
+  >("not-connected");
 
-  function toggle(person: PersonType) {
+  function toggle(e : React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    e.stopPropagation();
+    console.log(e.target);
     if (selectedPeople.some((item) => item.id === person.id)) {
       setSelectedPeople((prevSelectedPeople) =>
         prevSelectedPeople.filter((prevPerson) => prevPerson.id !== person.id)
@@ -34,20 +42,45 @@ export default function CardPerson({ person, selected }: CardPersonProps) {
     }
   }
 
+function handleConnect(person : PersonType) {
+  setUserProfile((prevUserProfile) => ({
+    ...prevUserProfile,
+    pendingConnections: [...(prevUserProfile.pendingConnections || []), person],
+  }));
+}
+  useEffect(() => {
+    if (
+      userProfile.connections?.some((connection) => connection.id === person.id)
+    ) {
+      setRelationState("connected");
+    } else if (
+      userProfile.pendingConnections?.some(
+        (connection) => connection.id === person.id
+      )
+    ) {
+      setRelationState("pending");
+    } else {
+      setRelationState("not-connected");
+    }
+  }, [userProfile.connections, userProfile.pendingConnections]);
+
   const cardClass = `text-xs w-[80px] h-[100px] flex flex-col items-center justify-center gap-1 p-1 rounded-lg cursor-pointer ${
     selected ? "bg-indigo-200" : "bg-gray-200"
   }`;
 
   return (
     <div
-      onClick={() => {
-        toggle(person);
+      onClick={(e) => {
+        toggle(e);
       }}
       className={cardClass}
     >
       <ProfilePicture person={person} />
       <p>{person.first_name}</p>
       <p>{person.last_name}</p>
+      {relationState === "connected" && <button>Connected</button>}
+      {relationState === "not-connected" && <button onClick={() => handleConnect(person)}>Connect</button>}
+      {relationState === "pending" && <button>Pending</button>}
     </div>
   );
 }
