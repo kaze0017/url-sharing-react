@@ -468,6 +468,7 @@ export default function AddLinkForm() {
               <ProgressBarComp
                 percent={currentStep === 0 ? 0 : currentStep === 1 ? 50 : 100}
                 filledBackground="linear-gradient(90deg, rgba(121,115,200,1) 0%, rgba(29,65,163,1) 35%, rgba(4,27,50,1) 100%)"
+                steps={3}
               />
             </div>
             <div className="w-full flex items-center justify-between text-center">

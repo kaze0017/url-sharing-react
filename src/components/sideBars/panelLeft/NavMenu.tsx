@@ -12,7 +12,7 @@ export default function NavMenu({ toggledCollapse, menuLinks }: Props) {
   const panelBtnsWrapper = "flex flex-col gap-2";
   return (
     <div className={panelBtnsWrapper}>
-      {menuLinks.map((link) => (
+      {menuLinks.map((link) => ( link.id !== 7 &&
         <NavButton
           key={link.id}
           link={link.url}

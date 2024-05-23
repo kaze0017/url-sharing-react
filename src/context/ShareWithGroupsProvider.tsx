@@ -3,12 +3,12 @@ import { PersonType } from "../lib/interfaces";
 import { groupType } from "../lib/interfaces";
 
 interface ShareWithGroupsContextType {
-  mode: "people" | "groups";
-  status: "loading" | "error" | "success" | "noLinks" | "approval";
-  setMode: React.Dispatch<React.SetStateAction<"people" | "groups">>;
+  mode: "users" | "groups" | "search or invite" | "selected";
+  status: "loading" | "error" | "success" | "noLinks" | "approval" | "sharingOptions" | "selectingRecipients";
+  setMode: React.Dispatch<React.SetStateAction<"users" | "groups" | "search or invite" | "selected">>;
   setStatus: React.Dispatch<
     React.SetStateAction<
-      "loading" | "error" | "success" | "noLinks" | "approval"
+      "loading" | "error" | "success" | "noLinks" | "approval" | "sharingOptions" | "selectingRecipients"
     >
   >;
   query: string;
@@ -21,12 +21,16 @@ interface ShareWithGroupsContextType {
   setSelectedGroups: React.Dispatch<React.SetStateAction<groupType[]>>;
   peopleToDisplay: PersonType[];
   setPeopleToDisplay: React.Dispatch<React.SetStateAction<PersonType[]>>;
+  publicationDate: string;
+  setPublicationDate: React.Dispatch<React.SetStateAction<string>>;
+  expirationDate: string;
+  setExpirationDate: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ShareWithGroupsContext = createContext<ShareWithGroupsContextType>({
   query: "",
-  mode: "people",
-  status: "noLinks",
+  mode: "search or invite",
+  status: "sharingOptions",
   setQuery: () => {},
   selectedPeople: [],
   selectedGroups: [],
@@ -38,6 +42,10 @@ const ShareWithGroupsContext = createContext<ShareWithGroupsContextType>({
   setMode: () => {},
   setSelectedGroups: () => {},
   setGroupsToDisplay: () => {},
+  publicationDate: "Today",
+  setPublicationDate: () => {},
+  expirationDate: "No expiration date",
+  setExpirationDate: () => {},
 });
 
 export function ShareWithGroupsProvider({
@@ -46,14 +54,18 @@ export function ShareWithGroupsProvider({
   children: React.ReactNode;
 }) {
   const [selectedPeople, setSelectedPeople] = useState<PersonType[]>([]);
-  const [mode, setMode] = useState<"people" | "groups">("people");
+  const [mode, setMode] = useState<
+    "search or invite" | "users" | "groups" | "selected"
+  >("search or invite");
   const [query, setQuery] = useState<string>("");
   const [peopleToDisplay, setPeopleToDisplay] = useState<PersonType[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<groupType[]>([]);
   const [groupsToDisplay, setGroupsToDisplay] = useState<groupType[]>([]);
   const [status, setStatus] = useState<
-    "loading" | "error" | "success" | "noLinks" | "approval"
-  >("noLinks");
+    "loading" | "error" | "success" | "noLinks" | "approval" | "sharingOptions" | "selectingRecipients"
+  >("sharingOptions");
+  const [publicationDate, setPublicationDate] = useState<string>("Today");
+  const [expirationDate, setExpirationDate] = useState<string>("No expiration date");
 
   return (
     <ShareWithGroupsContext.Provider
@@ -72,6 +84,10 @@ export function ShareWithGroupsProvider({
         setGroupsToDisplay,
         status,
         setStatus,
+        publicationDate,
+        setPublicationDate,
+        expirationDate,
+        setExpirationDate,
       }}
     >
       {children}

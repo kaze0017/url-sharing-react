@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import ShareWithGroupsContext from "../../../context/ShareWithGroupsProvider";
 import SearchBar from "../../SearchBar";
 import TabBtn from "./TabBtn";
+import TabBtnText from "./TabBtnText";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
 import { PiShareFatThin } from "react-icons/pi";
@@ -22,7 +23,7 @@ export default function Controller() {
   } = useContext(ShareWithGroupsContext);
 
   useEffect(() => {
-    if (mode === "people") {
+    if (mode === "users") {
       const people = getNPeople(10);
       let searchedPeople = people.filter(
         (person: PersonType) =>
@@ -47,25 +48,18 @@ export default function Controller() {
   }, [query]);
 
   return (
-    <div className="flex items-center gap-6 px-4">
-      <div className="flex items-center justify-center gap-4 h-[70px]">
-        <TabBtn
-          icon={GoPerson}
+    <div className="flex flex-col w-full items-center font-semibold">
+      <div className="flex items-center justify-between h-[35px] w-full">
+        <TabBtnText
           selectedCount={selectedPeople.length}
-          name={"people"}
+          name={"search or invite"}
         />
-        <TabBtn
-          icon={GoPeople}
-          selectedCount={selectedGroups.length}
-          name={"groups"}
+        <TabBtnText selectedCount={selectedPeople.length} name={"users"} />
+        <TabBtnText selectedCount={selectedGroups.length} name={"groups"} />
+        <TabBtnText
+          selectedCount={selectedPeople.length + selectedGroups.length}
+          name={"selected"}
         />
-        {selectedPeople.length > 0 || selectedGroups.length > 0 ? (
-          <TabBtn
-            icon={PiShareFatThin}
-            selectedCount={selectedPeople.length + selectedGroups.length}
-            name={"share"}
-          />
-        ) : null}
       </div>
       <SearchBar query={query} setQuery={setQuery} />
     </div>

@@ -4,20 +4,15 @@ import Controller from "./shareWithGroups/Controller";
 import MainPanelWrapper from "../MainPanelWrapper";
 import { getNPeople } from "../../lib/actions";
 import { groupOne, groupTwo, groupThree } from "../../lib/placeholder-data";
-import GroupSm from "../groups/GroupSm";
-
-import CardPerson from "./shareWithGroups/CardPerson";
+import SelectionPanel from "./shareWithGroups/SelectionPanel";
 
 export default function ShareWithGroups() {
   const {
     mode,
-    setMode,
     selectedPeople,
     peopleToDisplay,
     setPeopleToDisplay,
-    groupsToDisplay,
-    selectedGroups,
-    setGroupsToDisplay
+    setGroupsToDisplay,
   } = useContext(ShareWithGroupsContext);
 
   const groups = [groupOne, groupTwo, groupThree];
@@ -26,41 +21,36 @@ export default function ShareWithGroups() {
   useEffect(() => {
     setPeopleToDisplay(people);
     setGroupsToDisplay(groups);
-
   }, []);
 
   useEffect(() => {}, [selectedPeople, peopleToDisplay]);
+  const panelsWrapperClasses = "flex flex-col gap-2 w-full uppercase text-xs";
+  const mainWrapperClass =
+    "relative p-1 justify-center flex flex-wrap gap-x-2 gap-y-2 overflow-y-scroll min-w-full";
 
   return (
     <MainPanelWrapper>
-      <Controller />
-      {mode === "people" ? (
-        <div className="flex flex-col items-center">
-          <div className="flex flex-wrap gap-4 mt-4">
-            {selectedPeople.map((person) => (
-              <CardPerson key={person.id} person={person} selected={true} />
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-4 mt-4">
-            {peopleToDisplay.map((person) => (
-              <CardPerson key={person.id} person={person} selected={false} />
-            ))}
-          </div>
+      <div className="flex flex-col gap-2 w-full h-full items-center max-w-[600px] mx-auto overflow-hidden  overflow-y-hidden overflow-x-hidden">
+        <Controller />
+        <div className={mainWrapperClass}>
+          {mode === "users" ? (
+            <div className={panelsWrapperClasses}>
+              <SelectionPanel title="Selected Users" name="selectedUsers" />
+              <SelectionPanel title="Available Users" name="users" />
+            </div>
+          ) : mode === "groups" ? (
+            <div className={panelsWrapperClasses}>
+              <SelectionPanel title="Selected Groups" name="selectedGroups" />
+              <SelectionPanel title="Available Groups" name="groups" />
+            </div>
+          ) : mode === "search or invite" ? null : (
+            <div className={panelsWrapperClasses}>
+              <SelectionPanel title="Selected Users" name="selectedUsers" />
+              <SelectionPanel title="Selected Groups" name="selectedGroups" />
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="flex flex-col items-center">
-          <div className="flex flex-wrap gap-4 mt-4">
-            {selectedGroups.map((group) => (
-              <GroupSm key={group.id} group={group} selected={true} />
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-4 mt-4">
-            {groupsToDisplay.map((group) => (
-              <GroupSm group={group} key={group.id} selected={false} />
-            ))}
-          </div>
-        </div>
-      )}
+      </div>
     </MainPanelWrapper>
   );
 }

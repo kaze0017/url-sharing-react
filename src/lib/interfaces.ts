@@ -38,6 +38,8 @@ export type UserProfileType = {
   sharesCount?: number;
   rankCount?: number;
   subscribersCount?: number;
+  connections?: PersonType[];
+  groups?: groupType[];
 };
 
 export type SharedLinkType = {

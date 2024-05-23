@@ -1,12 +1,20 @@
 interface ProgressBarProps {
   percent: number;
-  filledBackground: string;
+  filledBackground?: string;
+  steps: number;
+  provider?: string;
 }
 
 export default function ProgressBarComp({
   percent,
   filledBackground,
+  steps,
+  provider,
 }: ProgressBarProps) {
+  if (percent === 400) {
+    percent = 100;
+  }
+
   const circleConst = "w-[20px] h-[20px]  rounded-full border-4 ";
 
   const circleIncomplete = "bg-gray-100 outline outline-gray-300";
@@ -35,27 +43,38 @@ export default function ProgressBarComp({
         <div className={topBar}></div>
       </div>
       <div className="absolute flex items-center justify-between top-0 left-0 w-[100%] h-full px-1">
-        <div
-          className={`${
-            percent >= 0
-              ? `${circleConst} ${circleComplete}`
-              : `${circleConst} ${circleIncomplete}`
-          } `}
-        ></div>
-        <div
-          className={`${
-            percent >= 50
-              ? `${circleConst} ${circleComplete}`
-              : `${circleConst} ${circleIncomplete}`
-          } `}
-        ></div>
-        <div
-          className={`${
-            percent >= 100
-              ? `${circleConst} ${circleComplete}`
-              : `${circleConst} ${circleIncomplete}`
-          } `}
-        ></div>
+        {Array.from({ length: steps }).map((_, index) => (
+          <div
+            key={index}
+            className={`${
+              percent >= index * (100 / steps)
+                ? `${circleConst} ${circleComplete}`
+                : `${circleConst} ${circleIncomplete}`
+            } `}
+          ></div>
+        ))}
+
+        {/* // <div
+        //   className={`${
+        //     percent >= 0
+        //       ? `${circleConst} ${circleComplete}`
+        //       : `${circleConst} ${circleIncomplete}`
+        //   } `}
+        // ></div>
+        // <div
+        //   className={`${
+        //     percent >= 50
+        //       ? `${circleConst} ${circleComplete}`
+        //       : `${circleConst} ${circleIncomplete}`
+        //   } `}
+        // ></div>
+        // <div
+        //   className={`${
+        //     percent >= 100
+        //       ? `${circleConst} ${circleComplete}`
+        //       : `${circleConst} ${circleIncomplete}`
+        //   } `}
+        // ></div> */}
       </div>
     </div>
   );
