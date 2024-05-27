@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useContext } from "react";
 import { select, hierarchy, tree, linkVertical, drag } from "d3";
 import { useDraggable } from "react-use-draggable-scroll";
 import { useDrop } from "react-dnd";
-import { PersonType } from "../../lib/interfaces";
+import { UserProfileType } from "../../lib/interfaces";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Search from "./Search";
@@ -11,7 +11,7 @@ import ChartDragAndDropContext from "../../context/ChartDragAndDropProvider";
 interface TreeNode {
   id: number;
   name: string;
-  profile_picture: string;
+  profile_picture?: string;
   children?: TreeNode[];
   collapsed?: boolean;
 }
@@ -34,7 +34,7 @@ export default function TreeChart({ data }: TreeChartProps) {
 
   //  const [{ isOver }, drop] = useDrop(() => ({
   //    accept: "PERSON",
-  //    drop: (item: { type: string; person: PersonType }) => {
+  //    drop: (item: { type: string; person: UserProfileType }) => {
   //      // Access the dropped person object
   //      const { person } = item;
   //      // Add the person to the deletedUsers array
@@ -164,7 +164,7 @@ export default function TreeChart({ data }: TreeChartProps) {
         .enter()
         .append("g")
         .append("image")
-        .attr("xlink:href", (node) => (node.data as any).profile_picture)
+        .attr("xlink:href", (node) => (node.data as any).profile_picture || "/images/defaults/personDefaultImage.png")
         .attr("x", (node) => (node as any).x - 25)
         .attr("y", (node) => (node as any).y - 25 + offset)
         .attr("width", 50)

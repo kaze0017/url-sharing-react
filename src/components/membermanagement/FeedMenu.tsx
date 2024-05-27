@@ -2,10 +2,11 @@ import React, { useState, Dispatch, useContext } from "react";
 import { NetworksContext } from "../../context/NetworksProvider";
 import SearchBar from "../SearchBar";
 import SelectorMenu from "../menus/SelectorMenu";
-import { menuType } from "../../lib/NetworkMenu";
 import { useNavigate } from "react-router-dom";
 import { networkMenu } from "../../lib/NetworkMenu";
 import FeederBtn from "../FeederBtn";
+import { BsUiChecksGrid } from "react-icons/bs";
+
 
 interface FeedMenuProps {
   query: string;
@@ -56,7 +57,6 @@ export default function FeedMenu({ query, setQuery }: FeedMenuProps) {
           )}
         </div>
         <div className="flex relative z-10">
-          <FeederBtn onClick={() => handelTypeSelector()} title="Type" />
           {showTypeSelector && (
             <SelectorMenu
               setSelected={setType}
@@ -65,6 +65,7 @@ export default function FeedMenu({ query, setQuery }: FeedMenuProps) {
             />
           )}
         </div>
+        {view === "list" && <BsUiChecksGrid className="text-2xl" />}
       </div>
       <SearchBar query={query} setQuery={setQuery} />
     </div>

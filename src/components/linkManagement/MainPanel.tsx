@@ -17,9 +17,26 @@ import MainPanelWrapper from "../MainPanelWrapper";
 import { getSharedLinks } from "../../api/axios";
 import LinkManagementContext from "../../context/LinkManagementProvider";
 import LinksSelectedMenu from "./controlers/LinksSelectedMenu";
+import { UserProfileType } from "../../lib/interfaces";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  ColumnDef,
+  getFilteredRowModel,
+  getPaginationRowModel,
+} from "@tanstack/react-table";
 
 import GrabScroll from "../GrabScroll";
 import FeederBtn from "../FeederBtn";
+import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
+import Type from "./table/body/Type";
+import PublicationDate from "./table/body/PublicationDate";
+import ExpirationDate from "./table/body/ExpirationDate";
+import Count from "./table/body/Count";
+import QrCode from "./table/body/QrCode";
+import ShortLink from "./table/body/ShortLink";
 
 export default function MainPanel() {
   const { auth } = useContext(AuthContext);
@@ -135,8 +152,6 @@ export default function MainPanel() {
   const mainBtnClass =
     "p-2 px-2 flex items-center justify-center text-xs bg-gray-300 h-10 rounded-xl min-w-24 max-w-24 uppercase hover:bg-gray-600 text-xs text-black hover:text-white";
 
-
-
   return (
     <MainPanelWrapper>
       {/* <div className={feedWrapperClass}> */}
@@ -221,8 +236,8 @@ export default function MainPanel() {
               <FeederBtn
                 title="Columns"
                 onClick={() => {
-                  setShowFilter(true);
-                  setShowSelector("");
+                  setShowFilter(!showFilter);
+                  // setShowSelector("");
                 }}
               />
             )}
@@ -233,15 +248,14 @@ export default function MainPanel() {
           </div>
         </div>
       )}
-      {selectedLinks.length !== 0 && (
-        <LinksSelectedMenu/>
-      )}
+      {selectedLinks.length !== 0 && <LinksSelectedMenu />}
       {viewSize === "details" && (
         <Table
           sharedLinks={sharedLinksToDisplay}
-          columns={columns}
+          columns={createColumns()}
           setSelectedLinks={setSelectedLinks}
           selectedLinks={selectedLinks}
+          showFilter={showFilter}
         />
       )}
       {viewSize === "small" && (
@@ -265,42 +279,6 @@ export default function MainPanel() {
           width={600}
         />
       )}
-
-      <FadeInOut show={showFilter} duration={1000}>
-        <div className="z-20	 p-5 uppercase  absolute h-full	w-full backdrop-blur-lg bg-white/20  top-0 left-1/2  -translate-x-1/2 flex flex-col gap-2 items-center justify-center gap-2 flex-grow overflow-hidden">
-          <div className="flex flex-wrap gap-4 shadow-xl bg-white p-8 w-4/5 mx-auto rounded-2xl">
-            {columns.map((column, index) => (
-              <div
-                className="text-xs w-32 overflow-hidden flex gap-2 p-1 items-center"
-                key={index}
-              >
-                <input
-                  className="rounded w-5 h-5"
-                  id={column.id}
-                  type="checkbox"
-                  value={column.id}
-                  checked={column.id === "NAME" ? true : column.display}
-                  disabled={column.id === "NAME"}
-                  onChange={() => toggleColumnDisplay(column.id)}
-                  style={{
-                    cursor: column.id === "NAME" ? "not-allowed" : "pointer",
-                  }}
-                />
-                <label className="text-xs" htmlFor={column.id}>
-                  {column.title}
-                </label>
-              </div>
-            ))}
-          </div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-            onClick={() => setShowFilter(false)}
-          >
-            Done
-          </button>
-        </div>
-      </FadeInOut>
-      {/* </div> */}
     </MainPanelWrapper>
   );
 }
@@ -437,4 +415,147 @@ function getColumns() {
       grow: 0,
     },
   ];
+}
+
+function createColumns() {
+  interface ExpandedSharedLinkType extends SharedLinkType {
+    select: boolean;
+    status: boolean;
+  }
+  const columnHelper = createColumnHelper<ExpandedSharedLinkType>();
+
+  
+  let tableColumns = [
+    columnHelper.accessor("select", {
+      header: ({ table }) => (
+        <input
+          checked={table.getIsAllRowsSelected()}
+          onChange={table.getToggleAllRowsSelectedHandler()}
+          type="checkbox"
+        />
+      ),
+      cell: ({ row }) => (
+        <input
+          checked={row.getIsSelected()}
+          disabled={!row.getCanSelect()}
+          onChange={row.getToggleSelectedHandler()}
+          type="checkbox"
+        />
+      ),
+    }),
+    columnHelper.accessor("thumbnail", {
+      header: "Thumbnail",
+      cell: (info) => (
+        <img
+          className="rounded-lg h-16 aspect-video mx-auto"
+          src={info.getValue()}
+          alt="thumbnail"
+        />
+      ),
+    }),
+    columnHelper.accessor("title", {
+      header: "Title",
+      cell: (info) => info.renderValue(),
+    }),
+    columnHelper.accessor("description", { header: "Description" }),
+
+    columnHelper.accessor("owner", {
+      header: "Owner",
+      cell: (info) => (
+        <>
+          <div className="flex flex-col items-center justify-center">
+            <ProfilePictureSm person={info.getValue()} />
+            <p className="text-3xs">
+              {info.getValue().first_name + " " + info.getValue().last_name}
+            </p>
+          </div>
+        </>
+      ),
+    }),
+    columnHelper.accessor("suggestedby", {
+      header: "Suggested By",
+      cell: (info) => (
+        <>
+          {info.getValue() !== (null || undefined) ? (
+            <div className="flex flex-col items-center justify-center">
+              <ProfilePictureSm person={info.getValue() as UserProfileType} />
+              <p className="text-3xs">
+                {info.getValue()?.first_name + " " + info.getValue()?.last_name}
+              </p>
+            </div>
+          ) : (
+            <p>NA</p>
+          )}
+        </>
+      ),
+    }),
+    columnHelper.accessor("sharedby", {
+      header: "Shared By",
+      cell: (info) => (
+        <>
+          {info.getValue() !== (null || undefined) ? (
+            <div className="flex flex-col items-center justify-center">
+              <ProfilePictureSm person={info.getValue() as UserProfileType} />
+              <p className="text-3xs">
+                {info.getValue()?.first_name + " " + info.getValue()?.last_name}
+              </p>
+            </div>
+          ) : (
+            <p>NA</p>
+          )}
+        </>
+      ),
+    }),
+    columnHelper.accessor("status", {
+      header: "Status",
+      cell: (info) => (
+        <p className="text-3xs">
+          {info.getValue() === true ? "Active" : "Inactive"}
+        </p>
+      ),
+    }),
+    columnHelper.accessor("audience", {
+      header: "Audience",
+      cell: (info) => (
+        <p className="text-3xs">
+          {info.getValue() === true ? "Public" : "Private"}
+        </p>
+      ),
+    }),
+    columnHelper.accessor("url_type", {
+      header: "Type",
+      cell: (info) => <Type type={info.getValue()} />,
+    }),
+    columnHelper.accessor("publicationDate", {
+      header: "Publication Date",
+      cell: (info) => (
+        <PublicationDate publicationDate={info.getValue() || ""} />
+      ),
+    }),
+    columnHelper.accessor("expirationDate", {
+      header: "Expiration Date",
+      cell: (info) => <ExpirationDate expirationDate={info.getValue() || ""} />,
+    }),
+    columnHelper.accessor("rankCount", {
+      header: () => <PiChartLineUp />,
+      cell: (info) => <Count count={info.getValue() || 0} />,
+    }),
+    columnHelper.accessor("sharedCount", {
+      header: () => <RiShareForwardLine />,
+      cell: (info) => <Count count={info.getValue() || 0} />,
+    }),
+    columnHelper.accessor("savedCount", {
+      header: () => <TfiTag />,
+      cell: (info) => <Count count={info.getValue() || 0} />,
+    }),
+    columnHelper.accessor("qr_code", {
+      header: "QR Code",
+      cell: (info) => <QrCode />,
+    }),
+    columnHelper.accessor("short_url", {
+      header: "Short Link",
+      cell: (info) => <ShortLink />,
+    }),
+  ];
+  return tableColumns;
 }

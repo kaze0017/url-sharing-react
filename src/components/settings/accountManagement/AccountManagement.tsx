@@ -1,7 +1,5 @@
-import React, { useContext } from "react";
+import  { useContext } from "react";
 import { SettingContext } from "../../../context/SettingsProvider";
-import SubscriptionDetails from "./SubscriptionDetails";
-import ConnectedAccounts from "./ConnectedAccounts";
 import PanelMenu from "../PanelMenu";
 import { settingsMenuLinks } from "../../../lib/SettingMenus";
 

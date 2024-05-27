@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import  { useEffect, useState, useRef } from "react";
 import { select, hierarchy, tree, linkVertical, drag } from "d3";
-import { useDraggable } from "react-use-draggable-scroll";
 
 interface TreeNode {
   id: number;
   name: string;
-  profile_picture: string;
+  profile_picture?: string;
   children?: TreeNode[];
   collapsed?: boolean;
 }
@@ -99,7 +98,7 @@ export default function Tree({ data, width, height }: TreeChartProps) {
         .enter()
         .append("g")
         .append("image")
-        .attr("xlink:href", (node) => (node.data as any).profile_picture)
+        .attr("xlink:href", (node) => (node.data as any).profile_picture || "/images/defaults/personDefaultImage.png")
         .attr("x", (node) => (node as any).x - 25)
         .attr("y", (node) => (node as any).y - 25 + offset)
         .attr("width", 50)

@@ -3,31 +3,22 @@ import FadeInOut from "./login/FadeInOut";
 import { IoIosClose } from "react-icons/io";
 
 interface TagSelectorProps {
-  setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   selectedTags: string[];
+  setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   editMode?: boolean;
+  inSuggestions?: string[];
 }
 
 export default function TagSelector({
   setSelectedTags,
   selectedTags,
   editMode = true,
+  inSuggestions,
 }: TagSelectorProps) {
   const MaxTag = 5;
   const [showWarning, setShowWarning] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
-  const suggestions = [
-    "tag1",
-    "tag2",
-    "tag3",
-    "tag4",
-    "tag5",
-    "bigtag1",
-    "bigtag2",
-    "bigtag3",
-    "bigtag4",
-    "bigtag5",
-  ];
+  const suggestions = inSuggestions || ["No Suggestions"];
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
 
   function removeTheTag(tag: string) {

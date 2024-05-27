@@ -1,4 +1,3 @@
-import RawTree from "./RawTree";
 import TreeChart from "../TreeChartCopy";
 import { getNPeople } from "../../../lib/actions";
 

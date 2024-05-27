@@ -36,7 +36,7 @@ const circleCurrentClass =
 interface IFormInput {
   title: string;
   contentDescription: string;
-  hashtags: Array<string>;
+  tags: Array<string>;
   url: string;
   back_up_link_1st: string;
   back_up_link_2nd: string;
@@ -44,20 +44,24 @@ interface IFormInput {
   category: string;
   url_username: string;
   url_pass: string;
-  defaultPort: string;
   sharingAbility: boolean;
   externalSharingAbility: boolean;
   sharingDeptLevel: string;
-  publicationDate: string;
-  publicationTime: string;
-  expirationDate: string;
-  expirationTime: string;
   url_type: string;
 }
 
 // AddLinkForm
 export default function AddLinkForm() {
   const { auth } = useContext(AuthContext);
+  // const tagSuggestions = Object.keys(auth?.userProfile?.tags || {});
+  const tagSuggestions = ["fun", "sport", "sport2", "kids"];
+  // const categorySuggestions = Object.keys(auth?.userProfile?.categories || {});
+  const categorySuggestions = [
+    "category1",
+    "category2",
+    "category3",
+    "category4",
+  ];
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const delta = currentStep - previousStep;
@@ -94,6 +98,7 @@ export default function AddLinkForm() {
 
   const [showThumbnailSelector, setShowThumbnailSelector] = useState(false);
   const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Array<string>>([]);
 
   const {
     register,
@@ -101,7 +106,9 @@ export default function AddLinkForm() {
     trigger,
     reset,
     formState: { errors },
+    watch,
   } = useForm<IFormInput>();
+  const watched = watch();
 
   const [tags, setTags] = useState<Array<string>>([]);
 
@@ -131,15 +138,10 @@ export default function AddLinkForm() {
       formData.append("content_description", data.contentDescription);
       formData.append("category", data.category);
       formData.append("thumbnail", selectedImage);
-      formData.append("hashtags", selectedTags.join(","));
+      formData.append("tags", selectedTags.join(","));
       formData.append("url_username", data.url_username);
       formData.append("url_pass", data.url_pass);
-      formData.append("default_port", data.defaultPort);
       formData.append("sharing_dept_level", data.sharingDeptLevel);
-      formData.append("publication_date", data.publicationDate);
-      formData.append("publication_time", data.publicationTime);
-      formData.append("expiration_date", data.expirationDate);
-      formData.append("expiration_time", data.expirationTime);
       formData.append("back_up_link_1st", data.back_up_link_1st);
       formData.append("back_up_link_2nd", data.back_up_link_2nd);
       formData.append("class_type", "link");
@@ -199,15 +201,14 @@ export default function AddLinkForm() {
   }, [selectedImage]);
 
   useEffect(() => {
-    register("hashtags", { value: selectedTags });
+    register("tags", { value: selectedTags });
   }, [selectedTags]);
 
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
-    const mainWrapperClass =
-      "panel-light relative p-1 justify-center flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide w-[700px]";
-
+  const mainWrapperClass =
+    "panel-light relative p-1 justify-center flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide w-[700px]";
 
   return (
     <div
@@ -260,6 +261,7 @@ export default function AddLinkForm() {
               <TagSelector
                 setSelectedTags={setSelectedTags}
                 selectedTags={selectedTags}
+                inSuggestions={tagSuggestions}
               />
               <div className="flex flex-col gap-1 w-full">
                 <input
@@ -323,11 +325,10 @@ export default function AddLinkForm() {
                 </button>
               </div>
 
-              <input
-                type="text"
-                className={longTextInputClass}
-                placeholder="Category Name"
-                {...register("category")}
+              <TagSelector
+                setSelectedTags={setSelectedCategory}
+                selectedTags={selectedCategory}
+                inSuggestions={categorySuggestions}
               />
               <input
                 type="text"
@@ -379,12 +380,6 @@ export default function AddLinkForm() {
               {...register("url_pass")}
             />
 
-            <input
-              type="text"
-              placeholder="Default Port"
-              {...register("defaultPort")}
-            />
-
             <div className="flex gap-2 items-center">
               <input
                 type="checkbox"
@@ -420,29 +415,31 @@ export default function AddLinkForm() {
             transition={{ duration: 0.5 }}
             className="w-full grow flex flex-col gap-2 "
           >
-            <input
-              type="date"
-              id="publicationDate"
-              {...register("publicationDate")}
-            />
-
-            <input
-              type="time"
-              id="publicationTime"
-              {...register("publicationTime")}
-            />
-
-            <input
-              type="date"
-              id="expirationDate"
-              {...register("expirationDate")}
-            />
-
-            <input
-              type="time"
-              id="expirationTime"
-              {...register("expirationTime")}
-            />
+            {/* Summery */}
+            <div className="relative flex w-full h-full overflow-hidden ">
+              <div className="flex absolute opacity-30 w-full h-full ">
+                <img
+                  src={watched.thumbnail}
+                  alt=""
+                  className="absolute w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col gap-1 bg-white bg-opacity-60 text-blue-950 font-semibold w-full h-full overflow-y-auto p-2">
+                <div className="flex">title : {watched.title}</div>
+                <div className="flex">contentDescription : {watched.contentDescription}</div>
+                <div className="flex">tags : {watched.tags}</div>
+                <div className="flex">url : {watched.url}</div>
+                <div className="flex">back_up_link_1st : {watched.back_up_link_1st}</div>
+                <div className="flex">back_up_link_2nd : {watched.back_up_link_2nd}</div>
+                <div className="flex">category : {watched.category}</div>
+                <div className="flex">url_username : {watched.url_username}</div>
+                <div className="flex">url_pass : {watched.url_pass}</div>
+                <div className="flex">sharingAbility : {watched.sharingAbility}</div>
+                <div className="flex">externalSharingAbility : {watched.externalSharingAbility}</div>
+                <div className="flex">sharingDeptLevel : {watched.sharingDeptLevel}</div>
+                <div className="flex">url_type : {watched.url_type}</div>
+              </div>
+            </div>
           </motion.div>
         )}
         {currentStep === 3 && (
@@ -520,7 +517,6 @@ function getSteps() {
       fields: [
         "usernameForAuthentication",
         "passwordForAuthentication",
-        "defaultPort",
         "sharingAbility",
         "externalSharingAbility",
         "sharingDeptLevel",

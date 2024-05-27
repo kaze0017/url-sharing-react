@@ -1,83 +1,129 @@
-import React, { useEffect, useState, useReducer } from "react";
-import { SharedLinkType } from "../../../lib/interfaces";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
-  ColumnDef,
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
+import { useEffect, useReducer, useState } from "react";
 
-interface TableProps {
-
-  columns: any;
-  setSelectedLinks: React.Dispatch<SharedLinkType[]>;
-  selectedLinks: SharedLinkType[];
-  sharedLinks: SharedLinkType[];
-  showFilter?: boolean;
-}
-
-interface ExpandedSharedLinkType extends SharedLinkType {
+type Person = {
   select: boolean;
-}
+  photo: string;
+  firstName: string;
+  lastName: string;
+  age: number;
+  visits: number;
+  status: string;
+  progress: number;
+};
 
-// const columnHelper = createColumnHelper<ExpandedSharedLinkType>();
+const defaultData: Person[] = [
+  {
+    select: false,
+    firstName: "tanner",
+    lastName: "linsley",
+    age: 24,
+    visits: 100,
+    status: "In Relationship",
+    progress: 50,
+    photo: "https://randomuser.me/api/portraits/men/76.jpg",
+  },
+  {
+    select: false,
+    firstName: "tandy",
+    lastName: "miller",
+    age: 40,
+    visits: 40,
+    status: "Single",
+    progress: 80,
+    photo: "https://randomuser.me/api/portraits/men/77.jpg",
+  },
+  {
+    select: false,
+    firstName: "joe",
+    lastName: "dirte",
+    age: 45,
+    visits: 20,
+    status: "Complicated",
+    progress: 10,
+    photo: "https://randomuser.me/api/portraits/men/78.jpg",
+  },
+];
 
-// const columns: any = [
-//   columnHelper.accessor("select", {
-//     header: ({ table }) => (
-//       <input
-//         checked={table.getIsAllRowsSelected()}
-//         onChange={table.getToggleAllRowsSelectedHandler()} //or getToggleAllPageRowsSelectedHandler
-//         type="checkbox"
-//       />
-//     ),
-//     cell: ({ row }) => (
-//       <input
-//         checked={row.getIsSelected()}
-//         disabled={!row.getCanSelect()}
-//         onChange={row.getToggleSelectedHandler()}
-//         type="checkbox"
-//       />
-//     ),
-//     // footer: (info) => info.column.id,
-//   }),
-//   columnHelper.accessor("thumbnail", {
-//     header: "Thumbnail",
-//     cell: (info) => (
-//       <img
-//         className="rounded-lg h-16 aspect-video mx-auto"
-//         src={info.getValue()}
-//         alt="thumbnail"
-//       />
-//     ),
-//   }),
-//   columnHelper.accessor("title", {
-//     header: "Title",
-//     cell: (info) => info.renderValue(),
-//   }),
-//   columnHelper.accessor("description", { header: "Description" }),
-// ];
+const columnHelper = createColumnHelper<Person>();
 
-export default function Table({
-  sharedLinks,
-  setSelectedLinks,
-  columns,
-  showFilter,
-}: TableProps) {
-  console.log("sharedLinks", sharedLinks);
-  const [data, _setData] = useState([...sharedLinks]);
+const columns = [
+  columnHelper.accessor("select", {
+    header: ({ table }) => (
+      <input
+        checked={table.getIsAllRowsSelected()}
+        onChange={table.getToggleAllRowsSelectedHandler()} //or getToggleAllPageRowsSelectedHandler
+        type="checkbox"
+      />
+    ),
+    cell: ({ row }) => (
+      <input
+        checked={row.getIsSelected()}
+        disabled={!row.getCanSelect()}
+        onChange={row.getToggleSelectedHandler()}
+        type="checkbox"
+      />
+    ),
+    // footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("photo", {
+    header: () => "Photo",
+    cell: (info) => (
+      <img
+        className="rounded-lg h-16 aspect-video mx-auto"
+        src={info.getValue()}
+        alt="person"
+      />
+    ),
 
+    // footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("firstName", {
+    cell: (info) => info.getValue(),
+    header: () => <span>First Name</span>,
+    // footer: (info) => info.column.id,
+  }),
+
+  columnHelper.accessor((row) => row.lastName, {
+    id: "lastName",
+    cell: (info) => <i>{info.getValue()}</i>,
+    header: () => <span>Last Name</span>,
+    // footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("age", {
+    header: () => "Age",
+    cell: (info) => info.renderValue(),
+    // footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("visits", {
+    header: () => <span>Visits</span>,
+    // footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("status", {
+    header: "Status",
+    // footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("progress", {
+    header: "Profile Progress",
+    // footer: (info) => info.column.id,
+  }),
+];
+
+export default function Table2({columns, data, showFilter} : {columns: any[], data: any[], showFilter: boolean}) {
+  // const [data, _setData] = useState(() => [...defaultData]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const rerender = useReducer(() => ({}), {})[1];
-
 
   const table = useReactTable({
-    data: sharedLinks,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {
@@ -89,18 +135,16 @@ export default function Table({
     debugHeaders: true,
     debugColumns: true,
     columnResizeMode: "onChange",
-    enableRowSelection: true,
+    enableRowSelection: true, 
     onRowSelectionChange: setRowSelection,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  useEffect(() => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-    setSelectedLinks(selectedRows.map((row) => row.original));
-  }, [rowSelection]);
+
+
   return (
-    <div className="p-2 text-xs uppercase h-full overflow-y-auto">
+    <div className="p-2 text-xs uppercase flex w-full flex-col gap-2">
       {showFilter && (
         <div className="inline-block border border-gray-300 shadow rounded">
           <div className="px-1 border-b border-gray-300 p-2">
@@ -138,15 +182,15 @@ export default function Table({
           </div>
         </div>
       )}
-      <table className="w-full ">
+      <table className="w-full">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <th key={header.id} colSpan={header.colSpan} >
+                  <th key={header.id} colSpan={header.colSpan} className="px-1">
                     {header.isPlaceholder ? null : (
-                      <div className="p1">
+                      <div>
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
@@ -188,4 +232,3 @@ export default function Table({
     </div>
   );
 }
-

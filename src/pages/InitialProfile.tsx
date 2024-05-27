@@ -9,7 +9,7 @@ import MainPanelWrapper from "../components/MainPanelWrapper";
 export default function InitialProfile() {
   const navigate = useNavigate();
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
-  const { auth } = useContext(AuthContext);
+  const { auth , setIsNewUser } = useContext(AuthContext);
   const token = auth?.token || "";
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
@@ -41,6 +41,7 @@ export default function InitialProfile() {
     const response = await postUserProfile({ token: token, userProfile: temp });
     if (response?.status === 200) {
       setUserProfile(temp);
+      setIsNewUser(false);
       navigate("/");
     } else {
       alert("Error in submitting the form");

@@ -1,5 +1,5 @@
 import { getPersonById } from "../lib/actions";
-import { PersonType, SharedLinkType } from "../lib/interfaces";
+import { UserProfileType, SharedLinkType } from "../lib/interfaces";
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import GrabScroll from "../components/GrabScroll";
@@ -20,9 +20,12 @@ export default function Profile() {
 
   const params = useParams();
   const { userId } = params as { userId: string };
+  const person = getPersonById(parseInt(userId));
+  
+
 
   //  const userIdString = stringify(userId);
-  const person = regenerateUser({ userId });
+  // const person = regenerateUser({ userId });
 
   const [sharedLinks, setSharedLinks] = useState<SharedLinkType[] | null>(null);
   const [linksToDisplay, setLinksToDisplay] = useState<SharedLinkType[] | null>(
@@ -51,6 +54,7 @@ export default function Profile() {
   // const ref =
   //   useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   // const { events } = useDraggable(ref);
+
   async function getAndSetSharedLinks() {
     const sharedLinks = await getSharedLinks(token);
     setSharedLinks(sharedLinks);
@@ -92,14 +96,13 @@ export default function Profile() {
     fetchUserLinksFromServer();
   }, []);
 
-  return (
+  return person ? (
     <div className="panel-light w-full h-full overflow-hidden flex flex-col gap-1">
       <PageTitle person={person} />
       {!linksToDisplay ? (
         <NotFound title="Links" size="text-2xl" />
       ) : (
-        <div className="panel-light flex flex-col  flex-grow  gap-2 overflow-hidden px-2 pb-2">
-          {/* Controllers */}
+        <div className="panel-light flex flex-col flex-grow gap-2 overflow-hidden px-2 pb-2">
           <Controls
             setDisplayStyle={setDisplayStyle}
             handleType={handleType}
@@ -109,17 +112,6 @@ export default function Profile() {
             setActiveType={setActiveType}
           />
 
-          {/* <div className="flex flex-wrap gap-1 justify-center p-2">
-          {linksToDisplay.map((sharedLink, index) => (
-            <SharedLinkCard
-              key={index}
-              // width="w-1/3"
-              variant={displayStyle}
-              size="medium"
-              sharedLink={sharedLink}
-              />
-          ))}
-        </div> */}
           <GrabScroll
             sharedLinks={linksToDisplay}
             Component={displayStyle === "grid" ? CardSharedMd : CardSharedLg}
@@ -128,26 +120,8 @@ export default function Profile() {
         </div>
       )}
     </div>
+  ) : (
+    <NotFound title="User" size="text-2xl" />
   );
-}
 
-function regenerateUser({ userId }: { userId: string }): PersonType {
-  const person = getPersonById(parseInt(userId));
-  const regeneratedPerson: PersonType = {
-    ...person,
-    first_name: person?.first_name || "NA",
-    last_name: person?.last_name || "NA",
-    profile_picture: person?.profile_picture || "/images/defaults/personDefaultImage.png",
-    id: person?.id || 0,
-    title: person?.title || "NA",
-    rankCount: person?.rankCount || 0,
-    sharesCount: person?.sharesCount || 0,
-    subscribersCount: person?.subscribersCount || 0,
-    followers: person?.followers || 0,
-    publications: person?.publications || {
-      links: [],
-      categories: "",
-    },
-  };
-  return regeneratedPerson;
 }

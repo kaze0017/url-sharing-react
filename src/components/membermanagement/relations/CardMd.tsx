@@ -1,13 +1,15 @@
 import React from "react";
-import { PersonType } from "../../../lib/interfaces";
+import { UserProfileType } from "../../../lib/interfaces";
 import { IoLogoTux } from "react-icons/io";
 import { BsExclamationLg } from "react-icons/bs";
 import { BiSolidDownArrow } from "react-icons/bi";
 import { BiSolidUpArrow } from "react-icons/bi";
+import { countries } from "country-flag-icons";
 
-export default function CardMd(person: PersonType) {
+export default function CardMd(person: UserProfileType) {
+  console.log(countries);
   const mainWrapperClass =
-    "relative panel-light flex flex-col items-center h-[150px]  aspect-video text-sm";
+    "relative rounded-md bg-white flex flex-col items-center h-[150px]  aspect-video text-sm border border-blue-950";
   return (
     <div className={mainWrapperClass}>
       <div className="absolute bottom-0 right-0">
@@ -22,7 +24,7 @@ export default function CardMd(person: PersonType) {
           <img
             src={person.profile_picture}
             alt="profile"
-            className=" border-1 border-blue-950"
+            className=" border border-blue-950"
             width={70}
             height={70}
           />
@@ -34,10 +36,18 @@ export default function CardMd(person: PersonType) {
             </p>
             <p>{person.title}</p>
             <p>{person.org_name}</p>
+            <div className="flex text-2xs uppercase gap-1 items-center font-semibold">
+              <img
+                alt="United States"
+                width={18}
+                src="http://purecatamphetamine.github.io/country-flag-icons/3x2/CA.svg"
+              />
+              <p>{person.org_name || "Company"}</p>
+            </div>
           </div>
         </div>
       </div>
-      <div className="flex justify-between w-full p-4">
+      <div className="flex justify-between w-full p-4 text-xs">
         <div className="flex gap-1">
           {person.org_picture ? (
             <img src={person.org_picture} alt="org" className="w-6 h-6" />
@@ -46,7 +56,7 @@ export default function CardMd(person: PersonType) {
           )}
           <p>{person.org_picture || "NA"}</p>
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 ">
           <div className="flex flex-col">
             <BiSolidDownArrow />
             <p>12</p>

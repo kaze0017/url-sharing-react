@@ -1,18 +1,18 @@
 import React from "react";
-import { useDrop, useDrag } from "react-dnd";
-import { PersonType } from "../../../lib/interfaces";
+import { useDrop } from "react-dnd";
+import { UserProfileType } from "../../../lib/interfaces";
 import DndPerson from "./DndPerson";
 
 interface GroupDnDProps {
-  members: PersonType[];
-  setMembers: React.Dispatch<React.SetStateAction<PersonType[]>>;
+  members: UserProfileType[];
+  setMembers: React.Dispatch<React.SetStateAction<UserProfileType[]>>;
 }
 
 export default function GroupDnD({ members, setMembers }: GroupDnDProps) {
   console.log(members);
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "PERSON",
-    drop: (item: { type: string; person: PersonType }) => {
+    drop: (item: { type: string; person: UserProfileType }) => {
       // Access the dropped person object
       const { person } = item;
       // Add the person to the deletedUsers array
@@ -23,7 +23,7 @@ export default function GroupDnD({ members, setMembers }: GroupDnDProps) {
     }),
   }));
 
-  function handelAddMember(person: PersonType) {
+  function handelAddMember(person: UserProfileType) {
     // if exist
     if (members.find((member) => member.id === person.id)) {
       alert("Member already exists");
@@ -40,7 +40,7 @@ export default function GroupDnD({ members, setMembers }: GroupDnDProps) {
       }}
       className="flex flex-wrap gap-2 w-full h-full overflow-y-auto overflow-x-hidden p-2 rounded-lg items-center justify-center"
     >
-      {members.map((person: PersonType) => {
+      {members.map((person: UserProfileType) => {
         return <DndPerson person={person} />;
       })}
     </div>

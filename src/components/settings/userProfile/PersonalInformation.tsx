@@ -46,6 +46,7 @@ export default function PersonalInformation() {
   const textareaClass = editMode
     ? "border-b border-gray-300 flex flex-grow"
     : "bg-transparent border-none flex flex-grow";
+    
   const btnClass = "bg-blue-950 text-white p-2 rounded-md w-20";
 
   return (

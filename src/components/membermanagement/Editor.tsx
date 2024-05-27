@@ -4,8 +4,7 @@ import SearchPeople from "./SearchPeople";
 import GroupEditor from "./editors/GroupEditor";
 import TreeEditor from "./editors/TreeEditor";
 import NeutralEditor from "./editors/NeutralEditor";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+
 
 export default function Editor() {
   let { id } = useParams<{ id: string }>();

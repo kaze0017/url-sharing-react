@@ -1,12 +1,7 @@
 import { useEffect, useState, useRef, useContext, Children, memo } from "react";
 import { select, hierarchy, tree, linkVertical, drag } from "d3";
-import { useDraggable } from "react-use-draggable-scroll";
 import { useDrop } from "react-dnd";
-import { PersonType } from "../../../lib/interfaces";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import ChartDragAndDropContext from "../../../context/ChartDragAndDropProvider";
-import { set } from "react-hook-form";
 import { TreeNode, TreeData } from "../graphs/TreeData";
 // interface TreeNode {
 //   id: number;

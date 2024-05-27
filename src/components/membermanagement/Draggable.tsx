@@ -1,4 +1,3 @@
-import { useDrag } from "react-dnd";
 
 // Define DraggableProps interface
 interface DraggableProps {

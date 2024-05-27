@@ -7,7 +7,7 @@ import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
 import { PiShareFatThin } from "react-icons/pi";
 
-import { PersonType, groupType } from "../../../lib/interfaces";
+import { UserProfileType, groupType } from "../../../lib/interfaces";
 import { getNPeople } from "../../../lib/actions";
 import { groupsPH } from "../../../lib/placeholder-data";
 
@@ -26,7 +26,7 @@ export default function Controller() {
     if (mode === "users") {
       const people = getNPeople(10);
       let searchedPeople = people.filter(
-        (person: PersonType) =>
+        (person: UserProfileType) =>
           person.first_name.toLowerCase().includes(query.toLowerCase()) ||
           person.last_name.toLowerCase().includes(query.toLowerCase())
       );

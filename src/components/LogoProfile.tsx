@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { PersonType } from "../lib/interfaces";
+import { UserProfileType } from "../lib/interfaces";
 import ProfilePicture from "./profilePictures/ProfilePictureLg";
 import { getTopPeople } from "../lib/actions";
 import InfoReport from "./InfoReport";
 function LogoProfile({ toggledCollapse = false }) {
-  const defaultPerson: PersonType = {
+  const defaultPerson: UserProfileType = {
     id: 0,
     first_name: "FAC ",
     last_name: "Logo",
     title: "Circle",
+    email: "example@example.com",
     profile_picture: "/images/logos/circle.png",
     publications: {
       links: [
@@ -25,7 +26,7 @@ function LogoProfile({ toggledCollapse = false }) {
     },
   };
   //   three people all with the same data as defaultPerson
-  const [people, setPeople] = useState<PersonType[]>([
+  const [people, setPeople] = useState<UserProfileType[]>([
     defaultPerson,
     defaultPerson,
     defaultPerson,
@@ -48,7 +49,7 @@ function LogoProfile({ toggledCollapse = false }) {
     <div className={logoProfileContainer}>
       <InfoReport
         title={people[0].first_name + " " + people[0].last_name}
-        data={people[0].publications.categories?.length}
+        data={people[0].publications?.categories?.length}
       />
       {!toggledCollapse && (
         <div className={logoProfileWrapper}>

@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { PersonType } from "../lib/interfaces";
+import { UserProfileType } from "../lib/interfaces";
 import { groupType } from "../lib/interfaces";
 
 interface ShareWithGroupsContextType {
@@ -13,14 +13,14 @@ interface ShareWithGroupsContextType {
   >;
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
-  selectedPeople: PersonType[];
-  setSelectedPeople: React.Dispatch<React.SetStateAction<PersonType[]>>;
+  selectedPeople: UserProfileType[];
+  setSelectedPeople: React.Dispatch<React.SetStateAction<UserProfileType[]>>;
   selectedGroups: groupType[];
   groupsToDisplay: groupType[];
   setGroupsToDisplay: React.Dispatch<React.SetStateAction<groupType[]>>;
   setSelectedGroups: React.Dispatch<React.SetStateAction<groupType[]>>;
-  peopleToDisplay: PersonType[];
-  setPeopleToDisplay: React.Dispatch<React.SetStateAction<PersonType[]>>;
+  peopleToDisplay: UserProfileType[];
+  setPeopleToDisplay: React.Dispatch<React.SetStateAction<UserProfileType[]>>;
   publicationDate: string;
   setPublicationDate: React.Dispatch<React.SetStateAction<string>>;
   expirationDate: string;
@@ -53,10 +53,10 @@ export function ShareWithGroupsProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [selectedPeople, setSelectedPeople] = useState<PersonType[]>([]);
+  const [selectedPeople, setSelectedPeople] = useState<UserProfileType[]>([]);
   const [mode, setMode] = useState<"users" | "groups" | "selected">("users");
   const [query, setQuery] = useState<string>("");
-  const [peopleToDisplay, setPeopleToDisplay] = useState<PersonType[]>([]);
+  const [peopleToDisplay, setPeopleToDisplay] = useState<UserProfileType[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<groupType[]>([]);
   const [groupsToDisplay, setGroupsToDisplay] = useState<groupType[]>([]);
   const [status, setStatus] = useState<

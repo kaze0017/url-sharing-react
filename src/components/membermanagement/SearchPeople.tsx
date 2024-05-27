@@ -1,18 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState,  useEffect } from "react";
 import { getNPeople } from "../../lib/actions";
-import ProfilePicture from "../profilePictures/ProfilePicture";
-import Draggable from "./Draggable";
-import { useDraggable } from "react-use-draggable-scroll";
-import DndPerson from "./editors/DnDPersonName";
 import SearchBar from "../SearchBar";
 import Person from "./Person";
 
-import { PersonType } from "../../lib/interfaces";
+import { UserProfileType } from "../../lib/interfaces";
 
 export default function SearchPeople() {
   const [query, setQuery] = useState<string>("");
   const people = getNPeople(7);
-  const [peopleToDisplay, setPeopleToDisplay] = useState<PersonType[]>([]);
+  const [peopleToDisplay, setPeopleToDisplay] = useState<UserProfileType[]>([]);
 
   function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
     const search = e.target.value;

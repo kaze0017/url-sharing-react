@@ -2,21 +2,19 @@ import React, { useState, useRef, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
 import {
   UserProfileContext,
-  initializeUserProfile,
 } from "../../context/UserProfileProvider";
 import axiosInstance from "../../api/axios";
 import { REGISTER_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import FadeInOut from "./FadeInOut";
 import SubmitBtn from "./SubmitBtn";
-import { set } from "react-hook-form";
 
 interface LoginFormProps {
   showRegister: boolean;
 }
 export function RegisterForm({ showRegister }: LoginFormProps) {
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth , setIsNewUser } = useContext(AuthContext);
   const { setUserProfile } = useContext(UserProfileContext);
 
   const userRef = useRef<HTMLInputElement>(null);
@@ -32,6 +30,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsPending(true);
+    setIsNewUser(true);
 
     if (pwd !== matchPwd) {
       setError("Passwords do not match");
@@ -43,15 +42,20 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
       const formData = new URLSearchParams();
       formData.append("password", pwd);
       formData.append("email", email);
-      formData.append("username", user);
+      formData.append("username", email);
 
       const response = await axiosInstance.post(
         REGISTER_URL,
         formData.toString(),
         {}
       );
-      console.log(response.data);
-      const tempUserProfile = {...initializeUserProfile(), email: email, username: user}
+      const tempUserProfile = {
+        id: response.data.id,
+        first_name: "",
+        last_name: "",
+        email: email,
+        username: email,
+      };
 
       setAuth({
         userProfile: tempUserProfile,
@@ -63,7 +67,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
       setPwd("");
       setMatchPwd("");
 
-      navigate("/initialProfile");
+      navigate("/");
     } catch (err: any) {
       setIsPending(false);
 
@@ -81,7 +85,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
         onSubmit={handleRegister}
       >
         <h1 className="text-xl font-semibold text-gray-500">Register</h1>
-        <input
+        {/* <input
           id="name"
           className="rounded-md border-gray-300"
           type="text"
@@ -90,7 +94,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
           ref={userRef}
           onChange={(e) => setUser(e.target.value)}
           required
-        />
+        /> */}
 
         <input
           className="rounded-md border-gray-300"

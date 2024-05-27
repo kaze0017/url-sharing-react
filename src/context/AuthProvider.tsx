@@ -2,6 +2,8 @@ import React, { createContext, useState } from "react";
 import { UserProfileType } from "../lib/interfaces";
 
 interface AuthContextType {
+  isNewUser: boolean;
+  setIsNewUser: React.Dispatch<React.SetStateAction<boolean>>;
   auth: { userProfile: UserProfileType | null; token: string | null } | null;
   setAuth: React.Dispatch<
     React.SetStateAction<{
@@ -12,6 +14,8 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
+  isNewUser: false,
+  setIsNewUser: () => {},
   auth: null,
   setAuth: () => {},
 });
@@ -21,6 +25,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [isNewUser, setIsNewUser] = useState<boolean>(false);
   const [auth, setAuth] = useState<{
     userProfile: UserProfileType | null;
     token: string | null;
@@ -30,7 +35,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   });
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, setAuth , isNewUser, setIsNewUser}}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { PersonType } from "../../lib/interfaces";
+import { UserProfileType } from "../../lib/interfaces";
 
 interface ProfilePictureProps {
-  person: PersonType | null;
+  person: UserProfileType | null;
 }
 
 const ProfilePicture: React.FC<ProfilePictureProps> = ({ person }) => {

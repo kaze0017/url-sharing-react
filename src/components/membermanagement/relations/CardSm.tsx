@@ -1,12 +1,12 @@
 import React from "react";
-import { PersonType } from "../../../lib/interfaces";
+import { UserProfileType } from "../../../lib/interfaces";
 import ProfilePictureLg from "../../profilePictures/ProfilePictureLg";
 import { IoLogoTux } from "react-icons/io";
 import { BsExclamationLg } from "react-icons/bs";
 
 
 
-export default function cardSm(person: PersonType) {
+export default function cardSm(person: UserProfileType) {
   const mainWrapperClass = "flex items-center h-[80px]";
   const textPanelClass =
     "relative flex items-center justify-between px-2 pr-6 panel-light w-[220px] h-[60px]  uppercase text-xs";

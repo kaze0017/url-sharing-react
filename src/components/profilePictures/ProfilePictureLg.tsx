@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { Link } from "react-router-dom";
-import { PersonType } from "../../lib/interfaces";
+import { UserProfileType } from "../../lib/interfaces";
 import NotFound from "../NotFound";
 
 interface ProfilePictureProps {
-  person: PersonType | null;
+  person: UserProfileType | null;
 }
 
 const ProfilePictureLg: React.FC<ProfilePictureProps> = ({ person }) => {

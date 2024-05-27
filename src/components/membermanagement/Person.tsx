@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import ChartDragAndDropContext from "../../context/ChartDragAndDropProvider";
-import { PersonType } from "../../lib/interfaces";
+import { UserProfileType } from "../../lib/interfaces";
 import { useDrag } from "react-dnd";
 import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
 
 interface PersonProps {
-  person: PersonType;
+  person: UserProfileType;
 }
 
 export default function Person({ person }: PersonProps) {

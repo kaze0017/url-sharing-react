@@ -1,7 +1,5 @@
-import React from "react";
 import { getNPeople } from "../../lib/actions";
 import Person from "./Person";
-import { PersonType } from "../../lib/interfaces";
 
 
 

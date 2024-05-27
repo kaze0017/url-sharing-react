@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
-import { PersonType } from "../../../lib/interfaces";
-import { FaRegTrashCan } from "react-icons/fa6";
+import { UserProfileType } from "../../../lib/interfaces";
 import { groupType } from "../../../lib/interfaces";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +20,7 @@ export default function DnDGroupConstructor({ setNewGroup }: DnDTrashCanProps) {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "PERSON",
-    drop: (item: { type: string; person: PersonType }) => {
+    drop: (item: { type: string; person: UserProfileType }) => {
       // Access the dropped person object
       const { person } = item;
       // Add the person to the deletedUsers array
@@ -32,7 +31,7 @@ export default function DnDGroupConstructor({ setNewGroup }: DnDTrashCanProps) {
     }),
   }));
 
-  function handelCreateGroup(person: PersonType) {
+  function handelCreateGroup(person: UserProfileType) {
     setNewGroup(true);
     navigate(`/networks/editor/g0`);
   }

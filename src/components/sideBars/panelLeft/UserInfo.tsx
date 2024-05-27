@@ -1,6 +1,6 @@
 import ProfilePictureLg from "../../profilePictures/ProfilePictureLg";
 import InfoReport from "../../InfoReport";
-import { PersonType } from "../../../lib/interfaces";
+import { UserProfileType } from "../../../lib/interfaces";
 import { GoDotFill } from "react-icons/go";
 import { useContext } from "react";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
@@ -8,7 +8,7 @@ import AuthContext from "../../../context/AuthProvider";
 import { getUserProfile } from "../../../api/axios";
 
 interface Props {
-  user: PersonType;
+  user: UserProfileType;
   toggledCollapse: boolean;
 }
 
@@ -16,14 +16,15 @@ export default function UserInfo({ user, toggledCollapse }: Props) {
   const { auth } = useContext(AuthContext);
   const { userProfile } = useContext(UserProfileContext);
 
-  let person: PersonType = {
+  let person: UserProfileType = {
     id: userProfile.user_id || 0,
     first_name: userProfile.first_name || "NA",
     last_name: userProfile.last_name || "NA",
+    email: userProfile.email || "NA",
     profile_picture:
       userProfile.profile_picture || "images/defaults/personDefaultImage.png",
     title: userProfile.title || "NA",
-    subscribersCount: userProfile.subscribersCount,
+    subscribers:userProfile.subscribers || [],
     publications: userProfile.publications || {
       links: [],
       categories: "",
@@ -31,13 +32,13 @@ export default function UserInfo({ user, toggledCollapse }: Props) {
   };
 
   const fullName = person.first_name + " " + person.last_name;
-  const publishedCategories = person.publications.categories || [];
-  const publishedLinks = person.publications.links || [];
+  const publishedCategories = person.publications?.categories || [];
+  const publishedLinks = person.publications?.links || [];
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center uppercase">
       <ProfilePictureLg person={person} />
-      <InfoReport title="subscribers" data={person.subscribersCount || 0} />
+      <InfoReport title="subscribers" data={person.subscribers?.length || 0} />
       {!toggledCollapse && (
         <>
           <p>{fullName}</p>

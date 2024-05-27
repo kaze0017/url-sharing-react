@@ -1,4 +1,3 @@
-import React from "react";
 import Controller from "./graphs/Controller";
 import Graph from "./graphs/Graph";
 import { Link } from "react-router-dom";

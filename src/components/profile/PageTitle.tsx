@@ -1,10 +1,10 @@
-import { PersonType } from "../../lib/interfaces";
+import { UserProfileType } from "../../lib/interfaces";
 import ProfilePicture from "../profilePictures/ProfilePicture";
 import { PiChartLineUp } from "react-icons/pi";
 import { RiShareForwardLine } from "react-icons/ri";
 
 interface ProfilePageProps {
-  person: PersonType;
+  person: UserProfileType;
 }
 
 export default function PageTitle({ person }: ProfilePageProps) {
@@ -31,7 +31,7 @@ export default function PageTitle({ person }: ProfilePageProps) {
             </div>
           </div>
           <div className={subscribeWrapperClass}>
-            <p>{person?.subscribersCount}</p>
+            <p>{person?.subscribers?.length}</p>
             <p>Subscribe</p>
           </div>
           <div className={rankShareClass}>

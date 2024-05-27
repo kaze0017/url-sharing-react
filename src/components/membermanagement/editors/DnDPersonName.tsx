@@ -1,8 +1,8 @@
 import { useDrag } from "react-dnd";
-import { PersonType } from "../../../lib/interfaces";
+import { UserProfileType } from "../../../lib/interfaces";
 import ProfilePicture from "../../profilePictures/ProfilePicture";
 
-export default function DndPerson({ person }: { person: PersonType }) {
+export default function DndPerson({ person }: { person: UserProfileType }) {
   const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
     type: "PERSON",
     item: { person },

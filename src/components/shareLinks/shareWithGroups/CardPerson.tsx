@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
 import ShareWithGroupsContext from "../../../context/ShareWithGroupsProvider";
-import { PersonType } from "../../../lib/interfaces";
+// import { PersonType } from "../../../lib/interfaces";
 import ProfilePicture from "../../profilePictures/ProfilePicture";
+import { UserProfileType } from "../../../lib/interfaces";
 import { set } from "react-hook-form";
 
 interface CardPersonProps {
-  person: PersonType;
+  person: UserProfileType;
   selected: boolean;
 }
 
@@ -42,7 +43,7 @@ export default function CardPerson({ person, selected }: CardPersonProps) {
     }
   }
 
-function handleConnect(person : PersonType) {
+function handleConnect(person: UserProfileType) {
   setUserProfile((prevUserProfile) => ({
     ...prevUserProfile,
     pendingConnections: [...(prevUserProfile.pendingConnections || []), person],

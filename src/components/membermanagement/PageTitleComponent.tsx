@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import  { useContext, useEffect } from "react";
 import { NetworksContext } from "../../context/NetworksProvider";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { PiGraphLight } from "react-icons/pi";

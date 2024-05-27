@@ -1,5 +1,5 @@
 // axiosInstance.js
-import { UserProfileType } from "../lib/userProfileType";
+import { UserProfileType } from "../lib/interfaces";
 import axios from "axios";
 import { USER_PROFILE_URL } from "../constants";
 import { PUBLIC_URL } from "../constants";
