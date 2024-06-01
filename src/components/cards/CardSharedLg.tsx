@@ -33,7 +33,7 @@ export default function CardSharedLg({ sharedLink }: CardSharedLgProps) {
           <div className="">
             <p>{sharedLink.publicationDate}</p>
             <div className="text-xs flex w-full uppercase gap-1">
-              {tags.map((tag: string, index: number) => {
+              {tags?.map((tag: string, index: number) => {
                 return (
                   <p
                     key={index}

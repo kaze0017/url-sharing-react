@@ -11,7 +11,6 @@ import {
 } from "@tanstack/react-table";
 
 interface TableProps {
-
   columns: any;
   setSelectedLinks: React.Dispatch<SharedLinkType[]>;
   selectedLinks: SharedLinkType[];
@@ -67,14 +66,12 @@ export default function Table({
   columns,
   showFilter,
 }: TableProps) {
-  console.log("sharedLinks", sharedLinks);
   const [data, _setData] = useState([...sharedLinks]);
 
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
   const rerender = useReducer(() => ({}), {})[1];
-
 
   const table = useReactTable({
     data: sharedLinks,
@@ -144,7 +141,7 @@ export default function Table({
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <th key={header.id} colSpan={header.colSpan} >
+                  <th key={header.id} colSpan={header.colSpan}>
                     {header.isPlaceholder ? null : (
                       <div className="p1">
                         {flexRender(
@@ -188,4 +185,3 @@ export default function Table({
     </div>
   );
 }
-

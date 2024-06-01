@@ -54,6 +54,8 @@ export default function Shared() {
 
   async function getAndSetSharedLinks() {
     const sharedLinks = await getSharedLinks(token);
+    console.log("dfdsfdssgd", sharedLinks);
+
     setSharedLinks(sharedLinks);
     setSharedLinksToDisplay(sharedLinks);
   }
@@ -75,12 +77,12 @@ export default function Shared() {
     <div className="w-full h-full overflow-hidden flex flex-col gap-2 p-2">
       <Search query={query} setQuery={setQuery} />
       <Sort setSort={setSort} />
-      {/* <SliderFlexWrapper
+      <SliderFlexWrapper
         sharedLinks={sharedLinksToDisplay}
         CardComponent={CardSharedLg}
         setIsLoading={setIsLoading}
-      /> */}
-      <Pagination sharedLinks={sharedLinksToDisplay} />
+      />
+      {/* <Pagination sharedLinks={sharedLinksToDisplay} /> */}
     </div>
   ) : (
     <NotFound title="shared links" size="text-md" />

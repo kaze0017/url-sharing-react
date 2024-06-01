@@ -18,15 +18,7 @@ export default function InitialProfile() {
   const [org_name, setOrg_name] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
 
-  function handelContinueLater() {
-    console.log("Continue Later");
-  }
-  function handelSkip() {
-    console.log("Skip");
-  }
-  function handelBack() {
-    console.log("Back");
-  }
+
 
   async function handelSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

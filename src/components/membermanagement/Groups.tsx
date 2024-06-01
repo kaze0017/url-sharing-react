@@ -8,7 +8,7 @@ import GroupSm from "../groups/GroupSm";
 export default function Groups() {
   const groupsToDisplay = [groupOne, groupTwo, groupThree];
   return (
-    <div>
+    <div className="flex flex-col gap-2 p-2">
       <Controller />
       <div className="flex flex-wrap gap-2 w-full h-full">
         {groupsToDisplay.map((group) => {

@@ -13,6 +13,7 @@ export default function Trend() {
   const [isLoading, setIsLoading] = useState(true);
   async function getAndSetSharedLinks() {
     const sharedLinks = await getSharedLinks(token);
+
     setSharedLinks(sharedLinks);
   }
 

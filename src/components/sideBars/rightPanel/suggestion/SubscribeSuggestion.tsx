@@ -12,8 +12,8 @@ export default function SubscribeSuggestion({
   variant,
 }: SubscribeSuggestionProps) {
   const fullName = `${person.first_name} ${person.last_name}`;
-  return (variant === "expanded" && person) ? (
-    <div className="text-xs h-20 p-1 w-full border border-gray-800 flex flex-col gap-1 justify-center rounded">
+  return variant === "expanded" && person ? (
+    <div className="text-xs h-20 p-1 w-full border border-gray-950 flex flex-col gap-1 justify-center rounded bg-gray-100">
       <div className="flex items-center justify-between gap-1 text-center">
         <ProfilePicture person={person} />
         <h3 className="w-1/4">{fullName}</h3>

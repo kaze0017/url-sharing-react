@@ -12,6 +12,9 @@ import AuthContext from "../../context/AuthProvider";
 import axiosInstance from "../../api/axios";
 import { CREATE_URL } from "../../constants";
 import { useDraggable } from "react-use-draggable-scroll";
+import { FaRegEye } from "react-icons/fa";
+import { RxCheckCircled } from "react-icons/rx";
+import { RxCrossCircled } from "react-icons/rx";
 
 // Steps
 
@@ -64,6 +67,8 @@ export default function AddLinkForm() {
   ];
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+
   const delta = currentStep - previousStep;
   const [selectedImage, setSelectedImage] = useState(
     "/images/defaults/thumbnails/th1.jpg"
@@ -148,6 +153,9 @@ export default function AddLinkForm() {
       formData.append("url_type", data.url_type);
 
       // const URL = "http://18.224.166.225:8000/link_management/create/";
+      formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
 
       try {
         const response = await axiosInstance.post(
@@ -160,6 +168,7 @@ export default function AddLinkForm() {
             },
           }
         );
+        console.log(response);
       } catch (error) {
         console.error(error);
       }
@@ -209,6 +218,8 @@ export default function AddLinkForm() {
   const { events } = useDraggable(ref);
   const mainWrapperClass =
     "panel-light relative p-1 justify-center flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide w-[700px]";
+
+  const summeryCheckWrapperClass = "flex items-center gap-1 w-[250px]";
 
   return (
     <div
@@ -416,28 +427,106 @@ export default function AddLinkForm() {
             className="w-full grow flex flex-col gap-2 "
           >
             {/* Summery */}
-            <div className="relative flex w-full h-full overflow-hidden ">
-              <div className="flex absolute opacity-30 w-full h-full ">
+            <div className="relative flex w-full h-full overflow-hidden">
+              <div className="flex absolute opacity-30 w-full h-full">
                 <img
                   src={watched.thumbnail}
                   alt=""
                   className="absolute w-full h-full object-cover"
                 />
               </div>
-              <div className="flex flex-col gap-1 bg-white bg-opacity-60 text-blue-950 font-semibold w-full h-full overflow-y-auto p-2">
-                <div className="flex">title : {watched.title}</div>
-                <div className="flex">contentDescription : {watched.contentDescription}</div>
-                <div className="flex">tags : {watched.tags}</div>
-                <div className="flex">url : {watched.url}</div>
-                <div className="flex">back_up_link_1st : {watched.back_up_link_1st}</div>
-                <div className="flex">back_up_link_2nd : {watched.back_up_link_2nd}</div>
-                <div className="flex">category : {watched.category}</div>
-                <div className="flex">url_username : {watched.url_username}</div>
-                <div className="flex">url_pass : {watched.url_pass}</div>
-                <div className="flex">sharingAbility : {watched.sharingAbility}</div>
-                <div className="flex">externalSharingAbility : {watched.externalSharingAbility}</div>
-                <div className="flex">sharingDeptLevel : {watched.sharingDeptLevel}</div>
-                <div className="flex">url_type : {watched.url_type}</div>
+              <div className="uppercase flex flex-col items-center justify-center  gap-4 bg-white bg-opacity-80 text-blue-950 font-semibold w-full h-full overflow-y-auto p-2">
+                <div className="flex bg-blue-950 text-white w-[200px] text-center items-center justify-center p-2 bg-opacity-100">
+                  Title: {watched.title}
+                </div>
+                <div className="flex">
+                  Description:{" "}
+                  {watched.contentDescription
+                    ? watched.contentDescription
+                    : "No Description Provided"}
+                </div>
+                <div className="flex w-full flex-wrap justify-center">
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.tags ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    Tags
+                  </div>
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.url ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    URL
+                  </div>
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.back_up_link_1st ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    Back Up Link 1st
+                  </div>
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.back_up_link_2nd ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    Back Up Link 2nd
+                  </div>
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.category ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    Category
+                  </div>
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.url_username ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    Username
+                  </div>
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.sharingAbility ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    Sharing Ability
+                  </div>
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.externalSharingAbility ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    External Sharing Ability
+                  </div>
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.sharingDeptLevel ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    Sharing Dept Level
+                  </div>
+                  <div className={summeryCheckWrapperClass}>
+                    {watched.url_type ? (
+                      <RxCheckCircled className="text-green-800" />
+                    ) : (
+                      <RxCrossCircled className="text-red-800" />
+                    )}
+                    URL Type
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>

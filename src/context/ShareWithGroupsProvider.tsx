@@ -3,12 +3,27 @@ import { UserProfileType } from "../lib/interfaces";
 import { groupType } from "../lib/interfaces";
 
 interface ShareWithGroupsContextType {
-  mode: "users" | "groups"  | "selected";
-  status: "loading" | "error" | "success" | "noLinks" | "approval" | "sharingOptions" | "selectingRecipients";
-  setMode: React.Dispatch<React.SetStateAction<"users" | "groups" |  "selected">>;
+  mode: "users" | "groups" | "selected";
+  status:
+    | "loading"
+    | "error"
+    | "success"
+    | "noLinks"
+    | "approval"
+    | "sharingOptions"
+    | "selectingRecipients";
+  setMode: React.Dispatch<
+    React.SetStateAction<"users" | "groups" | "selected">
+  >;
   setStatus: React.Dispatch<
     React.SetStateAction<
-      "loading" | "error" | "success" | "noLinks" | "approval" | "sharingOptions" | "selectingRecipients"
+      | "loading"
+      | "error"
+      | "success"
+      | "noLinks"
+      | "approval"
+      | "sharingOptions"
+      | "selectingRecipients"
     >
   >;
   query: string;
@@ -25,6 +40,8 @@ interface ShareWithGroupsContextType {
   setPublicationDate: React.Dispatch<React.SetStateAction<string>>;
   expirationDate: string;
   setExpirationDate: React.Dispatch<React.SetStateAction<string>>;
+  description: string;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ShareWithGroupsContext = createContext<ShareWithGroupsContextType>({
@@ -46,6 +63,8 @@ const ShareWithGroupsContext = createContext<ShareWithGroupsContextType>({
   setPublicationDate: () => {},
   expirationDate: "No expiration date",
   setExpirationDate: () => {},
+  description: "",
+  setDescription: () => {},
 });
 
 export function ShareWithGroupsProvider({
@@ -60,10 +79,18 @@ export function ShareWithGroupsProvider({
   const [selectedGroups, setSelectedGroups] = useState<groupType[]>([]);
   const [groupsToDisplay, setGroupsToDisplay] = useState<groupType[]>([]);
   const [status, setStatus] = useState<
-    "loading" | "error" | "success" | "noLinks" | "approval" | "sharingOptions" | "selectingRecipients"
+    | "loading"
+    | "error"
+    | "success"
+    | "noLinks"
+    | "approval"
+    | "sharingOptions"
+    | "selectingRecipients"
   >("sharingOptions");
   const [publicationDate, setPublicationDate] = useState<string>("Today");
-  const [expirationDate, setExpirationDate] = useState<string>("No expiration date");
+  const [expirationDate, setExpirationDate] =
+    useState<string>("No expiration date");
+  const [description, setDescription] = useState<string>("");
 
   return (
     <ShareWithGroupsContext.Provider
@@ -86,6 +113,8 @@ export function ShareWithGroupsProvider({
         setPublicationDate,
         expirationDate,
         setExpirationDate,
+        description,
+        setDescription,
       }}
     >
       {children}

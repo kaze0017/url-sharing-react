@@ -4,6 +4,8 @@ import axios from "axios";
 import { USER_PROFILE_URL } from "../constants";
 import { PUBLIC_URL } from "../constants";
 import { SharedLinkType } from "../lib/interfaces";
+import { NotificationsType } from "../lib/interfaces/notifications";
+import getMockNotifications from "../lib/mockData/notifications";
 
 axios.defaults.withCredentials = true;
 
@@ -135,4 +137,14 @@ function checkData({ sharedLinks }: CheckDataProps) {
     }
   });
   return sharedLinks;
+}
+
+export function getNotifications(token: string) {
+  // return axiosInstance.get("/notifications", {
+  //   headers: {
+  //     "Content-Type": "application/x-www-form-urlencoded",
+  //     auth: token,
+  //   },
+  // });
+  return getMockNotifications();
 }

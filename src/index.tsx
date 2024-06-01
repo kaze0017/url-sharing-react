@@ -4,6 +4,7 @@ import App from "./App";
 import { AuthProvider } from "./context/AuthProvider";
 import { BrowserRouter } from "react-router-dom";
 import UserProfileProvider from "./context/UserProfileProvider";
+import RightPanelProvider from "./context/RightPanelProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,7 +14,9 @@ root.render(
   <BrowserRouter>
     <AuthProvider>
       <UserProfileProvider>
-        <App />
+        <RightPanelProvider>
+          <App />
+        </RightPanelProvider>
       </UserProfileProvider>
     </AuthProvider>
   </BrowserRouter>

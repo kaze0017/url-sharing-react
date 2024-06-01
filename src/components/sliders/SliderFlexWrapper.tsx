@@ -133,8 +133,8 @@ export default function SliderFlexWrapper({
         {...events}
         onScroll={handleScroll}
       >
-        {sharedLinks.map((sharedLink) => (
-          <CardComponent key={sharedLink.id} sharedLink={sharedLink} />
+        {sharedLinks.map((sharedLink, index) => (
+          <CardComponent key={index} sharedLink={sharedLink} />
         ))}
       </div>
     );

@@ -424,23 +424,26 @@ function createColumns() {
   }
   const columnHelper = createColumnHelper<ExpandedSharedLinkType>();
 
-  
   let tableColumns = [
     columnHelper.accessor("select", {
       header: ({ table }) => (
-        <input
-          checked={table.getIsAllRowsSelected()}
-          onChange={table.getToggleAllRowsSelectedHandler()}
-          type="checkbox"
-        />
+        <div className="p-1">
+          <input
+            checked={table.getIsAllRowsSelected()}
+            onChange={table.getToggleAllRowsSelectedHandler()}
+            type="checkbox"
+          />
+        </div>
       ),
       cell: ({ row }) => (
-        <input
-          checked={row.getIsSelected()}
-          disabled={!row.getCanSelect()}
-          onChange={row.getToggleSelectedHandler()}
-          type="checkbox"
-        />
+        <div className="p-1">
+          <input
+            checked={row.getIsSelected()}
+            disabled={!row.getCanSelect()}
+            onChange={row.getToggleSelectedHandler()}
+            type="checkbox"
+          />
+        </div>
       ),
     }),
     columnHelper.accessor("thumbnail", {

@@ -6,11 +6,12 @@ import CardSm from "./relations/CardSm";
 import CardMd from "./relations/CardMd";
 import Table from "./relations/Table";
 
+
 export default function Relations() {
   const { view } = useContext(RelationsContext);
   const people = getNPeople(5);
   return (
-    <div className="w-full flex flex-col flex-grow">
+    <div className="flex flex-col gap-2 p-2">
       <Controller />
       <div className="flex flex-wrap gap-2 w-full p-6  overflow-y-auto justify-center">
         {view === "small" &&

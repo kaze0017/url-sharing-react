@@ -4,6 +4,7 @@ import ShareWithGroupsContext from "../../context/ShareWithGroupsProvider";
 import MainPanelWrapper from "../MainPanelWrapper";
 import { GiWingedEmblem } from "react-icons/gi";
 import Dates from "./approval/Dates";
+import Description from "./approval/Description";
 
 export default function Approval() {
   const { selectedLinks, setSelectedLinks } = useContext(LinkManagementContext);
@@ -35,6 +36,7 @@ export default function Approval() {
           <>
             <div className="flex flex-col gap-4 items-center justify-center ">
               <Dates />
+              <Description />
               <div className="flex items-center gap-1">
                 <div className="">
                   <p className="text-2xl text-blue-950">
@@ -46,7 +48,7 @@ export default function Approval() {
                 </div>
                 <div className="flex gap-2  p-4 ">
                   <p className="text-2xl text-blue-950">
-                    {selectedPeople.length} people
+                    {selectedPeople.length} {selectedPeople.length > 1 ? "People" : "Person"} &
                   </p>
                   <p className="text-2xl text-blue-950">
                     {selectedGroups.length} Groups

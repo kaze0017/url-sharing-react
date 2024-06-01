@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Graphs() {
   return (
-    <div>
+    <div className="flex flex-col gap-2 p-2">
       <Controller />
       <div className="flex flex-col w-full gap-2">
         <div className="flex flex-wrap gap-2 w-full">

@@ -4,7 +4,6 @@ import GradientIcon from "../../customIcons/GradientIcon";
 import { CiPlay1, CiCamera } from "react-icons/ci";
 import { IoDocumentOutline } from "react-icons/io5";
 import { PiFileHtmlLight } from "react-icons/pi";
-import { FiBox } from "react-icons/fi";
 
 interface FeaturedImageProps {
   sharedLink: SharedLinkType;
@@ -18,7 +17,7 @@ export default function FeaturedImage({
 
   const mainWrapperClass = `relative flex    items-center justify-center  overflow-hidden ${twClass} rounded-md`;
   return (
-    <Link to={`/sharedLink/${sharedLink.id}`}>
+    // <Link to={`/sharedLink/${sharedLink.id}`}>
       <div className={mainWrapperClass}>
         <div className="absolute top-0 left-0 w-full h-full ">
           <GradientIcon
@@ -40,6 +39,6 @@ export default function FeaturedImage({
           alt={sharedLink.title}
         />
       </div>
-    </Link>
+    // </Link>
   );
 }
