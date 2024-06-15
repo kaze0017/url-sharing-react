@@ -6,6 +6,7 @@ import ToggledSharedLinksNotification from "./notifications/ToggledSharedLinksNo
 export default function Notifications() {
   const { notifications, toggleRightPanel } = useContext(RightPanelContext);
   useContext(RightPanelContext);
+  
 
   return (
     <div className="flex flex-col p-1 gap-1  w-full items-center">

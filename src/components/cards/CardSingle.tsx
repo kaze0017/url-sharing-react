@@ -1,20 +1,30 @@
+import { useContext, useState } from "react";
+import AuthContext from "../../context/AuthProvider";
 import { SharedLinkType } from "../../lib/interfaces";
 // import { sharedLinks } from "../../lib/placeholder-data";
 import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
+import { CiEdit } from "react-icons/ci";
+import GradientIcon from "../customIcons/GradientIcon";
+import { useNavigate } from "react-router-dom";
 
 export default function CardSingle({
   sharedLink,
+  editable,
 }: {
   sharedLink: SharedLinkType;
+  editable: boolean;
 }) {
-  if (!sharedLink) {
-    return null;
+  const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
+
+  function navigateToEditLinkPage() {
+    navigate(`/linkManagement/editLink/${sharedLink.id}`);
   }
   const ownerFullName =
     sharedLink.owner.first_name + " " + sharedLink.owner.last_name;
   return (
-    <div className="uppercase flex flex-col h-full gap-1 p-2 panel-light ">
-      <div className="flex items-center justify-between h-12 p-1 border-b-2 border-indigo-700 ">
+    <div className=" uppercase flex flex-col h-full gap-1 p-2 panel-light">
+      <div className=" flex items-center justify-between h-12 p-1 border-b-2 border-indigo-700 ">
         <div className="flex gap-1 justify-center items-center h-full w-40">
           <ProfilePictureSm person={sharedLink.owner} />
           <h3 className="text-xs">{ownerFullName}</h3>
@@ -43,7 +53,7 @@ export default function CardSingle({
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-grow relative items-center justify-center ">
+      <div className="flex w-full flex-grow relative items-center justify-center">
         <img
           src={
             sharedLink.thumbnail || "/images/defaults/imageDefaultThumbnail.jpg"
@@ -51,11 +61,19 @@ export default function CardSingle({
           className="absolute w-full h-full top-0 left-0 object-cover"
         />
         <div className="absolute w-full h-full flex flex-col justify-center items-center backdrop-blur-sm bg-white/30">
+          {editable && (
+            <div
+              className="absolute top-0 right-0 flex  w-16 h-16"
+              onClick={navigateToEditLinkPage}
+            >
+              <GradientIcon icon={CiEdit} size="100%" />
+            </div>
+          )}
           <p className="text-2xl font-bold bg-blue-950 p-2 text-white px-4">
             {sharedLink.title}
           </p>
           <p className="text-xl text-blue-950 font-bold">
-            {sharedLink.description}
+            {sharedLink.contentDescription}
           </p>
           <a
             href={sharedLink.url}

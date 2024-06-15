@@ -19,7 +19,7 @@ export default function ShareWithGroups() {
   const people = getNPeople(10);
 
   useEffect(() => {
-    setPeopleToDisplay(people);
+    // setPeopleToDisplay(people);
     setGroupsToDisplay(groups);
   }, []);
 

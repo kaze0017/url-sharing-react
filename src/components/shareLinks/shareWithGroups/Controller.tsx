@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from "react";
+import AuthContext from "../../../context/AuthProvider";
 import ShareWithGroupsContext from "../../../context/ShareWithGroupsProvider";
 import SearchBar from "../../SearchBar";
 import TabBtn from "./TabBtn";
@@ -10,6 +11,8 @@ import { PiShareFatThin } from "react-icons/pi";
 import { UserProfileType, groupType } from "../../../lib/interfaces";
 import { getNPeople } from "../../../lib/actions";
 import { groupsPH } from "../../../lib/placeholder-data";
+import { getTopUsers } from "../../../api/getTopUsers";
+import { getUserByQuery } from "../../../api/getUserByQuery";
 
 export default function Controller() {
   const {
@@ -21,19 +24,27 @@ export default function Controller() {
     setPeopleToDisplay,
     mode,
   } = useContext(ShareWithGroupsContext);
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
+
+  let topTenPeople;
+
+  async function getTopTenPeople() {
+    topTenPeople = await getTopUsers(token);
+    setPeopleToDisplay(topTenPeople);
+  }
+  async function searchForUsers(query: string, token: string) {
+    const users = await getUserByQuery(token, query);
+    setPeopleToDisplay(users);
+  }
 
   useEffect(() => {
     if (mode === "users") {
-      const people = getNPeople(10);
-      let searchedPeople = people.filter(
-        (person: UserProfileType) =>
-          person.first_name.toLowerCase().includes(query.toLowerCase()) ||
-          person.last_name.toLowerCase().includes(query.toLowerCase())
-      );
-      searchedPeople.filter((person) => {
-        selectedPeople.some((item) => item.id !== person.id);
-      });
-      setPeopleToDisplay(searchedPeople);
+      if (query) {
+        searchForUsers(query, token);
+      } else {
+        getTopTenPeople();
+      }
     } else {
       let searchedGroups = groupsPH.filter(
         (group: groupType) =>
@@ -47,10 +58,13 @@ export default function Controller() {
     }
   }, [query]);
 
+  // useEffect(() => {
+  //   getTopTenPeople();
+  // }, []);
+
   return (
     <div className="flex flex-col w-full items-center font-semibold">
       <div className="flex items-center justify-between h-[35px] w-full">
-
         <TabBtnText selectedCount={selectedPeople.length} name={"users"} />
         <TabBtnText selectedCount={selectedGroups.length} name={"groups"} />
         <TabBtnText

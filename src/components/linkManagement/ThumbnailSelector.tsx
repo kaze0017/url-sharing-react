@@ -5,6 +5,7 @@ import { FiUploadCloud } from "react-icons/fi";
 
 interface ThumbnailSelectorProps {
   setSelectedImage: React.Dispatch<React.SetStateAction<string>>;
+  selectedImage?: string;
 }
 
 export default function ThumbnailSelector({

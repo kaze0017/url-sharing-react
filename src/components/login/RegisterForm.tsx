@@ -1,8 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
-import {
-  UserProfileContext,
-} from "../../context/UserProfileProvider";
+import { UserProfileContext } from "../../context/UserProfileProvider";
 import axiosInstance from "../../api/axios";
 import { REGISTER_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +12,7 @@ interface LoginFormProps {
 }
 export function RegisterForm({ showRegister }: LoginFormProps) {
   const navigate = useNavigate();
-  const { setAuth , setIsNewUser } = useContext(AuthContext);
+  const { setAuth, setIsNewUser } = useContext(AuthContext);
   const { setUserProfile } = useContext(UserProfileContext);
 
   const userRef = useRef<HTMLInputElement>(null);
@@ -97,6 +95,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
         /> */}
 
         <input
+          id="email"
           className="rounded-md border-gray-300"
           type="email"
           placeholder="Email"
@@ -105,20 +104,20 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
           required
         />
         <input
+          id="password"
           className="rounded-md border-gray-300"
           type="password"
           placeholder="Password"
-          id="password"
           onChange={(e) => setPwd(e.target.value)}
           aria-describedby="pwdnote"
           required
         />
 
         <input
+          id="confirmpassword"
           className="rounded-md border-gray-300"
           type="password"
           placeholder="Confirm password"
-          id="confirmpassword"
           onChange={(e) => setMatchPwd(e.target.value)}
           required
         />

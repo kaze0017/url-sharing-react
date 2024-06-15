@@ -2,8 +2,9 @@ import React from "react";
 import { SharedLinkType } from "../../lib/interfaces";
 import { IoIosLink } from "react-icons/io";
 import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
-import CardDetailIcons from "./CardDetailIcons";
+import CardDetailIcons from "./actionBtns/ActionBtns";
 import FeaturedImage from "./featuredImages/FeaturedImage";
+import ActionBtns from "./actionBtns/ActionBtns";
 
 interface CardSharedSmProps {
   sharedLink: SharedLinkType;
@@ -34,7 +35,7 @@ export default function CardSharedSm({ sharedLink }: CardSharedSmProps) {
           <h2 className="truncate  font-bold text-xs uppercase ">
             {sharedLink.title}
           </h2>
-          <p className="truncate  text-xs">{sharedLink.description}</p>
+          <p className="truncate  text-xs">{sharedLink.contentDescription}</p>
         </div>
       </div>
 
@@ -47,10 +48,12 @@ export default function CardSharedSm({ sharedLink }: CardSharedSmProps) {
         </div>
         <div className="flex grow"></div>
         <div className="w-1/2">
-          <CardDetailIcons
+          <ActionBtns
             rank={sharedLink.rankCount || 0}
             shared={sharedLink.sharedCount || 0}
             saved={sharedLink.savedCount || 0}
+            id={sharedLink.id || 0}
+            link={sharedLink}
           />
         </div>
       </div>

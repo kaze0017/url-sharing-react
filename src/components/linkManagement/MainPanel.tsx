@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useState, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { RiShareForwardLine } from "react-icons/ri";
@@ -14,20 +13,12 @@ import CardSharedSm from "../cards/CardSharedSm";
 import CardSharedMd from "../cards/CardSharedMd";
 import CardSharedLg from "../cards/CardSharedLg";
 import MainPanelWrapper from "../MainPanelWrapper";
-import { getSharedLinks } from "../../api/axios";
+import { getUserLinks } from "../../api/userLinks";
+import { getPublicLinks } from "../../api/getPublicLinks";
 import LinkManagementContext from "../../context/LinkManagementProvider";
 import LinksSelectedMenu from "./controlers/LinksSelectedMenu";
 import { UserProfileType } from "../../lib/interfaces";
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  ColumnDef,
-  getFilteredRowModel,
-  getPaginationRowModel,
-} from "@tanstack/react-table";
-
+import { createColumnHelper } from "@tanstack/react-table";
 import GrabScroll from "../GrabScroll";
 import FeederBtn from "../FeederBtn";
 import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
@@ -37,8 +28,10 @@ import ExpirationDate from "./table/body/ExpirationDate";
 import Count from "./table/body/Count";
 import QrCode from "./table/body/QrCode";
 import ShortLink from "./table/body/ShortLink";
+import { useNavigate } from "react-router-dom";
 
 export default function MainPanel() {
+  const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
 
@@ -87,6 +80,9 @@ export default function MainPanel() {
   }
 
   useEffect(() => {
+    if (!initialized) {
+      return;
+    }
     searchQuery === ""
       ? setSharedLinksToDisplay(sharedLinks)
       : setSharedLinksToDisplay(
@@ -96,42 +92,27 @@ export default function MainPanel() {
         );
   }, [searchQuery]);
 
+  let initialized = false;
+
+  async function getPublicAndUserLinks() {
+    const uLinks = await getUserLinks(token);
+    setSharedLinksToDisplay([...uLinks]);
+    setSharedLinks([...uLinks]);
+
+
+    initialized = true;
+  }
+
   useEffect(() => {
-    getSharedLinks(token).then((response) => {
-      setSharedLinks(response);
-      setSharedLinksToDisplay(response);
-    });
+    getPublicAndUserLinks();
   }, []);
 
-  const mainWrapperClass =
-    "h-full flex flex-col gap-1 panel-light overflow-hidden";
-
-  const feedWrapperClass =
-    "relative h-full panel-light flex flex-col grow w-full justify-start overflow-hidden p-x-2";
-
-  const displayWrapperClass = "flex flex-col overflow-y-auto";
-
-  const nodes = sharedLinks.map((sharedLink) => sharedLink);
-
-  // const [selectedLinks, setSelectedLinks] = useState<SharedLinkType[]>([]);
-
-  const [columns, setColumns] = useState(getColumns());
-
-  const toggleColumnDisplay = (columnId: string) => {
-    setColumns((prevColumns) =>
-      prevColumns.map((column) =>
-        column.id === columnId
-          ? { ...column, display: !column.display }
-          : column
-      )
-    );
-  };
-
   const btnConst = "uppercase p-2 text-2xs rounded-lg";
-  // const mainBtnClass = `${btnConst} bg-gray-200 text-gray-800`;
-  const selectedBtnClass = `${btnConst} bg-indigo-500 text-white`;
 
   useEffect(() => {
+    if (!initialized) {
+      return;
+    }
     const filteredLinks = sharedLinks.filter((link) => {
       // Filter based on linkClass
       if (linkClass !== "all" && link.class_type !== linkClass) {
@@ -418,6 +399,10 @@ function getColumns() {
 }
 
 function createColumns() {
+  // const navigate = useNavigate();
+  function navigateToEditLinkPage(id: any) {
+    // navigate(`/editLink/${id}`);
+  }
   interface ExpandedSharedLinkType extends SharedLinkType {
     select: boolean;
     status: boolean;
@@ -429,15 +414,19 @@ function createColumns() {
       header: ({ table }) => (
         <div className="p-1">
           <input
+            name="select-all"
             checked={table.getIsAllRowsSelected()}
             onChange={table.getToggleAllRowsSelectedHandler()}
             type="checkbox"
           />
         </div>
       ),
+      enableColumnFilter: false,
+
       cell: ({ row }) => (
         <div className="p-1">
           <input
+            name="select-row"
             checked={row.getIsSelected()}
             disabled={!row.getCanSelect()}
             onChange={row.getToggleSelectedHandler()}
@@ -449,42 +438,53 @@ function createColumns() {
     columnHelper.accessor("thumbnail", {
       header: "Thumbnail",
       cell: (info) => (
-        <img
-          className="rounded-lg h-16 aspect-video mx-auto"
-          src={info.getValue()}
-          alt="thumbnail"
-        />
+        <Link to={`/sharedLink/${info.row.original.id}`}>
+          <img
+            className="rounded-lg h-16 aspect-video mx-auto"
+            src={info.getValue()}
+            alt="thumbnail"
+            onClick={() => navigateToEditLinkPage(info.row.original.id)}
+          />
+        </Link>
       ),
+      enableColumnFilter: false,
     }),
     columnHelper.accessor("title", {
       header: "Title",
+      enableColumnFilter: false,
+
       cell: (info) => info.renderValue(),
     }),
-    columnHelper.accessor("description", { header: "Description" }),
+    columnHelper.accessor("contentDescription", {
+      header: "Description",
+      enableColumnFilter: false,
+    }),
 
     columnHelper.accessor("owner", {
       header: "Owner",
+      enableColumnFilter: false,
+
       cell: (info) => (
         <>
           <div className="flex flex-col items-center justify-center">
             <ProfilePictureSm person={info.getValue()} />
-            <p className="text-3xs">
-              {info.getValue().first_name + " " + info.getValue().last_name}
-            </p>
+            <p className="text-3xs">{info.getValue()?.first_name}</p>
+            <p className="text-3xs">{info.getValue()?.last_name}</p>
           </div>
         </>
       ),
     }),
     columnHelper.accessor("suggestedby", {
       header: "Suggested By",
+      enableColumnFilter: false,
+
       cell: (info) => (
         <>
           {info.getValue() !== (null || undefined) ? (
             <div className="flex flex-col items-center justify-center">
               <ProfilePictureSm person={info.getValue() as UserProfileType} />
-              <p className="text-3xs">
-                {info.getValue()?.first_name + " " + info.getValue()?.last_name}
-              </p>
+              <p className="text-3xs">{info.getValue()?.first_name}</p>
+              <p className="text-3xs">{info.getValue()?.last_name}</p>
             </div>
           ) : (
             <p>NA</p>
@@ -494,14 +494,15 @@ function createColumns() {
     }),
     columnHelper.accessor("sharedby", {
       header: "Shared By",
+      enableColumnFilter: false,
+
       cell: (info) => (
         <>
           {info.getValue() !== (null || undefined) ? (
             <div className="flex flex-col items-center justify-center">
               <ProfilePictureSm person={info.getValue() as UserProfileType} />
-              <p className="text-3xs">
-                {info.getValue()?.first_name + " " + info.getValue()?.last_name}
-              </p>
+              <p className="text-3xs">{info.getValue()?.first_name}</p>
+              <p className="text-3xs">{info.getValue()?.last_name}</p>
             </div>
           ) : (
             <p>NA</p>
@@ -511,6 +512,8 @@ function createColumns() {
     }),
     columnHelper.accessor("status", {
       header: "Status",
+      enableColumnFilter: false,
+
       cell: (info) => (
         <p className="text-3xs">
           {info.getValue() === true ? "Active" : "Inactive"}
@@ -519,6 +522,8 @@ function createColumns() {
     }),
     columnHelper.accessor("audience", {
       header: "Audience",
+      enableColumnFilter: false,
+
       cell: (info) => (
         <p className="text-3xs">
           {info.getValue() === true ? "Public" : "Private"}
@@ -527,36 +532,49 @@ function createColumns() {
     }),
     columnHelper.accessor("url_type", {
       header: "Type",
+      enableColumnFilter: false,
+
       cell: (info) => <Type type={info.getValue()} />,
     }),
     columnHelper.accessor("publicationDate", {
       header: "Publication Date",
+      enableColumnFilter: false,
+
       cell: (info) => (
         <PublicationDate publicationDate={info.getValue() || ""} />
       ),
     }),
     columnHelper.accessor("expirationDate", {
       header: "Expiration Date",
+      enableColumnFilter: false,
+
       cell: (info) => <ExpirationDate expirationDate={info.getValue() || ""} />,
     }),
     columnHelper.accessor("rankCount", {
       header: () => <PiChartLineUp />,
+      enableColumnFilter: false,
+
       cell: (info) => <Count count={info.getValue() || 0} />,
     }),
     columnHelper.accessor("sharedCount", {
       header: () => <RiShareForwardLine />,
+      enableColumnFilter: false,
       cell: (info) => <Count count={info.getValue() || 0} />,
     }),
     columnHelper.accessor("savedCount", {
       header: () => <TfiTag />,
+      enableColumnFilter: false,
       cell: (info) => <Count count={info.getValue() || 0} />,
     }),
     columnHelper.accessor("qr_code", {
       header: "QR Code",
+      enableColumnFilter: false,
       cell: (info) => <QrCode />,
     }),
     columnHelper.accessor("short_url", {
       header: "Short Link",
+      enableColumnFilter: false,
+
       cell: (info) => <ShortLink />,
     }),
   ];

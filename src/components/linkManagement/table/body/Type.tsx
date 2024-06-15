@@ -9,7 +9,7 @@ interface TypeProps {
 }
 export default function Type({ type }: TypeProps) {
   return (
-    <div>
+    <div className="flex w-full text-center items-center justify-center">
       {type === "article" ? (
         <PiArticleNyTimesDuotone className="text-indigo-500 text-xl" />
       ) : type === "video" ? (

@@ -4,7 +4,7 @@ import EditableField from "../EditableField";
 import SubSettingContainer from "../SubSettingContainer";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
 import AuthContext from "../../../context/AuthProvider";
-import { postUserProfile } from "../../../api/axios";
+import { postUserProfile } from "../../../api/postUserProfile";
 import { IoPersonOutline } from "react-icons/io5";
 
 export default function OrganizationInformation() {

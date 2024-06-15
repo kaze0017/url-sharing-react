@@ -17,6 +17,14 @@ export default function Controller() {
     setStatus("selectingRecipients");
     navigate("/shareLinks/shareWithGroups");
   }
+  function shareByDiagram() {
+    setStatus("selectingRecipients");
+    navigate("/shareLinks/shareByDiagram");
+  }
+  function shareOnInternet() {
+    setStatus("selectingRecipients");
+    navigate("/shareLinks/shareOnInternet");
+  }
   function goToLinkManagement() {
     setStatus("sharingOptions");
     navigate("/linkmanagement");
@@ -37,15 +45,14 @@ export default function Controller() {
             <MenuBtnCard
               icon={PiGraphLight}
               title="By a diagram hierarchy"
-              callBacFunc={() => {}}
+              callBacFunc={shareByDiagram}
             />
             <MenuBtnCard
               icon={TbWorldUpload}
               title="By a network"
-              callBacFunc={() => {}}
+              callBacFunc={shareOnInternet}
             />
           </div>
-
         </div>
       ) : (
         <div className="flex flex-col gap-2 panel-light p-4 items-center text-center font-bold text-blue-950 uppercase ">

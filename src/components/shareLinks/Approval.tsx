@@ -1,12 +1,17 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../../context/AuthProvider";
 import LinkManagementContext from "../../context/LinkManagementProvider";
 import ShareWithGroupsContext from "../../context/ShareWithGroupsProvider";
 import MainPanelWrapper from "../MainPanelWrapper";
 import { GiWingedEmblem } from "react-icons/gi";
 import Dates from "./approval/Dates";
 import Description from "./approval/Description";
+import { shareLinks } from "../../api/shareLinks";
 
 export default function Approval() {
+  const [responseMessage, setResponseMessage] = useState("");
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
   const { selectedLinks, setSelectedLinks } = useContext(LinkManagementContext);
   const {
     selectedPeople,
@@ -15,10 +20,28 @@ export default function Approval() {
     setStatus,
     setSelectedGroups,
     setSelectedPeople,
+    expirationDate,
+    publicationDate,
+    description,
   } = useContext(ShareWithGroupsContext);
 
-  function shareNow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  async function shareNow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
+    const link_ids = selectedLinks.map((link) => link.id);
+    const user_ids = selectedPeople.map((person) => person.id);
+    const message = "Check this out!";
+    const group_ids = selectedGroups.map((group) => group.id);
+    const response = await shareLinks({
+      token,
+      link_ids,
+      user_ids,
+      group_ids,
+      message,
+      description,
+      expirationDate,
+      publicationDate,
+    });
+    setResponseMessage(response?.data?.message);
     setSelectedLinks([]);
     setSelectedPeople([]);
     setSelectedGroups([]);
@@ -48,7 +71,8 @@ export default function Approval() {
                 </div>
                 <div className="flex gap-2  p-4 ">
                   <p className="text-2xl text-blue-950">
-                    {selectedPeople.length} {selectedPeople.length > 1 ? "People" : "Person"} &
+                    {selectedPeople.length}{" "}
+                    {selectedPeople.length > 1 ? "People" : "Person"} &
                   </p>
                   <p className="text-2xl text-blue-950">
                     {selectedGroups.length} Groups
@@ -71,7 +95,7 @@ export default function Approval() {
         ) : (
           <div className="flex flex-col gap-2 items-center text-4xl text-blue-950">
             <GiWingedEmblem className="text-6xl" />
-            <p>Congradulation</p>
+            <p>{responseMessage}</p>
           </div>
         )}
       </div>

@@ -4,7 +4,7 @@ import AuthContext from "../../../context/AuthProvider";
 import SubSettingContainer from "../SubSettingContainer";
 import { countries } from "../../../lib/countries";
 import Select from "react-select";
-import { postUserProfile } from "../../../api/axios";
+import { postUserProfile } from "../../../api/postUserProfile";
 
 export default function ContactInformation() {
   const { auth } = useContext(AuthContext);

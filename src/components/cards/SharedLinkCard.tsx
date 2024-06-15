@@ -52,7 +52,7 @@ export default function SharedLinkCard({
   const regeneratedSharedLink = {
     ...sharedLink,
     thumbnail: sharedLink.thumbnail || "",
-    description: sharedLink.description || "No description available",
+    description: sharedLink.contentDescription || "No description available",
     title: sharedLink.title || "No title available",
     rankCount: sharedLink.rankCount || 0,
     sharedCount: sharedLink.sharedCount || 0,
@@ -87,7 +87,7 @@ function SharedLinkCardGrid({ sharedLink }: { sharedLink: SharedLinkType }) {
         <div className="flex flex-col justify-between gap-1 h-[100px] overflow-clip p-1 w-3/5">
           <h3 className="text-sm truncate">{sharedLink.title}</h3>
           <p className="overflow-hidden text-xs h-3/5 w-full">
-            {sharedLink.description}
+            {sharedLink.contentDescription}
           </p>
         </div>
       </div>
@@ -135,7 +135,7 @@ function SharedLinkCardList({ sharedLink }: { sharedLink: SharedLinkType }) {
       />
       <h3 className="text-xs truncate w-4/12 max-w-32">{sharedLink.title}</h3>
       <p className="text-ellipsis overflow-hidden text-xs max-w-32 w-4/12 h-max-full">
-        {sharedLink.description}
+        {sharedLink.contentDescription}
       </p>
       <ProfilePicture person={sharedLink.owner} />
       <p className="text-xs text-gray-500 p-1 w-[60px] justify-center items-center">

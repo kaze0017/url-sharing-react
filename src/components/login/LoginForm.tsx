@@ -82,6 +82,7 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
           disabled={isPending}
         />
         <input
+          id="loginPassword"
           className={`${inputClass}`}
           type="password"
           placeholder="Password"
@@ -96,9 +97,9 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
               Remember me
             </label>
             <input
+              id="remember"
               type="checkbox"
               className="rounded-md border-gray-300"
-              id="remember"
             />
           </div>
           <p className="text-blue-800 text-xs cursor-pointer ">

@@ -4,32 +4,59 @@ export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
 const IP = "3.143.146.42";
 
-// export const REGISTER_URL = "http://3.143.146.42:8000/auth/register/";
-
-// export const LOGIN_URL = "http://3.143.146.42:8000/auth/login/";
-
-// export const CREATE_URL = "http://3.143.146.42:8000/link_management/create/";
-
-// export const PUBLIC_URL =
-//   "http://3.143.146.42:8000/link_management/public_links/";
-
-// export const USER_URL = "http://3.143.146.42:8000/link_management/user_links/";
-
-// export const USER_PROFILE_URL =
-//   "http://3.143.146.42:8000/profile_user/user_profile_view/";
-
+// register a new user
 export const REGISTER_URL = "https://api.url.faraertebat.com/auth/register/";
 
+// login
 export const LOGIN_URL = "https://api.url.faraertebat.com/auth/login/";
 
+// create a new link
 export const CREATE_URL =
   "https://api.url.faraertebat.com/link_management/create/";
 
+// get links that are public (created by current user or others)
 export const PUBLIC_URL =
   "https://api.url.faraertebat.com/link_management/public_links/";
 
+// get links that are created by the user
 export const USER_URL =
   "https://api.url.faraertebat.com/link_management/user_links/";
 
+// get user profile info
 export const USER_PROFILE_URL =
   "https://api.url.faraertebat.com/profile_user/user_profile_view/";
+
+export const SHARE_LINKS_TO_USERs_URL =
+  "https://api.url.faraertebat.com/link_management/share_links_to_users/";
+
+// list of top 10 users with base info to share or …
+export const TOP_USERs_URL =
+  "https://api.url.faraertebat.com/member_management/top_users/";
+
+// get popular links
+export const POPULAR_URL =
+  "https://api.url.faraertebat.com/link_management/populars_links/";
+
+// update a link info
+export const UPDATE_LINK_URL =
+  "https://api.url.faraertebat.com/link_management/update_link_version/";
+
+// list of users with base info
+// http://127.0.0.1:8000/member_management/current_users/
+
+export const GET_LINK_BY_ID_URL =
+  "https://api.url.faraertebat.com/link_management/filter_links_by_id/";
+
+// search for users based on email
+export const FIND_USER_BY_QUERY_URL =
+  "https://api.url.faraertebat.com/member_management/find_user_view/";
+
+
+// Notifications
+export const NOTIFICATION_URL =
+  "https://api.url.faraertebat.com/link_management/notifications/";
+
+// http://127.0.0.1:8000/link_management/populars_links/
+
+// share links to users
+// http://127.0.0.1:8000/link_management/share_links_to_users/

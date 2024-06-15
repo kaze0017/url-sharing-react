@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getSharedLinks } from "../../../../api/axios";
+import { HomeContext } from "../../../../context/HomeProvider";
+import { getSharedLinks } from "../../../../api/getSharedLinks";
+import CardSharedMd from "../../../cards/CardSharedMd";
 import CardImgIconS from "../../../cards/CardImgIconS";
+import CardSharedLg from "../../../cards/CardSharedLg";
 import SliderFlexWrapper from "../../../sliders/SliderFlexWrapper";
 import { SharedLinkType } from "../../../../lib/interfaces";
-import Controls from "./wall/Controls";
+import Controllers from "./Controllers";
 import AuthContext from "../../../../context/AuthProvider";
 import NotFound from "../../../NotFound";
 
@@ -12,12 +15,13 @@ export default function Wall() {
   const token = auth?.token || "";
   const [isLoading, setIsLoading] = useState(true);
   const [sharedLinks, setSharedLinks] = useState<SharedLinkType[] | null>(null);
-  const [query, setQuery] = React.useState("");
+  const [linksToDisplay, setLinksToDisplay] = useState<SharedLinkType[]>([]);
+  const { query, view } = useContext(HomeContext);
 
   async function getAndSetSharedLinks() {
     const sharedLinks = await getSharedLinks(token);
-
     setSharedLinks(sharedLinks);
+    setLinksToDisplay(sharedLinks);
   }
 
   useEffect(() => {
@@ -29,10 +33,11 @@ export default function Wall() {
       return;
     }
     // Filter the shared links based on the query
+
     const filteredLinks = sharedLinks.filter((sharedLink) =>
       sharedLink.title.toLowerCase().includes(query.toLowerCase())
     );
-    setSharedLinks(filteredLinks);
+    setLinksToDisplay(filteredLinks);
   }, [query]);
 
   return sharedLinks === null ? (
@@ -46,12 +51,26 @@ export default function Wall() {
     </div>
   ) : sharedLinks?.length > 0 ? (
     <div className="w-full h-full overflow-hidden flex flex-col gap-2 p-2">
-      <Controls query={query} setQuery={setQuery} />
-      <SliderFlexWrapper
-        sharedLinks={sharedLinks}
-        CardComponent={CardImgIconS}
-        setIsLoading={setIsLoading}
-      />
+      {view === "grid" ? (
+        <SliderFlexWrapper
+          sharedLinks={linksToDisplay}
+          CardComponent={CardSharedMd}
+          setIsLoading={setIsLoading}
+          multi={true}
+        />
+      ) : view === "cardImgIconS" ? (
+        <SliderFlexWrapper
+          sharedLinks={linksToDisplay}
+          CardComponent={CardImgIconS}
+          setIsLoading={setIsLoading}
+        />
+      ) : (
+        <SliderFlexWrapper
+          sharedLinks={linksToDisplay}
+          CardComponent={CardSharedLg}
+          setIsLoading={setIsLoading}
+        />
+      )}
     </div>
   ) : (
     <NotFound title="shared links" size="text-md" />

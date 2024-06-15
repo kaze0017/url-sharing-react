@@ -1,7 +1,7 @@
 import { SharedLinkType } from "../../lib/interfaces";
 import { IoIosLink } from "react-icons/io";
 import ProfilePicture from "../profilePictures/ProfilePicture";
-import CardDetailIcons from "./CardDetailIcons";
+import ActionBtns from "./actionBtns/ActionBtns";
 import GradientIcon from "../customIcons/GradientIcon";
 import { CiPlay1 } from "react-icons/ci";
 import { CiCamera } from "react-icons/ci";
@@ -30,10 +30,14 @@ export default function CardSharedMd({ sharedLink }: CardSharedMdProps) {
   };
   return (
     <div className={mainWrapperClass} style={mainWrapperStyle}>
-      <FeaturedImage sharedLink={sharedLink} twClass="h-[125px] w-full" />
+      <FeaturedImage
+        sharedLink={sharedLink}
+        twClass="h-[125px] w-full"
+        hight={125}
+      />
       <div className="w-full flex flex-col">
         <h3 className="font-bold text-sm uppercase ">{sharedLink.title}</h3>
-        <p className="text-sm">{sharedLink.description}</p>
+        <p className="text-sm">{sharedLink.contentDescription}</p>
       </div>
 
       <div className="w-full flex gap-1 items-center text-xs">
@@ -44,10 +48,12 @@ export default function CardSharedMd({ sharedLink }: CardSharedMdProps) {
           <p>{lastName}</p>
         </div>
         <div className="flex flex-grow"></div>
-        <CardDetailIcons
+        <ActionBtns
           rank={sharedLink.rankCount || 0}
           shared={sharedLink.sharedCount || 0}
           saved={sharedLink.savedCount || 0}
+          id={sharedLink.id || 0}
+          link={sharedLink}
         />
       </div>
     </div>

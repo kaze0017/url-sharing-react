@@ -11,7 +11,7 @@ import AuthContext from "../context/AuthProvider";
 import axiosInstance from "../api/axios";
 import { USER_URL } from "../constants";
 
-import { getSharedLinks } from "../api/axios";
+import { getSharedLinks } from "../api/getSharedLinks";
 import NotFound from "../components/NotFound";
 
 export default function Profile() {

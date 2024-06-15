@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { UserProfileContext } from "../context/UserProfileProvider";
 import AuthContext from "../context/AuthProvider";
 import ProgressBarComp from "../components/ProgressBarComp";
-import { postUserProfile } from "../api/axios";
+import { postUserProfile } from "../api/postUserProfile";
 import { useNavigate } from "react-router-dom";
 import MainPanelWrapper from "../components/MainPanelWrapper";
 

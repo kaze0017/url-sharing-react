@@ -78,7 +78,7 @@ export type SharedLinkType = {
   back_up_link_3rd?: string;
   category: string | null;
   class_type: "link" | "category";
-  description: string | null;
+  contentDescription: string | null;
   health_backup_1st?: true | false;
   health_backup_2nd?: true | false;
   health_backup_3rd?: true | false;
@@ -91,7 +91,7 @@ export type SharedLinkType = {
   savedCount: number;
   seenCount: number;
   sharedCount: number;
-  tags?: Array<string> | string
+  tags?: Array<string>;
   thumbnail: string | "";
   url_pass?: string;
   url_type: "article" | "video" | "podcast" | "image" | "other";

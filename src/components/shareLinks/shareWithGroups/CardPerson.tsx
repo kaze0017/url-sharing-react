@@ -2,9 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
 import ShareWithGroupsContext from "../../../context/ShareWithGroupsProvider";
 // import { PersonType } from "../../../lib/interfaces";
-import ProfilePicture from "../../profilePictures/ProfilePicture";
+import ProfilePictureMd from "../../profilePictures/ProfilePictureMd";
 import { UserProfileType } from "../../../lib/interfaces";
-import { set } from "react-hook-form";
 
 interface CardPersonProps {
   person: UserProfileType;
@@ -20,7 +19,7 @@ export default function CardPerson({ person, selected }: CardPersonProps) {
     "connected" | "not-connected" | "pending"
   >("not-connected");
 
-  function toggle(e : React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  function toggle(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
     console.log(e.target);
     if (selectedPeople.some((item) => item.id === person.id)) {
@@ -43,12 +42,15 @@ export default function CardPerson({ person, selected }: CardPersonProps) {
     }
   }
 
-function handleConnect(person: UserProfileType) {
-  setUserProfile((prevUserProfile) => ({
-    ...prevUserProfile,
-    pendingConnections: [...(prevUserProfile.pendingConnections || []), person],
-  }));
-}
+  function handleConnect(person: UserProfileType) {
+    setUserProfile((prevUserProfile) => ({
+      ...prevUserProfile,
+      pendingConnections: [
+        ...(prevUserProfile.pendingConnections || []),
+        person,
+      ],
+    }));
+  }
   useEffect(() => {
     if (
       userProfile.connections?.some((connection) => connection.id === person.id)
@@ -65,7 +67,7 @@ function handleConnect(person: UserProfileType) {
     }
   }, [userProfile.connections, userProfile.pendingConnections]);
 
-  const cardClass = `text-xs w-[80px] h-[100px] flex flex-col items-center justify-center gap-1 p-1 rounded-lg cursor-pointer ${
+  const cardClass = `text-center text-xs w-[80px] h-28 flex flex-col items-center justify-center gap-1 p-1 rounded-lg cursor-pointer ${
     selected ? "bg-indigo-200" : "bg-gray-200"
   }`;
 
@@ -76,11 +78,19 @@ function handleConnect(person: UserProfileType) {
       }}
       className={cardClass}
     >
-      <ProfilePicture person={person} />
-      <p>{person.first_name}</p>
-      <p>{person.last_name}</p>
-      {relationState === "connected" && <button>Connected</button>}
-      {relationState === "not-connected" && <button onClick={() => handleConnect(person)}>Connect</button>}
+      <ProfilePictureMd person={person} />
+      <div className="flex w-full flex-grow flex-col items-center justify-center">
+        <p className="text-center truncate w-full overflow-hidden">
+          {person.first_name}
+        </p>
+        <p className="text-center">{person.last_name}</p>
+      </div>
+      {relationState === "connected" && (
+        <button className="flex w-100 flex-grow">Connected</button>
+      )}
+      {relationState === "not-connected" && (
+        <button onClick={() => handleConnect(person)}>Connect</button>
+      )}
       {relationState === "pending" && <button>Pending</button>}
     </div>
   );

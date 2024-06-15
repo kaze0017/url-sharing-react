@@ -2,9 +2,7 @@ import PanelLeft from "../components/sideBars/PanelLeft";
 import PanelRight from "../components/sideBars/PanelRight";
 import { Outlet } from "react-router-dom";
 import ActionBtns from "../components/home/mainPanel/ActionBtns";
-import ModeProvider from "../context/ModeProvider";
-import UserProfileProvider from "../context/UserProfileProvider";
-import MainPanelWrapper from "../components/MainPanelWrapper";
+import HomeProvider from "../context/HomeProvider";
 import { LinkManagementProvider } from "../context/LinkManagementProvider";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthProvider";
@@ -21,14 +19,14 @@ export default function Home() {
       ) : (
         <>
           <PanelLeft />
-          <ModeProvider>
+          <HomeProvider>
             <LinkManagementProvider>
               <div className="flex flex-col w-full h-full gap-1">
                 <Outlet />
                 <ActionBtns />
               </div>
             </LinkManagementProvider>
-          </ModeProvider>
+          </HomeProvider>
           <PanelRight />
         </>
       )}

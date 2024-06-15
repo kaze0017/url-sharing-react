@@ -7,21 +7,23 @@ interface ProfilePictureProps {
   person: UserProfileType | null;
 }
 
-const ProfilePictureSm: React.FC<ProfilePictureProps> = ({ person }) => {
+const ProfilePictureMd: React.FC<ProfilePictureProps> = ({ person }) => {
   const size = 32;
   return person ? (
     <Link to={`/profile/${person.id}`}>
-      <img
-        src={
-          person.profile_picture || "/images/defaults/personDefaultImage.png"
-        }
-        alt={person.first_name + " " + person.last_name}
-        width={size}
-        height={size}
-        className="object-cover transition-transform transform hover:scale-110 rounded-full border-2 border-blue-500"
-      />
+      <div className="w-10 aspect-square border blue-red-500 flex transition-transform transform hover:scale-110 rounded-full overflow-hidden items-center justify-center">
+        <img
+          src={
+            person.profile_picture || "/images/defaults/personDefaultImage.png"
+          }
+          alt={person.first_name + " " + person.last_name}
+          width={size}
+          height={size}
+          className="w-full h-full object-cover"
+        />
+      </div>
     </Link>
   ) : null;
 };
 
-export default ProfilePictureSm;
+export default ProfilePictureMd;

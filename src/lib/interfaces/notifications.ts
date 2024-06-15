@@ -1,9 +1,9 @@
 import { UserProfileType } from "../interfaces";
 import { SharedLinkType } from "../interfaces";
 export type NotificationType = {
-  sharedBy: UserProfileType;
-  links: SharedLinkType[];
+  sender: UserProfileType;
+  linkdata: SharedLinkType[];
   description: string;
-  publicationDate: Date;
+  publicationDate?: Date;
 };
 export type NotificationsType = Array<NotificationType>;

@@ -8,7 +8,19 @@ import {
   ColumnDef,
   getFilteredRowModel,
   getPaginationRowModel,
+  Column,
+  PaginationState,
+  getSortedRowModel,
+  ColumnFiltersState,
+  RowData,
 } from "@tanstack/react-table";
+import Filter from "./Filter";
+declare module "@tanstack/react-table" {
+  //allows us to define custom properties for our columns
+  interface ColumnMeta<TData extends RowData, TValue> {
+    filterVariant?: "text" | "range" | "select";
+  }
+}
 
 interface TableProps {
   columns: any;
@@ -22,44 +34,6 @@ interface ExpandedSharedLinkType extends SharedLinkType {
   select: boolean;
 }
 
-// const columnHelper = createColumnHelper<ExpandedSharedLinkType>();
-
-// const columns: any = [
-//   columnHelper.accessor("select", {
-//     header: ({ table }) => (
-//       <input
-//         checked={table.getIsAllRowsSelected()}
-//         onChange={table.getToggleAllRowsSelectedHandler()} //or getToggleAllPageRowsSelectedHandler
-//         type="checkbox"
-//       />
-//     ),
-//     cell: ({ row }) => (
-//       <input
-//         checked={row.getIsSelected()}
-//         disabled={!row.getCanSelect()}
-//         onChange={row.getToggleSelectedHandler()}
-//         type="checkbox"
-//       />
-//     ),
-//     // footer: (info) => info.column.id,
-//   }),
-//   columnHelper.accessor("thumbnail", {
-//     header: "Thumbnail",
-//     cell: (info) => (
-//       <img
-//         className="rounded-lg h-16 aspect-video mx-auto"
-//         src={info.getValue()}
-//         alt="thumbnail"
-//       />
-//     ),
-//   }),
-//   columnHelper.accessor("title", {
-//     header: "Title",
-//     cell: (info) => info.renderValue(),
-//   }),
-//   columnHelper.accessor("description", { header: "Description" }),
-// ];
-
 export default function Table({
   sharedLinks,
   setSelectedLinks,
@@ -70,6 +44,11 @@ export default function Table({
 
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
+  const [pagination, setPagination] = useState({
+    pageIndex: 0, //initial page index
+    pageSize: 10, //default page size
+  });
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const rerender = useReducer(() => ({}), {})[1];
 
@@ -80,16 +59,21 @@ export default function Table({
     state: {
       columnVisibility,
       rowSelection,
+      pagination,
+      columnFilters,
     },
     onColumnVisibilityChange: setColumnVisibility,
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
+    // debugTable: true,
+    // debugHeaders: true,
+    // debugColumns: true,
     columnResizeMode: "onChange",
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination, //update the pagination state when internal APIs mutate the pagination state
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
   });
 
   useEffect(() => {
@@ -103,6 +87,7 @@ export default function Table({
           <div className="px-1 border-b border-gray-300 p-2">
             <label>
               <input
+                name="columnVisibility"
                 {...{
                   type: "checkbox",
                   checked: table.getIsAllColumnsVisible(),
@@ -121,6 +106,7 @@ export default function Table({
                 >
                   <label>
                     <input
+                      name="columnVisibility"
                       {...{
                         type: "checkbox",
                         checked: column.getIsVisible(),
@@ -141,15 +127,24 @@ export default function Table({
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <th key={header.id} colSpan={header.colSpan}>
+                  <th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className=" items-center text-center p-1 text-2xs"
+                  >
                     {header.isPlaceholder ? null : (
-                      <div className="p1">
+                      <div className=" flex w-full items-center text-center justify-center">
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
                       </div>
                     )}
+                    {header.column.getCanFilter() ? (
+                      <div>
+                        <Filter column={header.column} />
+                      </div>
+                    ) : null}
                   </th>
                 );
               })}
@@ -182,6 +177,74 @@ export default function Table({
           })}
         </tbody>
       </table>
+      <div className="h-2" />
+      <div className="flex items-center gap-2">
+        <button
+          className="border rounded p-1"
+          onClick={() => table.firstPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {"<<"}
+        </button>
+        <button
+          className="border rounded p-1"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {"<"}
+        </button>
+        <button
+          className="border rounded p-1"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {">"}
+        </button>
+        <button
+          className="border rounded p-1"
+          onClick={() => table.lastPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {">>"}
+        </button>
+        <span className="flex items-center gap-1">
+          <div>Page</div>
+          <strong>
+            {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount().toLocaleString()}
+          </strong>
+        </span>
+        <span className="flex items-center gap-1">
+          | Go to page:
+          <input
+            name="pageIndex"
+            type="number"
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              table.setPageIndex(page);
+            }}
+            className="border p-1 rounded w-16"
+          />
+        </span>
+        <select
+          name="pageSize"
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value));
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        Showing {table.getRowModel().rows.length.toLocaleString()} of{" "}
+        {table.getRowCount().toLocaleString()} Rows
+      </div>
     </div>
   );
 }

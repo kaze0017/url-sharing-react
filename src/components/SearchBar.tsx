@@ -12,6 +12,7 @@ export default function SearchBar({ query, setQuery }: SearchProps) {
   return (
     <div className="w-full mx-auto relative">
       <input
+        name="search"
         type="text"
         placeholder="Search..."
         value={query}

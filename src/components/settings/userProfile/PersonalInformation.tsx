@@ -5,7 +5,7 @@ import FullScreenOverlay from "../../FullScreenOverlay";
 import ChangeProfilePicture from "./forms/ChangeProfilePicture";
 import SubSettingContainer from "../SubSettingContainer";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
-import { postUserProfile } from "../../../api/axios";
+import { postUserProfile } from "../../../api/postUserProfile";
 import AuthContext from "../../../context/AuthProvider";
 import { IoPersonOutline } from "react-icons/io5";
 

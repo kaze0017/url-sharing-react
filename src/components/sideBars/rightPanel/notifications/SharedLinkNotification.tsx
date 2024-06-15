@@ -49,7 +49,7 @@ export default function SharedLinkNotification({
             </p>
           </div>
           <div className="flex w-full">
-            <p>{link.description}</p>
+            <p>{link.contentDescription}</p>
           </div>
           <div className="flex items-center justify-evenly">
             <RxCross1 className="text-xl text-red-500" onClick={handelReject} />

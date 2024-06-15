@@ -9,7 +9,7 @@ import ActionBtns from "./rightPanel/ActionBtns";
 import { useDraggable } from "react-use-draggable-scroll";
 import Histories from "./rightPanel/Histories";
 import Notifications from "./rightPanel/Notifications";
-import { getNotifications } from "../../api/axios";
+import { getNotifications } from "../../api/getNotifications";
 
 interface PanelLeftProps {
   className?: string;
@@ -27,7 +27,7 @@ export default function PanelRight(props: PanelLeftProps) {
   const { auth } = useContext(AuthContext);
   const token = auth?.token;
 
-  const orgNotifications = getNotifications(token || "");
+  // const orgNotifications = getNotifications(token || "");
   // setNotifications(orgNotifications);
 
   const ref =
@@ -51,9 +51,16 @@ export default function PanelRight(props: PanelLeftProps) {
   `;
   // const textBoxClass = `text-center ${toggledCollapse ? "w-52" : "w-16"}`;
 
+  async function retrieveNotifications() {
+    console.log("user id: ", auth?.userProfile?.id);
+    const response = await getNotifications(token || "");
+    setNotifications(response);
+    console.log(response);
+  }
+
   useEffect(() => {
-    setNotifications(orgNotifications);
-  },[]);
+    retrieveNotifications();
+  }, []);
 
   useEffect(() => {
     window.addEventListener("resize", () => {

@@ -13,15 +13,17 @@ const ProfilePictureSm: React.FC<ProfilePictureProps> = ({
   const size = 26;
   return (
     <Link to={`/profile/${person.id}`}>
-      <img
-        src={
-          person.profile_picture || "/images/defaults/personDefaultImage.png"
-        }
-        alt={`${person.first_name} ${person.last_name}`}
-        width={size}
-        height={size}
-        className="object-cover transition-transform transform hover:scale-110 rounded-full border-2 border-blue-500"
-      />
+      <div className="w-8 border border-blue-900 aspect-square  flex transition-transform transform hover:scale-110 rounded-full overflow-hidden items-center justify-center">
+        <img
+          src={
+            person.profile_picture || "/images/defaults/personDefaultImage.png"
+          }
+          alt={`${person.first_name} ${person.last_name}`}
+          width={size}
+          height={size}
+          className="w-full h-full object-cover"
+        />
+      </div>
     </Link>
   );
 };

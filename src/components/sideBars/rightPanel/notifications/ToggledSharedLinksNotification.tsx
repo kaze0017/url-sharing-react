@@ -16,13 +16,14 @@ export default function ToggledSharedLinksNotification({
       onClick={() => setToggleRightPanel(false)}
     >
       <img
-        src={notification.sharedBy.profile_picture}
+        src={notification.sender.profile_picture}
         alt=""
         width={30}
         className="rounded-full aspect-square"
       />
       <div className="absolute top-0 right-0 translate-x-1 -translate-y-1 text-sm text-red-500">
-        {notification.links.length}
+        {/* {notification.linkdata.length} */}
+        100
       </div>
     </div>
   );

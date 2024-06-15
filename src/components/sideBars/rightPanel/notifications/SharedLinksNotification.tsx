@@ -1,6 +1,5 @@
 import React from "react";
 import { SharedLinkType } from "../../../../lib/interfaces";
-import { UserProfileType } from "../../../../lib/interfaces";
 import { NotificationType } from "../../../../lib/interfaces/notifications";
 import { RxCross1 } from "react-icons/rx";
 import { RiCheckLine } from "react-icons/ri";
@@ -19,8 +18,10 @@ export default function SharedLinksNotification({
     "none"
   );
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const sharedBy = notification.sharedBy;
-  const date = new Date(notification.publicationDate);
+  const sender = notification.sender;
+  const date = notification.publicationDate
+    ? new Date(notification.publicationDate)
+    : new Date();
   const dateToDisplay = date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -45,14 +46,15 @@ export default function SharedLinksNotification({
           <div className="flex flex-row uppercase justify-between p-1">
             <div className="flex items-center gap-2 font-semibold">
               <img
-                src={sharedBy.profile_picture}
+                src={sender.profile_picture}
                 alt=""
                 width={30}
                 className="rounded-full aspect-square"
               />
               <p>
-                {sharedBy.first_name} {sharedBy.last_name} (
-                {notification.links.length})
+                {sender.first_name} {sender.last_name} (
+                {/* {notification.linkdata.length}) */}
+                1000
               </p>
             </div>
             <p className="text-2xs">{dateToDisplay}</p>
@@ -62,7 +64,7 @@ export default function SharedLinksNotification({
             {!isExpanded && ""}
             {isExpanded && (
               <div className="flex flex-col gap-2">
-                {notification.links.map(
+                {notification.linkdata.map(
                   (link: SharedLinkType, index: number) => (
                     <SharedLinkNotification key={index} link={link} />
                   )

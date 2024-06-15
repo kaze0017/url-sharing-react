@@ -23,6 +23,9 @@ import ShareLinks from "./pages/ShareLinks";
 import ShareWithGroups from "./components/shareLinks/ShareWithGroups";
 import Controller from "./components/shareLinks/Controller";
 import Approval from "./components/shareLinks/Approval";
+import ShareByDiagram from "./components/shareLinks/ShareByDiagram";
+import ShareOnInternet from "./components/shareLinks/ShareOnInternet";
+import EditLink from "./components/linkManagement/EditLink";
 
 function App() {
   return (
@@ -41,12 +44,24 @@ function App() {
                   path="/linkManagement/createLink"
                   element={<CreateLink />}
                 />
+                <Route
+                  path="/linkManagement/editLink/:id"
+                  element={<EditLink />}
+                />
               </Route>
               <Route path="/shareLinks" element={<ShareLinks />}>
                 <Route path="/shareLinks" element={<Controller />} />
                 <Route
                   path="/shareLinks/shareWithGroups"
                   element={<ShareWithGroups />}
+                />
+                <Route
+                  path="/shareLinks/shareByDiagram"
+                  element={<ShareByDiagram />}
+                />
+                <Route
+                  path="/shareLinks/shareOnInternet"
+                  element={<ShareOnInternet />}
                 />
                 <Route path="/shareLinks/approval" element={<Approval />} />
               </Route>
@@ -57,7 +72,7 @@ function App() {
               </Route>
               <Route path="/settings" element={<Settings />} />
               <Route path="/profile/:userId" element={<Profile />} />
-              <Route path="/sharedLink/:linkId" element={<SharedLink />} />
+              <Route path="/sharedLink/:id" element={<SharedLink />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/logout" element={<LogOut />} />
             </Route>
