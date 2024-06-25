@@ -1,9 +1,10 @@
 import React from "react";
 import { GiMagnifyingGlass } from "react-icons/gi";
 
+
 interface SearchProps {
   query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  setQuery: (newQuery: string) => void;
 }
 
 const Search: React.FC<SearchProps> = ({ query, setQuery }) => {
@@ -21,7 +22,6 @@ const Search: React.FC<SearchProps> = ({ query, setQuery }) => {
         className="w-full p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:border-blue-500 transition-colors duration-300 ease-in-out pl-10"
       />
       <GiMagnifyingGlass className="absolute top-1/2 left-4 text-xl transform -translate-y-1/2 text-gray-500" />
-      {/* Add the magnifier icon */}
     </div>
   );
 };

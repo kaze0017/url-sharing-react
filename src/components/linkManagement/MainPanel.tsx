@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { RiShareForwardLine } from "react-icons/ri";
 import { PiChartLineUp } from "react-icons/pi";
@@ -13,9 +13,6 @@ import CardSharedSm from "../cards/CardSharedSm";
 import CardSharedMd from "../cards/CardSharedMd";
 import CardSharedLg from "../cards/CardSharedLg";
 import MainPanelWrapper from "../MainPanelWrapper";
-import { getUserLinks } from "../../api/userLinks";
-import { getPublicLinks } from "../../api/getPublicLinks";
-import LinkManagementContext from "../../context/LinkManagementProvider";
 import LinksSelectedMenu from "./controlers/LinksSelectedMenu";
 import { UserProfileType } from "../../lib/interfaces";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -28,16 +25,37 @@ import ExpirationDate from "./table/body/ExpirationDate";
 import Count from "./table/body/Count";
 import QrCode from "./table/body/QrCode";
 import ShortLink from "./table/body/ShortLink";
-import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../state/store";
+import {
+  setLinkClass,
+  setLinkType,
+  setQuery,
+  setSelectedLinks,
+  setViewSize,
+  setTimeSensitive,
+  fetchUserLinks,
+  setShowSelector,
+  setShowFilter,
+} from "../../state/linkManagement/linkManagementSlice";
 
 export default function MainPanel() {
-  const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
 
-  const { selectedLinks, setSelectedLinks } = useContext(LinkManagementContext);
+  const {
+    selectedLinks,
+    linksToDisplay,
+    query,
+    linkClass,
+    linkType,
+    viewSize,
+    timeSensitive,
+    showSelector,
+    showFilter,
+  } = useSelector((state: RootState) => state.linkManagement);
+  const storeDispatch = useDispatch<AppDispatch>();
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const timeSensitiveSelection = [
     "all",
     "schedules",
@@ -56,79 +74,45 @@ export default function MainPanel() {
     "other",
   ];
 
-  const [linkClass, setLinkClass] = useState<string>("all");
-  const [linkType, setLinkType] = useState<string>("all");
-  const [timeSensitive, setTimeSensitive] = useState<string>("all");
-  const [viewSize, setViewSize] = useState<string>("details");
 
-  const [sharedLinks, setSharedLinks] = useState<SharedLinkType[]>([]);
 
-  const [showSelector, setShowSelector] = useState<string>("");
-  const [showFilter, setShowFilter] = useState(false);
-  // const [displayStyle, setDisplayStyle] = useState<"grid" | "list">("list");
-
-  const [sharedLinksToDisplay, setSharedLinksToDisplay] = useState<
-    SharedLinkType[]
-  >([]);
-
-  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
-    const searchValue = event.target.value;
-    const filteredLinks = sharedLinks.filter((sharedLink) =>
-      sharedLink.title.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setSharedLinks(filteredLinks);
+  function handelSetSelectedLinks(links: SharedLinkType[]) {
+    storeDispatch(setSelectedLinks(links));
+  }
+  function handelSetQuery(query: string) {
+    storeDispatch(setQuery(query));
+  }
+  function handelSetLinkClass(linkClass: "all" | "link" | "category") {
+    storeDispatch(setLinkClass(linkClass));
+  }
+  function handelSetLinkType(
+    linkType: "all" | "article" | "video" | "podcast" | "image" | "other"
+  ) {
+    storeDispatch(setLinkType(linkType));
+  }
+  function handelSetTimeSensitive(
+    timeSensitive: "all" | "scheduled" | "expiresSoon" | "comeSoon"
+  ) {
+    storeDispatch(setTimeSensitive(timeSensitive));
+  }
+  function handelSetViewSize(
+    viewSize: "small" | "medium" | "large" | "details"
+  ) {
+    storeDispatch(setViewSize(viewSize));
+  }
+  function handelSetShowSelector(selector: string) {
+    storeDispatch(setShowSelector(selector));
+  }
+  function handelSetShowFilter(show: boolean) {
+    storeDispatch(setShowFilter(show));
   }
 
   useEffect(() => {
-    if (!initialized) {
-      return;
-    }
-    searchQuery === ""
-      ? setSharedLinksToDisplay(sharedLinks)
-      : setSharedLinksToDisplay(
-          sharedLinks.filter((sharedLink) =>
-            sharedLink.title.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-        );
-  }, [searchQuery]);
+    storeDispatch(fetchUserLinks(token));
+    console.log("getSharedToUserAndUserLinks");
+  }, [token]);
 
-  let initialized = false;
-
-  async function getPublicAndUserLinks() {
-    const uLinks = await getUserLinks(token);
-    setSharedLinksToDisplay([...uLinks]);
-    setSharedLinks([...uLinks]);
-
-
-    initialized = true;
-  }
-
-  useEffect(() => {
-    getPublicAndUserLinks();
-  }, []);
-
-  const btnConst = "uppercase p-2 text-2xs rounded-lg";
-
-  useEffect(() => {
-    if (!initialized) {
-      return;
-    }
-    const filteredLinks = sharedLinks.filter((link) => {
-      // Filter based on linkClass
-      if (linkClass !== "all" && link.class_type !== linkClass) {
-        return false;
-      }
-      // Filter based on linkType
-      if (linkType !== "all" && link.class_type !== linkType) {
-        return false;
-      }
-      // Filter based on timeSensitive
-
-      return true; // Include all links that pass the filters
-    });
-
-    setSharedLinksToDisplay(filteredLinks);
-  }, [linkClass, linkType, timeSensitive]);
+  console.log("render");
 
   const mainBtnClass =
     "p-2 px-2 flex items-center justify-center text-xs bg-gray-300 h-10 rounded-xl min-w-24 max-w-24 uppercase hover:bg-gray-600 text-xs text-black hover:text-white";
@@ -149,43 +133,43 @@ export default function MainPanel() {
             <div className="relative">
               <FeederBtn
                 title="View"
-                onClick={() => setShowSelector("viewSize")}
+                onClick={() => handelSetShowSelector("viewSize")}
               />
               <FadeInOut show={showSelector === "viewSize"} duration={500}>
                 <SelectorMenu
                   selection={viewSelection}
-                  setSelected={setViewSize}
-                  setShow={setShowSelector}
+                  setSelected={handelSetViewSize}
+                  setShow={handelSetShowSelector}
                 />
               </FadeInOut>
             </div>
 
             {/* Class Menu */}
-
             <div className="relative">
               <FeederBtn
                 title={`Class: ${linkClass}`}
-                onClick={() => setShowSelector("linkClass")}
+                onClick={() => handelSetShowSelector("linkClass")}
               />
               <FadeInOut show={showSelector === "linkClass"} duration={500}>
                 <SelectorMenu
                   selection={linkClassSelection}
-                  setSelected={setLinkClass}
-                  setShow={setShowSelector}
+                  setSelected={handelSetLinkClass}
+                  setShow={handelSetShowSelector}
                 />
               </FadeInOut>
             </div>
+
             {/* Type Menu */}
             <div className="relative">
               <FeederBtn
                 title={`Type: ${linkType}`}
-                onClick={() => setShowSelector("linkType")}
+                onClick={() => handelSetShowSelector("linkType")}
               />
               <FadeInOut show={showSelector === "linkType"} duration={500}>
                 <SelectorMenu
                   selection={linkTypeSelection}
-                  setSelected={setLinkType}
-                  setShow={setShowSelector}
+                  setSelected={handelSetLinkType}
+                  setShow={handelSetShowSelector}
                 />
               </FadeInOut>
             </div>
@@ -193,31 +177,22 @@ export default function MainPanel() {
             <div className="relative">
               <FeederBtn
                 title={`Time: ${timeSensitive}`}
-                onClick={() => setShowSelector("timeSensitive")}
+                onClick={() => handelSetShowSelector("timeSensitive")}
               />
               <FadeInOut show={showSelector === "timeSensitive"} duration={500}>
                 <SelectorMenu
                   selection={timeSensitiveSelection}
-                  setSelected={setTimeSensitive}
-                  setShow={setShowSelector}
+                  setSelected={handelSetTimeSensitive}
+                  setShow={handelSetShowSelector}
                 />
               </FadeInOut>
             </div>
 
             {viewSize === "details" && (
-              // <button
-              //   className={mainBtnClass}
-              //   onClick={() => {
-              //     setShowFilter(true);
-              //     setShowSelector("");
-              //   }}
-              // >
-              //   Columns
-              // </button>
               <FeederBtn
                 title="Columns"
                 onClick={() => {
-                  setShowFilter(!showFilter);
+                  handelSetShowFilter(!showFilter);
                   // setShowSelector("");
                 }}
               />
@@ -225,16 +200,16 @@ export default function MainPanel() {
           </div>
 
           <div className="uppercase flex-grow">
-            <SearchBar query={searchQuery} setQuery={setSearchQuery} />
+            <SearchBar query={query} setQuery={handelSetQuery} />
           </div>
         </div>
       )}
       {selectedLinks.length !== 0 && <LinksSelectedMenu />}
       {viewSize === "details" && (
         <Table
-          sharedLinks={sharedLinksToDisplay}
+          sharedLinks={linksToDisplay}
           columns={createColumns()}
-          setSelectedLinks={setSelectedLinks}
+          setSelectedLinks={handelSetSelectedLinks}
           selectedLinks={selectedLinks}
           showFilter={showFilter}
         />
@@ -242,160 +217,26 @@ export default function MainPanel() {
       {viewSize === "small" && (
         <GrabScroll
           Component={CardSharedSm}
-          sharedLinks={sharedLinksToDisplay}
+          sharedLinks={linksToDisplay}
           width={320}
         />
       )}
       {viewSize === "medium" && (
         <GrabScroll
           Component={CardSharedMd}
-          sharedLinks={sharedLinksToDisplay}
+          sharedLinks={linksToDisplay}
           width={320}
         />
       )}
       {viewSize === "large" && (
         <GrabScroll
           Component={CardSharedLg}
-          sharedLinks={sharedLinksToDisplay}
+          sharedLinks={linksToDisplay}
           width={600}
         />
       )}
     </MainPanelWrapper>
   );
-}
-
-function getColumns() {
-  return [
-    {
-      id: "SELECT",
-      title: "select",
-      icon: "",
-      display: true,
-      width: 0,
-      grow: 0,
-    },
-    {
-      id: "THUMBNAIL",
-      title: "thumbnail",
-      icon: "",
-      display: true,
-      width: 0,
-      grow: 1,
-    },
-    {
-      id: "NAME",
-      title: "name",
-      icon: "",
-      display: true,
-      width: 0,
-      grow: 2,
-    },
-    {
-      id: "OWNER",
-      title: "owner",
-      icon: "",
-      display: true,
-      width: 55,
-      grow: 0,
-    },
-    {
-      id: "SUGGESTEDBY",
-      title: "suggested by",
-      icon: "",
-      display: true,
-      width: 55,
-      grow: 0,
-    },
-    {
-      id: "SHARED",
-      title: "shared",
-      icon: "",
-      display: true,
-      width: 55,
-      grow: 0,
-    },
-    {
-      id: "STATUS",
-      title: "status",
-      icon: "",
-      display: true,
-      width: 55,
-      grow: 0,
-    },
-    {
-      id: "AUDIENCE",
-      title: "audience",
-      icon: "",
-      display: true,
-      width: 55,
-      grow: 0,
-    },
-    {
-      id: "TYPE",
-      title: "type",
-      icon: "",
-      display: true,
-      width: 60,
-      grow: 0,
-    },
-    {
-      id: "PUBLICATIONDATE",
-      title: "publication date",
-      icon: "",
-      display: true,
-      width: 60,
-      grow: 0,
-    },
-    {
-      id: "EXPIRATIONDATE",
-      title: "expiration date",
-      icon: "",
-      display: true,
-      width: 60,
-      grow: 0,
-    },
-    {
-      id: "RANK",
-      title: "rank",
-      icon: <PiChartLineUp />,
-      display: true,
-      width: 50,
-      grow: 0,
-    },
-
-    {
-      id: "SHAREDCOUNT",
-      title: "shared count",
-      icon: <RiShareForwardLine />,
-      display: true,
-      width: 50,
-      grow: 0,
-    },
-    {
-      id: "SAVEDCOUNT",
-      title: "saved count",
-      icon: <TfiTag />,
-      display: true,
-      width: 50,
-      grow: 0,
-    },
-    {
-      id: "QRCODE",
-      title: "qr code",
-      icon: "",
-      display: true,
-      width: 50,
-      grow: 0,
-    },
-    {
-      id: "SHORTLINK",
-      title: "short link",
-      icon: "",
-      display: true,
-      width: 50,
-      grow: 0,
-    },
-  ];
 }
 
 function createColumns() {
@@ -452,12 +293,20 @@ function createColumns() {
     columnHelper.accessor("title", {
       header: "Title",
       enableColumnFilter: false,
+      cell: (info) => (
+        <Link to={`/sharedLink/${info.row.original.id}`}>
+          <p className="p-1 text-xs">{info.getValue()}</p>
+        </Link>
+      ),
 
-      cell: (info) => info.renderValue(),
+      // cell: (info) => info.renderValue(),
     }),
     columnHelper.accessor("contentDescription", {
       header: "Description",
       enableColumnFilter: false,
+      cell: (info) => (
+        <p className="p-1 text-3xs">{info.getValue() || "---"}</p>
+      ),
     }),
 
     columnHelper.accessor("owner", {

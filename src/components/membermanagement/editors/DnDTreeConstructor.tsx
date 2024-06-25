@@ -37,7 +37,7 @@ export default function DnDTreeConstructor({ setNewTree }: DnDTrashCanProps) {
   function handelCreateGroup(person: UserProfileType) {
     console.log("Drop eventsss", person);
     const newNode = new TreeNode(
-      person.id || 1,
+      person.user_id || 1,
       person.first_name || "",
       person.profile_picture || ""
     );

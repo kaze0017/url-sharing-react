@@ -1,7 +1,5 @@
 import axiosInstance from "./axios";
 import { SHARE_LINKS_TO_USERs_URL } from "../constants";
-import { SharedLinkType } from "../lib/interfaces";
-import { json } from "d3";
 
 interface ShareLinkToUsersInterface {
   token: string;
@@ -26,8 +24,8 @@ export async function shareLinks({
 }: ShareLinkToUsersInterface) {
   const formData = new URLSearchParams();
 
-  formData.append("message", "message test");
-  formData.append("description", "description test");
+  formData.append("message", message);
+  formData.append("description", description);
   formData.append("links", link_ids.toString());
 
   if (user_ids) {
@@ -49,29 +47,14 @@ export async function shareLinks({
     },
   };
 
+
+  console.log("share links api", " token", token);
   try {
-    // const response = await axiosInstance.post(
-    //   SHARE_LINKS_TO_USERs_URL,
-    //   formData,
-    //   config
-    // );
-    console.log("Token", token);
     const response = await axiosInstance.post(
       SHARE_LINKS_TO_USERs_URL,
-      {
-        message: "share link 100 to Asghar with id 31",
-        description: "share link 100 to Asghar with id 31",
-        links: "100",
-        people: "31",
-      },
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          auth: token,
-        },
-      }
+      formData.toString(),
+      config
     );
-    // formData.toString(), config;
     console.log("share links response", response);
     return response;
   } catch (error) {

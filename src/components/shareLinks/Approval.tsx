@@ -1,36 +1,43 @@
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
-import LinkManagementContext from "../../context/LinkManagementProvider";
-import ShareWithGroupsContext from "../../context/ShareWithGroupsProvider";
 import MainPanelWrapper from "../MainPanelWrapper";
 import { GiWingedEmblem } from "react-icons/gi";
 import Dates from "./approval/Dates";
 import Description from "./approval/Description";
-import { shareLinks } from "../../api/shareLinks";
+import { shareLinks } from "../../api/postShareLinks";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../state/store";
+import { setSelectedLinks } from "../../state/linkManagement/linkManagementSlice";
+import {
+  setSelectedGroups,
+  setSelectedPeople,
+  setStatus,
+  initState,
+} from "../../state/share/shareSlice";
 
 export default function Approval() {
   const [responseMessage, setResponseMessage] = useState("");
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
-  const { selectedLinks, setSelectedLinks } = useContext(LinkManagementContext);
+  const { selectedLinks } = useSelector(
+    (state: RootState) => state.linkManagement
+  );
+  const dispatch = useDispatch();
   const {
     selectedPeople,
     selectedGroups,
     status,
-    setStatus,
-    setSelectedGroups,
-    setSelectedPeople,
     expirationDate,
     publicationDate,
     description,
-  } = useContext(ShareWithGroupsContext);
+  } = useSelector((state: RootState) => state.share);
 
   async function shareNow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     const link_ids = selectedLinks.map((link) => link.id);
-    const user_ids = selectedPeople.map((person) => person.id);
+    const user_ids = selectedPeople.map((person) => person.user_id);
     const message = "Check this out!";
-    const group_ids = selectedGroups.map((group) => group.id);
+    const group_ids = selectedGroups.map((group) => group.group_id);
     const response = await shareLinks({
       token,
       link_ids,
@@ -42,15 +49,15 @@ export default function Approval() {
       publicationDate,
     });
     setResponseMessage(response?.data?.message);
-    setSelectedLinks([]);
-    setSelectedPeople([]);
-    setSelectedGroups([]);
-    setStatus("success");
+    dispatch(setSelectedLinks([]));
+    // dispatch(setSelectedPeople([]));
+    dispatch(initState());
+    dispatch(setStatus("success"));
   }
 
   useEffect(() => {
     setStatus("approval");
-  }, []);
+  }, [setStatus]);
 
   return (
     <MainPanelWrapper>

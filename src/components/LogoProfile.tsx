@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import AuthContext from "../context/AuthProvider";
 import { UserProfileType } from "../lib/interfaces";
-import ProfilePicture from "./profilePictures/ProfilePictureLg";
-import { getTopPeople } from "../lib/actions";
+import ProfilePictureLg from "./profilePictures/ProfilePictureLg";
 import InfoReport from "./InfoReport";
+import { getTopUsers } from "../api/getTopUsers";
 function LogoProfile({ toggledCollapse = false }) {
   const defaultPerson: UserProfileType = {
-    id: 0,
+    user_id: 0,
     first_name: "FAC ",
     last_name: "Logo",
     title: "Circle",
@@ -31,13 +32,24 @@ function LogoProfile({ toggledCollapse = false }) {
     defaultPerson,
     defaultPerson,
   ]);
-  //   get top three people
-  const topPeople = getTopPeople();
 
-  //   set top three people
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
   useEffect(() => {
-    setPeople(topPeople);
-  }, []);
+    async function getTopPeople() {
+      const topUsers = await getTopUsers(token);
+      setPeople(topUsers);
+      return topUsers;
+    }
+    getTopPeople();
+  }, [token]);
+  //   get top three people
+  // const topPeople = getTopPeople();
+
+  // //   set top three people
+  // useEffect(() => {
+  //   setPeople(topPeople);
+  // }, []);
 
   //   LogoProfile css Classes
   const logoProfileWrapper = `relative`;
@@ -54,13 +66,13 @@ function LogoProfile({ toggledCollapse = false }) {
       {!toggledCollapse && (
         <div className={logoProfileWrapper}>
           <div className={logoProfilePersonTC}>
-            <ProfilePicture person={people[0]} />
+            <ProfilePictureLg person={people[0]} />
           </div>
           <div className={logoProfilePersonBL}>
-            <ProfilePicture person={people[1]} />
+            <ProfilePictureLg person={people[1]} />
           </div>
           <div className={logoProfilePersonBR}>
-            <ProfilePicture person={people[2]} />
+            <ProfilePictureLg person={people[2]} />
           </div>
           <img
             src="/images/logos/fac-logo-bars.png"
@@ -72,7 +84,7 @@ function LogoProfile({ toggledCollapse = false }) {
       )}
       {toggledCollapse && (
         <div className="w-12">
-          <ProfilePicture person={people[0]} />
+          <ProfilePictureLg person={people[0]} />
         </div>
       )}
     </div>

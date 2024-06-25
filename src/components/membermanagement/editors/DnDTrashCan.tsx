@@ -4,17 +4,17 @@ import { UserProfileType } from "../../../lib/interfaces";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 interface DnDTrashCanProps {
-  setUserToDel: React.Dispatch<React.SetStateAction<UserProfileType[]>>;
+  removeMember: (user: UserProfileType) => void;
 }
 
-export default function DnDTrashCan({ setUserToDel }: DnDTrashCanProps) {
+export default function DnDTrashCan({ removeMember }: DnDTrashCanProps) {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "PERSON",
     drop: (item: { type: string; person: UserProfileType }) => {
       // Access the dropped person object
       const { person } = item;
       // Add the person to the deletedUsers array
-      setUserToDel((prev) => [...prev, person]);
+      removeMember(person);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),

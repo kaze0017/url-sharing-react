@@ -1,40 +1,72 @@
-import React, { useState,  useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import AuthContext from "../../context/AuthProvider";
 import { getNPeople } from "../../lib/actions";
 import SearchBar from "../SearchBar";
 import Person from "./Person";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../state/store";
 
 import { UserProfileType } from "../../lib/interfaces";
+import {
+  fetchSearchedUsers,
+  fetchTopUsers,
+  setPeopleQuery,
+} from "../../state/networks/groupsSlice";
 
 export default function SearchPeople() {
-  const [query, setQuery] = useState<string>("");
-  const people = getNPeople(7);
-  const [peopleToDisplay, setPeopleToDisplay] = useState<UserProfileType[]>([]);
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
 
-  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    const search = e.target.value;
-    if (search === "" || search === null) {
-      setPeopleToDisplay([]);
-      return;
-    }
-    const filteredPeople = people.filter((person) =>
-      (person.first_name + person.last_name)
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    );
-    setPeopleToDisplay(filteredPeople);
+  const { peopleQuery, peopleToDisplay } = useSelector(
+    (state: RootState) => state.netWorkGroups
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  function initPeopleList() {
+    dispatch(fetchTopUsers(token));
+  }
+
+  function handelSetQuery(query: string) {
+    dispatch(setPeopleQuery(query));
+  }
+
+  // function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+  //   const search = e.target.value;
+  //   if (search === "" || search === null) {
+  //     // setPeopleToDisplay([]);
+  //     return;
+  //   }
+  //   const filteredPeople = people.filter((person) =>
+  //     (person.first_name + person.last_name)
+  //       .toLowerCase()
+  //       .includes(search.toLowerCase())
+  //   );
+  //   setPeopleToDisplay(filteredPeople);
+  // }
+  // useEffect(() => {
+  //   if (query === "") {
+  //     setPeopleToDisplay(people);
+  //     return;
+  //   }
+  //   const filteredPeople = people.filter((person) =>
+  //     (person.first_name + person.last_name)
+  //       .toLowerCase()
+  //       .includes(query.toLowerCase())
+  //   );
+  //   setPeopleToDisplay(filteredPeople);
+  // }, [query]);
+
+  useEffect(() => {
+    initPeopleList();
+  }, []);
+
+  async function handelSearchPeople(query: string) {
+    dispatch(fetchSearchedUsers({ token, query }));
   }
   useEffect(() => {
-    if (query === "") {
-      setPeopleToDisplay(people);
-      return;
-    }
-    const filteredPeople = people.filter((person) =>
-      (person.first_name + person.last_name)
-        .toLowerCase()
-        .includes(query.toLowerCase())
-    );
-    setPeopleToDisplay(filteredPeople);
-  }, [query]);
+    handelSearchPeople(peopleQuery);
+  }, [peopleQuery]);
 
   // const ref =
   //   useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
@@ -52,7 +84,7 @@ export default function SearchPeople() {
         onChange={handleSearch}
         className="w-[225] rounded-sm"
       /> */}
-      <SearchBar query={query} setQuery={setQuery} />
+      <SearchBar query={peopleQuery} setQuery={handelSetQuery} />
 
       {/* display people */}
       {/* <div className={mainWrapperClass} {...events} ref={ref}> */}

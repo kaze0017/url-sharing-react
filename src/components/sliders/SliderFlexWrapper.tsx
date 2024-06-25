@@ -29,20 +29,20 @@ export default function SliderFlexWrapper({
   let lastDirection: "up" | "down" | null = null; // Track last scroll direction
 
   const handleScroll = () => {
-    if (ref.current) {
-      const scrollTop = ref.current.scrollTop;
-      const scrollHeight = ref.current.scrollHeight;
-      const clientHeight = ref.current.clientHeight;
+    // if (ref.current) {
+    //   const scrollTop = ref.current.scrollTop;
+    //   const scrollHeight = ref.current.scrollHeight;
+    //   const clientHeight = ref.current.clientHeight;
 
-      if (scrollTop === 0) {
-        handleScrollEnd("up");
-      } else if (scrollTop + clientHeight === scrollHeight) {
-        handleScrollEnd("down");
-      } else {
-        clearTimeout(scrollTimeout as NodeJS.Timeout);
-        lastScrollTop = scrollTop; // Update last scroll position
-      }
-    }
+    //   if (scrollTop === 0) {
+    //     handleScrollEnd("up");
+    //   } else if (scrollTop + clientHeight === scrollHeight) {
+    //     handleScrollEnd("down");
+    //   } else {
+    //     clearTimeout(scrollTimeout as NodeJS.Timeout);
+    //     lastScrollTop = scrollTop; // Update last scroll position
+    //   }
+    // }
   };
 
   const handleScrollEnd = (direction: "up" | "down") => {
@@ -61,27 +61,27 @@ export default function SliderFlexWrapper({
 
   useEffect(() => {
     // Clear timeout when component unmounts
-    return () => {
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-    };
+    // return () => {
+    //   if (scrollTimeout) {
+    //     clearTimeout(scrollTimeout);
+    //   }
+    // };
   }, []);
 
   useEffect(() => {
     // Add event listener for wheel event
-    const handleWheel = () => {
-      clearTimeout(scrollTimeout as NodeJS.Timeout);
-    };
-    if (ref.current) {
-      ref.current.addEventListener("wheel", handleWheel);
-    }
-    // Remove event listener when component unmounts
-    return () => {
-      if (ref.current) {
-        ref.current.removeEventListener("wheel", handleWheel);
-      }
-    };
+    // const handleWheel = () => {
+    //   clearTimeout(scrollTimeout as NodeJS.Timeout);
+    // };
+    // if (ref.current) {
+    //   ref.current.addEventListener("wheel", handleWheel);
+    // }
+    // // Remove event listener when component unmounts
+    // return () => {
+    //   if (ref.current) {
+    //     ref.current.removeEventListener("wheel", handleWheel);
+    //   }
+    // };
   }, [scrollTimeout]);
 
   const gridItems = [];

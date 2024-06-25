@@ -1,12 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useState, useContext } from "react";
 import AuthContext from "../../../context/AuthProvider";
-import LinkManagementContext from "../../../context/LinkManagementProvider";
 import { FiTrendingUp } from "react-icons/fi";
 import { PiShareFatThin } from "react-icons/pi";
 import { IoPricetagOutline } from "react-icons/io5";
-import { updateLink } from "../../../api/postUpdateLink";
 import { SharedLinkType } from "../../../lib/interfaces";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../state/store";
+import { setSelectedLinks } from "../../../state/linkManagement/linkManagementSlice";
+import { postQuickAccessLinks } from "../../../api/postQuickAccessLinks";
 
 interface Props {
   id: number;
@@ -17,10 +19,12 @@ interface Props {
 }
 
 export default function ActionBtns(props: Props) {
-  const { auth } = useContext(AuthContext);
-  const { selectedLinks, setSelectedLinks } = useContext(LinkManagementContext);
+  const {auth} = useContext(AuthContext);
   const token = auth?.token || "";
-
+  const { selectedLinks } = useSelector(
+    (state: RootState) => state.linkManagement
+  );
+  const dispatch = useDispatch();
   const [saved, setSaved] = useState<boolean>(false);
   const [shared, setShared] = useState<boolean>(false);
   const [ranked, setRanked] = useState<boolean>(false);
@@ -37,24 +41,24 @@ export default function ActionBtns(props: Props) {
   const navigate = useNavigate();
   async function share(event: any) {
     event.stopPropagation();
+    setShared(!shared);
 
     try {
       if (selectedLinks !== undefined && props.link !== undefined) {
-        setSelectedLinks([...selectedLinks, props.link]);
+        dispatch(setSelectedLinks([...selectedLinks, props.link]));
       } else if (props.link !== undefined) {
-        setSelectedLinks([props.link]);
+        dispatch(setSelectedLinks([props.link]));
       }
     } catch (error) {
       console.error(error);
     }
-    console.log(selectedLinks);
     navigate("/shareLinks");
   }
 
   async function save(event: any) {
     event.stopPropagation();
     try {
-      setSaved(!saved);
+      await postQuickAccessLinks({ token, links_add: props.id });
     } catch (error) {
       console.error(error);
     }

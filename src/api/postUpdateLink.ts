@@ -18,6 +18,7 @@ export async function updateLink({ id, token, formData }: UpdateLinkInterface) {
 
   try {
     const response = await axiosInstance.post(url, formData.toString(), config);
+    console.log("updateLink", response);
     return response;
   } catch (error) {
     console.error(error);

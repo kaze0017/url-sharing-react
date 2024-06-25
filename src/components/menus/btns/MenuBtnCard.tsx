@@ -1,9 +1,8 @@
-import React from "react";
 import { IconType } from "react-icons";
 interface Props {
   icon: IconType;
   title: string;
-  callBacFunc: () => void;
+  callBacFunc?: () => void;
 }
 
 export default function MenuBtnCard({ icon: Icon, title, callBacFunc }: Props) {

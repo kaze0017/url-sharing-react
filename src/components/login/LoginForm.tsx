@@ -3,8 +3,7 @@ import SubmitBtn from "./SubmitBtn";
 import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { UserProfileContext } from "../../context/UserProfileProvider";
-import axiosInstance from "../../api/axios";
-import { LOGIN_URL } from "../../constants";
+import { postLogin } from "../../api/postLogin";
 import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps {
@@ -26,29 +25,21 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
     e.preventDefault();
     setIsPending(true);
     try {
-      const formData = new URLSearchParams();
-      formData.append("username", userName);
-      formData.append("password", password);
-
-      const response = await axiosInstance.post(
-        LOGIN_URL,
-        formData.toString(),
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          withCredentials: true,
-        }
-      );
-
-      setAuth({
-        userProfile: response.data.profile,
-        token: response.data.auth,
+      const response = await postLogin({
+        username: userName,
+        password: password,
       });
+      setAuth({
+        userProfile: response?.data.profile,
+        token: response?.data.auth,
+      });
+      localStorage.setItem("url_sharing_token", response?.data.auth);
 
-      setUserProfile(response.data.profile);
+      setUserProfile(response?.data.profile);
 
       navigate("/");
 
-      setUserName(response.data.username);
+      setUserName(response?.data.username);
       // Clear any input fields or states related to login
       setUserName("");
       setPassword("");

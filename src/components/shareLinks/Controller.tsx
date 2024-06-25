@@ -1,32 +1,33 @@
-import { useContext } from "react";
-import LinkManagementContext from "../../context/LinkManagementProvider";
-import ShareWithGroupsContext from "../../context/ShareWithGroupsProvider";
 import { useNavigate } from "react-router-dom";
 import MenuBtnCard from "../menus/btns/MenuBtnCard";
-import { HiOutlineUserGroup } from "react-icons/hi2";
+import { HiOutlineUserGroup } from "react-icons/hi";
 import { PiGraphLight } from "react-icons/pi";
 import { TbWorldUpload } from "react-icons/tb";
-import ProgressBarComp from "../ProgressBarComp";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../state/store";
+import { setStatus } from "../../state/share/shareSlice";
 
 export default function Controller() {
-  const { selectedLinks } = useContext(LinkManagementContext);
-  const { setStatus } = useContext(ShareWithGroupsContext);
+  const { selectedLinks } = useSelector(
+    (state: RootState) => state.linkManagement
+  );
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function shareWithGroup() {
-    setStatus("selectingRecipients");
+    dispatch(setStatus("selectingRecipients"));
     navigate("/shareLinks/shareWithGroups");
   }
   function shareByDiagram() {
-    setStatus("selectingRecipients");
+    dispatch(setStatus("selectingRecipients"));
     navigate("/shareLinks/shareByDiagram");
   }
   function shareOnInternet() {
-    setStatus("selectingRecipients");
+    dispatch(setStatus("selectingRecipients"));
     navigate("/shareLinks/shareOnInternet");
   }
   function goToLinkManagement() {
-    setStatus("sharingOptions");
+    dispatch(setStatus("sharingOptions"));
     navigate("/linkmanagement");
   }
 

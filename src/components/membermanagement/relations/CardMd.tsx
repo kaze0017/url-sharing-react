@@ -1,13 +1,10 @@
 import React from "react";
 import { UserProfileType } from "../../../lib/interfaces";
 import { IoLogoTux } from "react-icons/io";
-import { BsExclamationLg } from "react-icons/bs";
 import { BiSolidDownArrow } from "react-icons/bi";
 import { BiSolidUpArrow } from "react-icons/bi";
-import { countries } from "country-flag-icons";
 
 export default function CardMd(person: UserProfileType) {
-  console.log(countries);
   const mainWrapperClass =
     "relative rounded-md bg-white flex flex-col items-center h-[150px]  aspect-video text-sm border border-blue-950";
   return (

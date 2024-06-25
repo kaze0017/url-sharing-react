@@ -1,5 +1,5 @@
 import { UserProfileType } from "../../lib/interfaces";
-import ProfilePicture from "../profilePictures/ProfilePicture";
+import ProfilePictureLg from "../profilePictures/ProfilePictureLg";
 import { PiChartLineUp } from "react-icons/pi";
 import { RiShareForwardLine } from "react-icons/ri";
 
@@ -16,7 +16,7 @@ export default function PageTitle({ person }: ProfilePageProps) {
   return (
     <div className=" p-2">
       <div className="flex items-center">
-        <ProfilePicture person={person} />
+        <ProfilePictureLg person={person} />
         <div className="flex flex-col ml-2">
           <h1 className="text-2xl font-bold">{fullName}</h1>
           <p>{person?.title}</p>

@@ -12,7 +12,7 @@ const ProfilePictureSm: React.FC<ProfilePictureProps> = ({
 }: ProfilePictureProps) => {
   const size = 26;
   return (
-    <Link to={`/profile/${person.id}`}>
+    <Link to={`/profile/${person.user_id}`}>
       <div className="w-8 border border-blue-900 aspect-square  flex transition-transform transform hover:scale-110 rounded-full overflow-hidden items-center justify-center">
         <img
           src={

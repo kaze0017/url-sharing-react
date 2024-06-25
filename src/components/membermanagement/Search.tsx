@@ -8,7 +8,7 @@ export default function Search() {
   return (
     <div>
       {people.map((person) => (
-        <Person key={person.id} person={person} />
+        <Person key={person.user_id} person={person} />
       ))}
     </div>
   );

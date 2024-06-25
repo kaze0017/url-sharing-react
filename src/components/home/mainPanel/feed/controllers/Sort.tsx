@@ -1,16 +1,16 @@
-import { useContext } from "react";
-import { HomeContext } from "../../../../../context/HomeProvider";
-import React from "react";
 import { FiTrendingUp } from "react-icons/fi";
 import { PiShareFatThin } from "react-icons/pi";
 import { IoPricetagOutline } from "react-icons/io5";
+import {useSelector, useDispatch} from "react-redux";
+import { RootState } from "../../../../../state/store";
+import { setSortBy } from "../../../../../state/home/homeSlice";
 
 export default function Sort() {
-  const { sortBy, setSortBy } = useContext(HomeContext);
+  const sortBy = useSelector((state: RootState) => state.home.sortBy);
+  const dispatch = useDispatch();
 
   function handleSortBy(e: "rank" | "shared" | "saved") {
-    
-    setSortBy(e);
+    dispatch(setSortBy(e));
   }
 
   const wrapperClass =

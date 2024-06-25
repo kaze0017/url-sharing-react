@@ -2,7 +2,7 @@ import { GiMagnifyingGlass } from "react-icons/gi";
 
 interface SearchProps {
   query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  setQuery: (query: string) => void;
 }
 
 export default function SearchBar({ query, setQuery }: SearchProps) {

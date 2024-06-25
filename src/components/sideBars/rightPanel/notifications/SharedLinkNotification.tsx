@@ -28,7 +28,7 @@ export default function SharedLinkNotification({
       {state === "accepting" && <p>Accepting...</p>}
       {state === "none" && (
         <div className="w-full h-full flex flex-col gap-1">
-          <div className="flex p-1">
+          <div className="flex p-1 justify-between">
             <p>{link.title}</p>
             <img
               src={"/images/defaults/generalDefaultThumbnail.jpg"}

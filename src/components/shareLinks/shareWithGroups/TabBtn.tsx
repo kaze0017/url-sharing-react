@@ -1,7 +1,9 @@
 import { createElement, useContext } from "react";
 import { IconType } from "react-icons";
-import ShareWithGroupsContext from "../../../context/ShareWithGroupsProvider";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../state/store";
+import { setMode } from "../../../state/share/shareSlice";
 
 interface TabBtnProps {
   icon: IconType;
@@ -10,13 +12,11 @@ interface TabBtnProps {
 }
 export default function TabBtn({ icon, selectedCount, name }: TabBtnProps) {
   const navigate = useNavigate();
-  const { mode, setMode } = useContext(ShareWithGroupsContext);
+  const { mode} = useSelector((state: RootState) => state.share);
+  const dispatch = useDispatch();
+  
   function handleTabClick() {
-    // if (name === "share") {
-    //   navigate("/sharelinks/approval");
-    //   return;
-    // }
-    setMode(name);
+    dispatch(setMode(name));
   }
   return (
     <div

@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { RightPanelContext } from "../../../context/RightPanelProvider";
 import AuthContext from "../../../context/AuthProvider";
 import SearchBar from "../../SearchBar";
 import { getNPeople } from "../../../lib/actions";
@@ -10,10 +9,15 @@ import Controller from "./search/Controller";
 import { getSharedLinks } from "../../../api/getSharedLinks";
 import { SharedLinkType } from "../../../lib/interfaces";
 import { getTopUsers } from "../../../api/getTopUsers";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../state/store";
+import { setToggleRightPanel } from "../../../state/rightPanel/rightPanelSlice";
 
 export default function Searches() {
-  const { toggleRightPanel, setToggleRightPanel } =
-    useContext(RightPanelContext);
+  const { toggleRightPanel } = useSelector((state: RootState) => state.rightPanel);
+  const dispatch = useDispatch();
+
+
   const [query, setQuery] = useState<string>("");
   const people = getNPeople(10);
   const [peopleToDisplay, setPeopleToDisplay] = useState<any[]>([]);
@@ -58,7 +62,7 @@ export default function Searches() {
       {toggleRightPanel ? (
         <BsArrowsExpandVertical
           className="text-2xl text-blue-950 cursor-pointer"
-          onClick={() => setToggleRightPanel(false)}
+          onClick={() => dispatch(setToggleRightPanel(false))}
         />
       ) : (
         <>

@@ -1,11 +1,13 @@
 import React, { useState, Dispatch, useContext } from "react";
-import { NetworksContext } from "../../context/NetworksProvider";
 import SearchBar from "../SearchBar";
 import SelectorMenu from "../menus/SelectorMenu";
 import { useNavigate } from "react-router-dom";
 import { networkMenu } from "../../lib/NetworkMenu";
 import FeederBtn from "../FeederBtn";
 import { BsUiChecksGrid } from "react-icons/bs";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../state/store";
+import { setType, setView } from "../../state/networks/networksSlice";
 
 
 interface FeedMenuProps {
@@ -14,7 +16,16 @@ interface FeedMenuProps {
 }
 
 export default function FeedMenu({ query, setQuery }: FeedMenuProps) {
-  const { type, view, setType, setView } = useContext(NetworksContext);
+  const { type, view} = useSelector((state: RootState) => state.networks);
+  const dispatch = useDispatch();
+  
+
+  function handelSetType(type: "groups" | "graphs" | "relations" | "none") {
+    dispatch(setType(type));
+  }
+  function handelSetView(view: "grid" | "list") {
+    dispatch(setView(view));
+  }
 
   const [showViewSelector, setShowViewSelector] = useState<string>("");
   const [showTypeSelector, setShowTypeSelector] = useState<string>("");
@@ -50,7 +61,7 @@ export default function FeedMenu({ query, setQuery }: FeedMenuProps) {
           <FeederBtn onClick={() => handelViewSelector()} title="View" />
           {showViewSelector && (
             <SelectorMenu
-              setSelected={setView}
+              setSelected={handelSetView}
               setShow={setShowViewSelector}
               selection={["card", "list"]}
             />
@@ -59,7 +70,7 @@ export default function FeedMenu({ query, setQuery }: FeedMenuProps) {
         <div className="flex relative z-10">
           {showTypeSelector && (
             <SelectorMenu
-              setSelected={setType}
+              setSelected={handelSetType}
               setShow={setShowTypeSelector}
               selection={["all", "graphs", "groups"]}
             />

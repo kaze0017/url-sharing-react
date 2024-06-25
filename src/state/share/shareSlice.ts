@@ -1,0 +1,276 @@
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { UserProfileType, groupType } from "../../lib/interfaces";
+import { GroupType } from "../../lib/interfaces/group";
+import { getUserGroups } from "../../api/getUserGroups";
+import { getTopUsers } from "../../api/getTopUsers";
+import { getUserByQuery } from "../../api/getUserByQuery";
+
+export const fetchUserGroups = createAsyncThunk(
+  "groups/fetchUserGroups",
+  async (token: string) => {
+    console.log("fetching user groups");
+    const response = await getUserGroups(token);
+    return response;
+  }
+);
+
+export const fetchTopUsers = createAsyncThunk(
+  "groups/fetchTopUsers",
+  async (token: string) => {
+    console.log("fetching top users");
+    const response = await getTopUsers(token);
+    return response;
+  }
+);
+
+export const fetchSearchedUsers = createAsyncThunk(
+  "groups/fetchSearchedUsers",
+  async (args: { token: string; query: string }, { dispatch }) => {
+    dispatch(setQuery(args.query));
+    if (args.query === "") {
+      console.log("query is empty");
+      return [];
+    }
+    const response = await getUserByQuery(args.token, args.query);
+    return response;
+  }
+);
+
+export const handelSearch = createAsyncThunk(
+  "groups/handelSearch",
+  async (args: { query: string; token: string }, { dispatch }) => {
+    dispatch(shareWithGroupsSlice.actions.setQuery(args.query));
+    if (args.query === "") {
+      return;
+    }
+    await dispatch(fetchSearchedUsers(args));
+    await dispatch(fetchUserGroups(args.token));
+  }
+);
+
+export const initShareWithGroupsSlice = createAsyncThunk(
+  "share/initShareWithGroups",
+  async (token: string, { dispatch }) => {
+    dispatch(shareWithGroupsSlice.actions.initState());
+    const topU = await getTopUsers(token);
+    const topG = await getUserGroups(token);
+    dispatch(shareWithGroupsSlice.actions.setTopPeople(topU));
+    dispatch(shareWithGroupsSlice.actions.setPeopleToDisplay(topU));
+    dispatch(shareWithGroupsSlice.actions.setTopGroups(topG));
+    dispatch(shareWithGroupsSlice.actions.setGroupsToDisplay(topG));
+  }
+);
+
+interface ShareWithGroupsState {
+  mode: "users" | "groups" | "selected";
+  status:
+    | "loading"
+    | "error"
+    | "success"
+    | "noLinks"
+    | "approval"
+    | "sharingOptions"
+    | "selectingRecipients";
+  query: string;
+  topPeople: UserProfileType[];
+  searchedPeople: UserProfileType[];
+  selectedPeople: UserProfileType[];
+  peopleToDisplay: UserProfileType[];
+  topGroups: GroupType[];
+  selectedGroups: GroupType[];
+  searchedGroups: GroupType[];
+  groupsToDisplay: GroupType[];
+  publicationDate: string;
+  expirationDate: string;
+  description: string;
+}
+
+const initialState: ShareWithGroupsState = {
+  mode: "users",
+  status: "sharingOptions",
+  query: "",
+  topPeople: [],
+  searchedPeople: [],
+  selectedPeople: [],
+  peopleToDisplay: [],
+  selectedGroups: [],
+  groupsToDisplay: [],
+  topGroups: [],
+  searchedGroups: [],
+  publicationDate: "Today",
+  expirationDate: "No expiration date",
+  description: "",
+};
+
+const shareWithGroupsSlice = createSlice({
+  name: "shareWithGroups",
+  initialState,
+  reducers: {
+    initState(state) {
+      return initialState;
+    },
+
+    setMode(state, action: PayloadAction<"users" | "groups" | "selected">) {
+      state.mode = action.payload;
+    },
+    setStatus(state, action: PayloadAction<ShareWithGroupsState["status"]>) {
+      state.status = action.payload;
+    },
+    setQuery(state, action: PayloadAction<string>) {
+      state.query = action.payload;
+      if (state.query === "") {
+        state.peopleToDisplay = state.topPeople.filter(
+          (person) => !state.selectedPeople.includes(person)
+        );
+        state.groupsToDisplay = state.topGroups.filter(
+          (group) => !state.selectedGroups.includes(group)
+        );
+      } else {
+        state.peopleToDisplay = state.searchedPeople.filter(
+          (person) => !state.selectedPeople.includes(person)
+        );
+        state.groupsToDisplay = state.searchedGroups.filter(
+          (group) => !state.selectedGroups.includes(group)
+        );
+      }
+    },
+    setTopPeople(state, action: PayloadAction<UserProfileType[]>) {
+      state.topPeople = action.payload;
+    },
+    setSearchedPeople(state, action: PayloadAction<UserProfileType[]>) {
+      state.searchedPeople = action.payload;
+      if (state.query === "") {
+        state.peopleToDisplay = state.topPeople.filter(
+          (person) =>
+            !state.selectedPeople.some((p) => p.user_id === person.user_id)
+        );
+      } else {
+        state.peopleToDisplay = state.searchedPeople.filter(
+          (person) =>
+            !state.selectedPeople.some((p) => p.user_id === person.user_id)
+        );
+      }
+    },
+    setSelectedPeople(state, action: PayloadAction<UserProfileType[]>) {
+      state.selectedPeople = action.payload;
+      if (state.query === "") {
+        state.peopleToDisplay = state.topPeople.filter(
+          (person) =>
+            !state.selectedPeople.some((p) => p.user_id === person.user_id)
+        );
+      } else {
+        state.peopleToDisplay = state.searchedPeople.filter(
+          (person) =>
+            !state.selectedPeople.some((p) => p.user_id === person.user_id)
+        );
+      }
+    },
+    setTopGroups(state, action: PayloadAction<GroupType[]>) {
+      state.topGroups = action.payload;
+    },
+
+    setPeopleToDisplay(state, action: PayloadAction<UserProfileType[]>) {
+      state.peopleToDisplay = action.payload;
+    },
+    setSelectedGroups(state, action: PayloadAction<GroupType>) {
+      if (
+        state.selectedGroups.some(
+          (group) => group.group_id === action.payload.group_id
+        )
+      ) {
+        state.selectedGroups = state.selectedGroups.filter(
+          (group) => group.group_id !== action.payload.group_id
+        );
+        state.groupsToDisplay = [...state.groupsToDisplay, action.payload];
+      } else {
+        state.selectedGroups = [...state.selectedGroups, action.payload];
+        state.groupsToDisplay = state.groupsToDisplay.filter(
+          (group) => group.group_id !== action.payload.group_id
+        );
+      }
+    },
+
+    setGroupsToDisplay(state, action: PayloadAction<GroupType[]>) {
+      state.groupsToDisplay = action.payload;
+    },
+    setPublicationDate(state, action: PayloadAction<string>) {
+      state.publicationDate = action.payload;
+    },
+    setExpirationDate(state, action: PayloadAction<string>) {
+      state.expirationDate = action.payload;
+    },
+    setDescription(state, action: PayloadAction<string>) {
+      state.description = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchUserGroups.fulfilled, (state, action) => {
+      return {
+        ...state,
+        topGroups: action.payload,
+        searchedGroups: action.payload,
+        groupsToDisplay: action.payload
+          .filter((group: GroupType) => !state.selectedGroups.includes(group))
+          .filter((group: groupType) =>
+            group.description.includes(state.query)
+          ),
+      };
+    });
+
+    builder.addCase(fetchTopUsers.fulfilled, (state, action) => {
+      return {
+        ...state,
+        topPeople: action.payload,
+        peopleToDisplay: action.payload,
+      };
+    });
+
+    builder.addCase(fetchSearchedUsers.fulfilled, (state, action) => {
+      if (state.query === "") {
+        return {
+          ...state,
+          searchedPeople: action.payload,
+          peopleToDisplay: state.topPeople.filter(
+            (person) =>
+              !state.selectedPeople.some((p) => p.user_id === person.user_id)
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          searchedPeople: action.payload,
+          peopleToDisplay: action.payload.filter(
+            (person: UserProfileType) =>
+              !state.selectedPeople.some((p) => p.user_id === person.user_id)
+          ),
+        };
+      }
+    });
+
+    builder.addCase(handelSearch.fulfilled, (state, action) => {
+      if (state.query === "") {
+        return state;
+      }
+    });
+
+    
+  },
+});
+
+export const {
+  setMode,
+  setStatus,
+  setQuery,
+  setTopPeople,
+  setSearchedPeople,
+  setSelectedPeople,
+  setPeopleToDisplay,
+  setSelectedGroups,
+  setGroupsToDisplay,
+  setPublicationDate,
+  setExpirationDate,
+  setDescription,
+  initState,
+} = shareWithGroupsSlice.actions;
+
+export default shareWithGroupsSlice.reducer;

@@ -6,7 +6,7 @@ import ThumbnailSelector from "./ThumbnailSelector";
 import FadeInOut from "../login/FadeInOut";
 import { MdOutlineChangeCircle } from "react-icons/md";
 import { IoCloseOutline } from "react-icons/io5";
-import { CiCirclePlus } from "react-icons/ci";
+import { TiArrowBackOutline } from "react-icons/ti";
 import TagSelector from "../TagSelector";
 import AuthContext from "../../context/AuthProvider";
 import { RxCheckCircled } from "react-icons/rx";
@@ -124,7 +124,7 @@ export default function EditLinkForm() {
 
     return {
       title: tempLink.title,
-      contentDescription: tempLink.content_description,
+      contentDescription: tempLink.contentDescription,
       tags: tempLink.tags,
       url: tempLink.url as string,
       back_up_link_1st: tempLink.back_up_link_1st as string,
@@ -151,7 +151,7 @@ export default function EditLinkForm() {
       const formData = new URLSearchParams();
       formData.append("title", data.title);
       formData.append("url", data.url);
-      formData.append("content_description", data.contentDescription);
+      formData.append("contentDescription", data.contentDescription);
       formData.append("category", data.category);
       formData.append("thumbnail", selectedImage);
       formData.append("tags", selectedTags.join(","));
@@ -218,10 +218,7 @@ export default function EditLinkForm() {
   const summeryCheckWrapperClass = "flex items-center gap-1 w-[250px]";
 
   return (
-    <div
-      className={mainWrapperClass}
-      ref={ref}
-    >
+    <div className={mainWrapperClass} ref={ref}>
       <div className="px-2">
         <h2 className="uppercase">Edit Link</h2>
         <p className="text-xs text-gray-500">
@@ -534,7 +531,7 @@ export default function EditLinkForm() {
             <h3 className="text-center  text-green-600 w-full text-2xl">
               Link Updated Successfully
             </h3>
-            <CiCirclePlus
+            <TiArrowBackOutline
               className="text-2xl text-blue-600 mt-4 cursor-pointer"
               onClick={backToLink}
             />

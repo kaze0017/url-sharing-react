@@ -9,9 +9,8 @@ interface ProfilePictureProps {
 }
 
 const ProfilePictureLg: React.FC<ProfilePictureProps> = ({ person }) => {
-  const size = 49;
   return person ? (
-    <Link to={`/profile/${person.id}`}>
+    <Link to={`/profile/${person.user_id}`}>
       <div className="w-14 aspect-square border blue-red-500 flex transition-transform transform hover:scale-110 rounded-full overflow-hidden items-center justify-center">
         <img
           src={

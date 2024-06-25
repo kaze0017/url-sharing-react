@@ -2,18 +2,18 @@ import { useContext } from "react";
 import { FiEye } from "react-icons/fi";
 import { FiCompass } from "react-icons/fi";
 import { FiTrendingUp } from "react-icons/fi";
-import { HomeContext } from "../../../context/HomeProvider";
 import { useLocation, useNavigate } from "react-router-dom";
-
-// interface Props {
-//   setMode: (a: string) => void;
-//   panelMainMode: string;
-// }
+import { useSelector } from "react-redux";
+import { RootState } from "../../../state/store";
+import { useDispatch } from "react-redux";
+import { setMode } from "../../../state/home/homeSlice";
 
 export default function ActionBtns() {
+  const rMode = useSelector((state: RootState) => state.home.mode);
+  const dispatch = useDispatch();
+
   const active = "text-blue-500 text-2xl";
   const inactive = "text-gray-600 text-2xl";
-  const { mode, setMode } = useContext(HomeContext);
   let location = useLocation();
   const navigate = useNavigate();
 
@@ -24,8 +24,8 @@ export default function ActionBtns() {
     if (location.pathname !== "/") {
       navigate("/");
     }
-
-    setMode(mode);
+    dispatch(setMode(mode));
+    // setMode(mode);
   }
 
   const iconWrapperClasses = "flex flex-col items-center cursor-pointer";
@@ -36,18 +36,18 @@ export default function ActionBtns() {
       <div className={iconWrapperClasses} title="Saved Links">
         <FiEye
           onClick={() => handleModeChange("saved")}
-          className={mode === "saved" ? active : inactive}
+          className={rMode === "saved" ? active : inactive}
         />
       </div>
       <div className={iconWrapperClasses} title="Public Links">
         <FiCompass
-          className={mode === "public" ? active : inactive}
+          className={rMode === "public" ? active : inactive}
           onClick={() => handleModeChange("public")}
         />
       </div>
       <div className={iconWrapperClasses} title="Trending Links">
         <FiTrendingUp
-          className={mode === "trend" ? active : inactive}
+          className={rMode === "trend" ? active : inactive}
           onClick={() => handleModeChange("trend")}
         />
       </div>

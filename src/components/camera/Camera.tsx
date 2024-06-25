@@ -47,7 +47,7 @@ export default function Camera({ showOverlay }: Props) {
     return () => {
       stopCamera(); // Cleanup function to stop camera when component unmounts or when mode changes
     };
-  }, [showOverlay]);
+  }, [showOverlay, startCamera]);
 
   // Function to take a picture
   function takePicture() {
@@ -66,13 +66,6 @@ export default function Camera({ showOverlay }: Props) {
       }
     }
   }
-  async function savePicture() {
-    if (photoData) {
-      // Save photoData to local folder public/images/profiles folder
-      
-
-    }
-  } 
 
   return (
     <div className="flex gap-2 text-white uppercase">

@@ -11,11 +11,9 @@ export default function Controller() {
   const [query, setQuery] = useState("");
   function handelCreate() {
     const newId = Math.floor(Math.random() * 1000).toString();
-    navigate("/networks/editor/g" + newId);
+    navigate("/networks/groupEditor/");
   }
-
   const btnClass = "cursor-pointer text-2xl text-gray-800";
-
   return (
     <div className="flex gap-4">
       <div className="flex gap-4">

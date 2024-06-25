@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
-import ShareWithGroupsContext from "../../../context/ShareWithGroupsProvider";
-// import { PersonType } from "../../../lib/interfaces";
-import ProfilePictureMd from "../../profilePictures/ProfilePictureMd";
 import { UserProfileType } from "../../../lib/interfaces";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../state/store";
+import { setSelectedPeople } from "../../../state/share/shareSlice";
 
 interface CardPersonProps {
   person: UserProfileType;
@@ -11,9 +11,9 @@ interface CardPersonProps {
 }
 
 export default function CardPerson({ person, selected }: CardPersonProps) {
-  const { selectedPeople, setSelectedPeople, setPeopleToDisplay } = useContext(
-    ShareWithGroupsContext
-  );
+  const { selectedPeople } = useSelector((state: RootState) => state.share);
+  const dispatch = useDispatch();
+
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
   const [relationState, setRelationState] = useState<
     "connected" | "not-connected" | "pending"
@@ -21,24 +21,15 @@ export default function CardPerson({ person, selected }: CardPersonProps) {
 
   function toggle(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
-    console.log(e.target);
-    if (selectedPeople.some((item) => item.id === person.id)) {
-      setSelectedPeople((prevSelectedPeople) =>
-        prevSelectedPeople.filter((prevPerson) => prevPerson.id !== person.id)
-      );
 
-      setPeopleToDisplay((prevPeopleToDisplay) => [
-        ...prevPeopleToDisplay,
-        person,
-      ]);
-    } else {
-      setSelectedPeople((prevSelectedPeople) => [
-        ...prevSelectedPeople,
-        person,
-      ]);
-      setPeopleToDisplay((prevPeopleToDisplay) =>
-        prevPeopleToDisplay.filter((prevPerson) => prevPerson.id !== person.id)
+    if (selectedPeople.some((p) => p.user_id === person.user_id)) {
+      dispatch(
+        setSelectedPeople(
+          selectedPeople.filter((p) => p.user_id !== person.user_id)
+        )
       );
+    } else {
+      dispatch(setSelectedPeople([...selectedPeople, person]));
     }
   }
 
@@ -53,12 +44,14 @@ export default function CardPerson({ person, selected }: CardPersonProps) {
   }
   useEffect(() => {
     if (
-      userProfile.connections?.some((connection) => connection.id === person.id)
+      userProfile.connections?.some(
+        (connection) => connection.user_id === person.user_id
+      )
     ) {
       setRelationState("connected");
     } else if (
       userProfile.pendingConnections?.some(
-        (connection) => connection.id === person.id
+        (connection) => connection.user_id === person.user_id
       )
     ) {
       setRelationState("pending");
@@ -67,7 +60,7 @@ export default function CardPerson({ person, selected }: CardPersonProps) {
     }
   }, [userProfile.connections, userProfile.pendingConnections]);
 
-  const cardClass = `text-center text-xs w-[80px] h-28 flex flex-col items-center justify-center gap-1 p-1 rounded-lg cursor-pointer ${
+  const cardClass = `hover:shadow-md text-center text-xs w-[80px] h-28 flex flex-col items-center justify-center gap-1 p-1 rounded-lg cursor-pointer ${
     selected ? "bg-indigo-200" : "bg-gray-200"
   }`;
 
@@ -78,7 +71,13 @@ export default function CardPerson({ person, selected }: CardPersonProps) {
       }}
       className={cardClass}
     >
-      <ProfilePictureMd person={person} />
+      <img
+        src={
+          person.profile_picture || "/images/defaults/personDefaultImage.png"
+        }
+        alt={person.first_name}
+        className="rounded-full w-8 h-8 "
+      />
       <div className="flex w-full flex-grow flex-col items-center justify-center">
         <p className="text-center truncate w-full overflow-hidden">
           {person.first_name}

@@ -48,7 +48,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
         {}
       );
       const tempUserProfile = {
-        id: response.data.id,
+        user_id: response.data.id,
         first_name: "",
         last_name: "",
         email: email,

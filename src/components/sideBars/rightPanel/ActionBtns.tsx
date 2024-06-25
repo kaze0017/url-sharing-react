@@ -1,10 +1,10 @@
-import { useContext } from "react";
-import { RightPanelContext } from "../../../context/RightPanelProvider";
 import { MdOutlineHistory } from "react-icons/md";
-
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
 import { MdOutlineNotificationImportant } from "react-icons/md";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../state/store";
+import { setContent } from "../../../state/rightPanel/rightPanelSlice";
 
 interface ActionBtnsProps {
   variant: "expanded" | "collapsed";
@@ -12,7 +12,8 @@ interface ActionBtnsProps {
 }
 
 export default function ActionBtns(props: ActionBtnsProps) {
-  const { content, setContent } = useContext(RightPanelContext);
+  const { content } = useSelector((state: RootState) => state.rightPanel);
+  const dispatch = useDispatch();
 
   const activeBtnClass = "text-2xl text-gray-900 cursor-pointer";
   const passiveBtnClass = "text-2xl text-gray-500 cursor-pointer";
@@ -21,7 +22,7 @@ export default function ActionBtns(props: ActionBtnsProps) {
     <div className="flex w-full items-center justify-between gap-2 text-xs">
       <div
         className="flex flex-col items-center"
-        onClick={() => setContent("history")}
+        onClick={() => dispatch(setContent("history"))}
       >
         <MdOutlineHistory
           className={content === "history" ? activeBtnClass : passiveBtnClass}
@@ -30,7 +31,7 @@ export default function ActionBtns(props: ActionBtnsProps) {
       </div>
       <div
         className="flex flex-col items-center"
-        onClick={() => setContent("suggestions")}
+        onClick={() => dispatch(setContent("suggestions"))}
       >
         <AiOutlineUsergroupAdd
           className={
@@ -42,7 +43,7 @@ export default function ActionBtns(props: ActionBtnsProps) {
       </div>
       <div
         className="flex flex-col items-center"
-        onClick={() => setContent("search")}
+        onClick={() => dispatch(setContent("search"))}
       >
         <FiSearch
           className={content === "search" ? activeBtnClass : passiveBtnClass}
@@ -51,7 +52,7 @@ export default function ActionBtns(props: ActionBtnsProps) {
       </div>
       <div
         className="flex flex-col items-center"
-        onClick={() => setContent("notifications")}
+        onClick={() => dispatch(setContent("notifications"))}
       >
         <div className="relative">
           <MdOutlineNotificationImportant
@@ -70,22 +71,22 @@ export default function ActionBtns(props: ActionBtnsProps) {
     <div className="flex flex-col gap-1 p-1">
       <MdOutlineHistory
         className={content === "history" ? activeBtnClass : passiveBtnClass}
-        onClick={() => setContent("history")}
+        onClick={() => dispatch(setContent("history"))}
       />
       <AiOutlineUsergroupAdd
         className={content === "suggestions" ? activeBtnClass : passiveBtnClass}
-        onClick={() => setContent("suggestions")}
+        onClick={() => dispatch(setContent("suggestions"))}
       />
       <FiSearch
         className={content === "search" ? activeBtnClass : passiveBtnClass}
-        onClick={() => setContent("search")}
+        onClick={() => dispatch(setContent("search"))}
       />
       <div className="relative">
         <MdOutlineNotificationImportant
           className={
             content === "notifications" ? activeBtnClass : passiveBtnClass
           }
-          onClick={() => setContent("notifications")}
+          onClick={() => dispatch(setContent("notifications"))}
         />
         <p className="absolute top-0 right-0 translate-x-1 -translate-y-1 text-red-700 font-semibold rounded-full">
           {props.notifications}

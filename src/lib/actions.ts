@@ -69,7 +69,7 @@ export function getTopCategories() {
 // }
 
 export function getPersonById(id: number) {
-  return people.find((person) => person.id === id);
+  return people.find((person) => person.user_id === id);
 }
 
 // Gey suggestions

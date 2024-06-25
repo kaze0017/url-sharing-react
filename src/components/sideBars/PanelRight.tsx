@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
-import { RightPanelContext } from "../../context/RightPanelProvider";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import Suggestions from "./rightPanel/Suggestions";
 import Searches from "./rightPanel/Searches";
@@ -10,32 +9,32 @@ import { useDraggable } from "react-use-draggable-scroll";
 import Histories from "./rightPanel/Histories";
 import Notifications from "./rightPanel/Notifications";
 import { getNotifications } from "../../api/getNotifications";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../state/store";
+import {
+  setNotifications,
+  setToggleRightPanel,
+} from "../../state/rightPanel/rightPanelSlice";
 
 interface PanelLeftProps {
   className?: string;
 }
 
 export default function PanelRight(props: PanelLeftProps) {
-  const {
-    toggleRightPanel,
-    setToggleRightPanel,
-    notifications,
-    setNotifications,
-    content,
-  } = useContext(RightPanelContext);
+  const { toggleRightPanel, notifications, content } = useSelector(
+    (state: RootState) => state.rightPanel
+  );
+  const dispatch = useDispatch();
 
   const { auth } = useContext(AuthContext);
   const token = auth?.token;
-
-  // const orgNotifications = getNotifications(token || "");
-  // setNotifications(orgNotifications);
 
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
 
   function handelRightPanelToggle() {
-    setToggleRightPanel(!toggleRightPanel);
+    dispatch(setToggleRightPanel(!toggleRightPanel));
   }
 
   // panel css classes
@@ -49,26 +48,22 @@ export default function PanelRight(props: PanelLeftProps) {
   const toggleButtonClasses = `flex flex-row-reverse cursor-pointer p-4 text-gray items-center w-full h-6 
   ${!toggleRightPanel ? "justify-start" : "justify-center"}
   `;
-  // const textBoxClass = `text-center ${toggledCollapse ? "w-52" : "w-16"}`;
-
-  async function retrieveNotifications() {
-    console.log("user id: ", auth?.userProfile?.id);
-    const response = await getNotifications(token || "");
-    setNotifications(response);
-    console.log(response);
-  }
 
   useEffect(() => {
+    async function retrieveNotifications() {
+      const response = await getNotifications(token || "");
+      dispatch(setNotifications(response));
+    }
     retrieveNotifications();
-  }, []);
+  }, [token, dispatch]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
       if (window.innerWidth < 960) {
-        setToggleRightPanel(true);
+        dispatch(setToggleRightPanel(true));
       }
     });
-  }, []);
+  }, [dispatch]);
   return (
     <div className={panelWrapper} ref={ref} {...events}>
       <div

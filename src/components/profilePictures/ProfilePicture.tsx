@@ -11,7 +11,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({ person }) => {
     <div
       className={`relative inline-block rounded-full overflow-hidden  border-2 border-blue-500 `}
     >
-      <Link to={`/profile/${person.id}`}>
+      <Link to={`/profile/${person.user_id}`}>
         <img
           src={
             person.profile_picture || "/images/defaults/personDefaultImage.png"

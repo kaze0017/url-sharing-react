@@ -1,14 +1,34 @@
-import { useEffect, useState } from "react";
+import { updateLink } from "../../api/postUpdateLink";
+
+import { useEffect, useState, useContext } from "react";
+import AuthContext from "../../context/AuthProvider";
 import SearchBar from "../SearchBar";
 import { getNPeople } from "../../lib/actions";
 import Person from "./shareOnInternet/Person";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
 
 export default function ShareOnInternet() {
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
+  const { selectedLinks } = useSelector(
+    (state: RootState) => state.linkManagement
+  );
   const [query, setQuery] = useState<string>("");
   const [peopleToDisplay, setPeopleToDisplay] = useState<any[]>([]);
   const people = getNPeople(10);
   useEffect(() => {
-    setPeopleToDisplay(people);
+    // setPeopleToDisplay(people);
+    console.log("sdfsdf");
+    const formData = new URLSearchParams();
+
+    async function updateLinks() {
+      selectedLinks.forEach(async (link) => {
+        formData.append("audience", "True");
+        await updateLink({ token, id: link.id, formData });
+      });
+    }
+    updateLinks();
   }, []);
 
   useEffect(() => {
@@ -22,14 +42,15 @@ export default function ShareOnInternet() {
   }, [query]);
   return (
     <div className="flex items-center flex-col flex-grow w-full border">
-      <div className="flex flex-col gap-2 w-[600px] m-x-auto">
+      It is Public Now
+      {/* <div className="flex flex-col gap-2 w-[600px] m-x-auto">
         <SearchBar query={query} setQuery={setQuery} />
         <div className="uppercase text-xs font-semibold flex flex-col gap-1">
           {peopleToDisplay.map((person, index) => (
             <Person key={index} person={person} />
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

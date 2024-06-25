@@ -1,29 +1,29 @@
-import { useContext, useEffect } from "react";
-import ShareWithGroupsContext from "../../context/ShareWithGroupsProvider";
+import { useEffect, useContext } from "react";
+import AuthContext from "../../context/AuthProvider";
 import Controller from "./shareWithGroups/Controller";
 import MainPanelWrapper from "../MainPanelWrapper";
-import { getNPeople } from "../../lib/actions";
 import { groupOne, groupTwo, groupThree } from "../../lib/placeholder-data";
 import SelectionPanel from "./shareWithGroups/SelectionPanel";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../state/store";
+import {
+  initShareWithGroupsSlice,
+  setGroupsToDisplay,
+} from "../../state/share/shareSlice";
+import { initializeGroupSlice } from "../../state/networks/groupsSlice";
 
 export default function ShareWithGroups() {
-  const {
-    mode,
-    selectedPeople,
-    peopleToDisplay,
-    setPeopleToDisplay,
-    setGroupsToDisplay,
-  } = useContext(ShareWithGroupsContext);
-
-  const groups = [groupOne, groupTwo, groupThree];
-  const people = getNPeople(10);
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
+  const { mode, selectedPeople, peopleToDisplay } = useSelector(
+    (state: RootState) => state.share
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    // setPeopleToDisplay(people);
-    setGroupsToDisplay(groups);
+    dispatch(initShareWithGroupsSlice(token));
   }, []);
 
-  useEffect(() => {}, [selectedPeople, peopleToDisplay]);
   const panelsWrapperClasses = "flex flex-col gap-2 w-full uppercase text-xs";
   const mainWrapperClass =
     "relative p-1 justify-center flex flex-wrap gap-x-2 gap-y-2 overflow-y-scroll min-w-full";

@@ -1,49 +1,40 @@
-import React, { useRef, useEffect, useState, useContext } from "react";
+import { useRef } from "react";
 import { UserProfileType } from "../../../lib/interfaces";
-import TableComponent from "../../table/TableComponent";
 import Table2 from "../../table/Table2";
 import { RiArrowUpSFill } from "react-icons/ri";
 import { RiArrowDownSFill } from "react-icons/ri";
 import { LuCircleDashed } from "react-icons/lu";
-import { RelationsContext } from "../../../context/RelationsProvider";
-
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
-  getPaginationRowModel,
-} from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../state/store";
 
 interface TableProps {
   people: UserProfileType[];
 }
 
 export default function Table({ people }: TableProps) {
-  const { showFilter } = useContext(RelationsContext);
-  const [maxWidth, setMaxWidth] = useState<number>(0);
+  const { showFilter } = useSelector((state: RootState) => state.relations);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        if (entry.target === ref.current) {
-          setMaxWidth(entry.contentRect.width);
-        }
-      }
-    });
+  // useEffect(() => {
+  //   const resizeObserver = new ResizeObserver((entries) => {
+  //     for (let entry of entries) {
+  //       if (entry.target === ref.current) {
+  //         setMaxWidth(entry.contentRect.width);
+  //       }
+  //     }
+  //   });
 
-    if (ref.current) {
-      resizeObserver.observe(ref.current);
-    }
+  //   if (ref.current) {
+  //     resizeObserver.observe(ref.current);
+  //   }
 
-    return () => {
-      if (ref.current) {
-        resizeObserver.unobserve(ref.current);
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (ref.current) {
+  //       resizeObserver.unobserve(ref.current);
+  //     }
+  //   };
+  // }, []);
 
   return (
     <div className="flex flex-grow overflow-hidden">
@@ -87,7 +78,7 @@ function createColumns() {
       header: "",
       cell: (info) => (
         <img
-          className="rounded-lg h-16 aspect-video mx-auto"
+          className="rounded-lg w-10 aspect-square mx-auto min-w-5"
           src={info.getValue()}
           alt="thumbnail"
         />

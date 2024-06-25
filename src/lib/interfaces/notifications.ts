@@ -2,7 +2,7 @@ import { UserProfileType } from "../interfaces";
 import { SharedLinkType } from "../interfaces";
 export type NotificationType = {
   sender: UserProfileType;
-  linkdata: SharedLinkType[];
+  links: SharedLinkType[];
   description: string;
   publicationDate?: Date;
 };

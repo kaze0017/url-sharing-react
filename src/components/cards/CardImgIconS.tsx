@@ -1,4 +1,3 @@
-import React from "react";
 import { SharedLinkType } from "../../lib/interfaces";
 import FeaturedImage from "./featuredImages/FeaturedImage";
 import { Link } from "react-router-dom";
@@ -9,9 +8,7 @@ interface CardImgIconSProps {
 }
 
 export default function CardImgIconS({ sharedLink }: CardImgIconSProps) {
-  // css Classes
 
-  const imgUrl = sharedLink.thumbnail || "";
   return (
     <Link to={`/category/${sharedLink.id}`}>
       <div className="w-[200px] aspect-video">

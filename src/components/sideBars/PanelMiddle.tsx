@@ -1,7 +1,6 @@
 import { useState } from "react";
 import PanelTop from "../home/PanelTop";
 import PanelMain from "../home/PanelMain";
-import ActionBtns from "../home/mainPanel/ActionBtns";
 
 export default function PanelMiddle() {
   const [panelTopMode, setPanelTopMode] = useState<"wall" | "link">("wall");

@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { RelationsContext } from "../../../context/RelationsProvider";
+import React from "react";
 import SearchBar from "../../SearchBar";
 import { BsUiChecksGrid } from "react-icons/bs";
 import { FcInvite } from "react-icons/fc";
@@ -7,26 +6,26 @@ import { AiOutlineFilter } from "react-icons/ai";
 import { AiOutlineTable } from "react-icons/ai";
 import { FaRegAddressCard } from "react-icons/fa";
 import { CgUserList } from "react-icons/cg";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../state/store";
+import {
+  setShowFilter,
+  setView,
+} from "../../../state/relations/relationsSlice";
 
 export default function Controller() {
-  const { view, setView, setShowFilter, showFilter } =
-    useContext(RelationsContext);
+  const { view, showFilter } = useSelector(
+    (state: RootState) => state.relations
+  );
+  const dispatch = useDispatch();
   const [query, setQuery] = React.useState("");
 
   function changeView() {
-    if (view === "small") {
-      setView("medium");
-    } else if (view === "medium") {
-      setView("table");
-    } else {
-      setView("small");
-    }
+    dispatch(setView());
   }
 
   function handelShowFilter() {
-    if (setShowFilter) {
-      setShowFilter(!showFilter);
-    }
+    dispatch(setShowFilter(!showFilter));
   }
   const btnClass = "cursor-pointer text-2xl text-gray-800";
 
@@ -39,13 +38,21 @@ export default function Controller() {
         <button className={btnClass} title="Filter">
           <AiOutlineFilter className="text-2xl" />
         </button>
-        <button className={btnClass} onClick={changeView} title={view.toUpperCase()}>
+        <button
+          className={btnClass}
+          onClick={changeView}
+          title={view.toUpperCase()}
+        >
           {view.toLocaleLowerCase() === "table" && <AiOutlineTable />}
           {view.toLocaleLowerCase() === "small" && <CgUserList />}
           {view.toLocaleLowerCase() === "medium" && <FaRegAddressCard />}
         </button>
         {view === "table" && (
-          <button className={btnClass} onClick={handelShowFilter} title="Select Columns">
+          <button
+            className={btnClass}
+            onClick={handelShowFilter}
+            title="Select Columns"
+          >
             <BsUiChecksGrid />
           </button>
         )}

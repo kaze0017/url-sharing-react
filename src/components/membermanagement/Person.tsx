@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import ChartDragAndDropContext from "../../context/ChartDragAndDropProvider";
+import React from "react";
 import { UserProfileType } from "../../lib/interfaces";
 import { useDrag } from "react-dnd";
 import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
@@ -9,9 +8,6 @@ interface PersonProps {
 }
 
 export default function Person({ person }: PersonProps) {
-  const { setDraggedPerson, draggedPerson , treeData} = useContext(
-    ChartDragAndDropContext
-  );
 
   const [{ opacity }, dragRef] = useDrag(
     () => ({
@@ -24,19 +20,12 @@ export default function Person({ person }: PersonProps) {
     []
   );
 
-  return (
-    // <div ref={dragRef} style={{ opacity }}>
-    <div
-      ref={dragRef}
-      draggable={true}
-      onDragStart={(e) => {
-        console.log("perv", draggedPerson);
-        console.log("dragging", person);
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData("text/plain", JSON.stringify(person));
+  };
 
-        setDraggedPerson(person);
-        console.log("teep", treeData);
-      }}
-    >
+  return (
+    <div ref={dragRef} draggable={true} onDragStart={handleDragStart}>
       <ProfilePictureSm person={person} />
     </div>
   );

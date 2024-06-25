@@ -10,6 +10,7 @@ export async function getPublicLinks(token: string) {
         auth: token,
       },
     });
+    console.log("getPublicLinks", response);
     return checkData({ sharedLinks: response.data.result });
   } catch (error) {
     console.error(error);

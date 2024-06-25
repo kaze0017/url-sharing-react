@@ -1,16 +1,18 @@
-import { useContext } from "react";
-import ShareWithGroupsContext from "../../../context/ShareWithGroupsProvider";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../state/store";
+import {
+  setExpirationDate,
+  setPublicationDate,
+} from "../../../state/share/shareSlice";
 
 export default function Dates() {
-  const {
-    publicationDate,
-    setPublicationDate,
-    expirationDate,
-    setExpirationDate,
-  } = useContext(ShareWithGroupsContext);
-  const mainWrapperClass = "flex flex-col gap-1 uppercase text-xs uppercase font-semibold text-bas";
-  const inputWrapperClass =
-    "flex  items-center justify-between gap-1";
+  const { publicationDate, expirationDate } = useSelector(
+    (state: RootState) => state.share
+  );
+  const dispatch = useDispatch();
+  const mainWrapperClass =
+    "flex flex-col gap-1 uppercase text-xs uppercase font-semibold text-bas";
+  const inputWrapperClass = "flex  items-center justify-between gap-1";
   return (
     <div className={mainWrapperClass}>
       <div className={inputWrapperClass}>
@@ -19,7 +21,7 @@ export default function Dates() {
           type="date"
           id="publicationDate"
           value={publicationDate}
-          onChange={(e) => setPublicationDate(e.target.value)}
+          onChange={(e) => dispatch(setPublicationDate(e.target.value))}
         />
       </div>
 
@@ -30,7 +32,7 @@ export default function Dates() {
           type="date"
           id="expirationDate"
           value={expirationDate}
-          onChange={(e) => setExpirationDate(e.target.value)}
+          onChange={(e) => dispatch(setExpirationDate(e.target.value))}
         />
       </div>
     </div>

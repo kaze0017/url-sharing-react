@@ -1,4 +1,3 @@
-import { getPersonById } from "../lib/actions";
 import { UserProfileType, SharedLinkType } from "../lib/interfaces";
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
@@ -8,10 +7,7 @@ import CardSharedLg from "../components/cards/CardSharedLg";
 import PageTitle from "../components/profile/PageTitle";
 import Controls from "../components/profile/Controls";
 import AuthContext from "../context/AuthProvider";
-import axiosInstance from "../api/axios";
-import { USER_URL } from "../constants";
-
-import { getSharedLinks } from "../api/getSharedLinks";
+import { getUserInfoById } from "../api/getUserInfoById";
 import NotFound from "../components/NotFound";
 
 export default function Profile() {
@@ -20,12 +16,7 @@ export default function Profile() {
 
   const params = useParams();
   const { userId } = params as { userId: string };
-  const person = getPersonById(parseInt(userId));
-  
-
-
-  //  const userIdString = stringify(userId);
-  // const person = regenerateUser({ userId });
+  const [person, setPerson] = useState<UserProfileType | null>(null);
 
   const [sharedLinks, setSharedLinks] = useState<SharedLinkType[] | null>(null);
   const [linksToDisplay, setLinksToDisplay] = useState<SharedLinkType[] | null>(
@@ -35,8 +26,24 @@ export default function Profile() {
   const [activeType, setActiveType] = useState("all");
   const [query, setQuery] = useState<string>("");
 
-  // const URL = "http://18.224.166.225:8000/link_management/user_links/";
+  useEffect(() => {
+    async function getPerson() {
+      const response = await getUserInfoById({
+        userId: userId,
+        token: token,
+      });
+      setPerson(response.user_info);
+      let tempLinks = response.public_links;
 
+      if (!Array.isArray(tempLinks)) {
+        tempLinks = [tempLinks];
+      }
+
+      setSharedLinks(tempLinks);
+      setLinksToDisplay(tempLinks);
+    }
+    getPerson();
+  }, [userId, token]);
   function handleType(type: string) {
     if (!sharedLinks) {
       return;
@@ -51,16 +58,6 @@ export default function Profile() {
     setLinksToDisplay(filteredLinks);
   }
 
-  // const ref =
-  //   useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-  // const { events } = useDraggable(ref);
-
-  async function getAndSetSharedLinks() {
-    const sharedLinks = await getSharedLinks(token);
-    setSharedLinks(sharedLinks);
-    setLinksToDisplay(sharedLinks);
-  }
-
   useEffect(() => {
     if (!sharedLinks) {
       return;
@@ -73,28 +70,7 @@ export default function Profile() {
       sharedLink.title.toLowerCase().includes(query.toLowerCase())
     );
     setLinksToDisplay(filteredLinks);
-  }, [query]);
-
-  useEffect(() => {
-    getAndSetSharedLinks();
-  }, []);
-
-  async function fetchUserLinksFromServer() {
-    try {
-      const response = await axiosInstance.get(USER_URL, {
-        headers: {
-          auth: auth?.token,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    fetchUserLinksFromServer();
-  }, []);
+  }, [query, sharedLinks]);
 
   return person ? (
     <div className="panel-light w-full h-full overflow-hidden flex flex-col gap-1">
@@ -123,5 +99,4 @@ export default function Profile() {
   ) : (
     <NotFound title="User" size="text-2xl" />
   );
-
 }

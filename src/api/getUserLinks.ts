@@ -4,6 +4,8 @@ import { USER_URL } from "../constants";
 import { PUBLIC_URL } from "../constants";
 export async function getUserLinks(token: string) {
   try {
+    console.log("getUserLinks");
+    console.log("token", token);
     const response = await axiosInstance.get(
       "https://api.url.faraertebat.com/link_management/user_links/",
       {
@@ -13,6 +15,7 @@ export async function getUserLinks(token: string) {
         },
       }
     );
+    console.log("getUserLinks", response);
     return response.data.result;
   } catch (error) {
     console.error(error);

@@ -51,10 +51,31 @@ export const GET_LINK_BY_ID_URL =
 export const FIND_USER_BY_QUERY_URL =
   "https://api.url.faraertebat.com/member_management/find_user_view/";
 
-
 // Notifications
 export const NOTIFICATION_URL =
   "https://api.url.faraertebat.com/link_management/notifications/";
+
+// get user profile info
+export const USER_PROFILE_By_ID_URL =
+  "https://api.url.faraertebat.com/member_management/get_specific_user_info/";
+
+// Quick Access Links
+export const QUICK_ACCESS_LINKS_URL =
+  "https://api.url.faraertebat.com/link_management/quick_access_links/";
+
+// Log Out
+export const LOGOUT_URL = "https://api.url.faraertebat.com/logout/";
+
+// Get User's Groups
+
+export const GET_USER_GROUPS_URL =
+  "https://api.url.faraertebat.com/member_management/private_people_group_manager/";
+
+// Post User's Groups
+export const POST_USER_GROUPS_URL =
+  "https://api.url.faraertebat.com/member_management/private_people_group_manager/";
+
+  
 
 // http://127.0.0.1:8000/link_management/populars_links/
 

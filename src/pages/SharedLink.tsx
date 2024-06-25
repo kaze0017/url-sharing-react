@@ -14,7 +14,7 @@ export default function SharedLink() {
   const [isLoading, setIsLoading] = useState(true);
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
-  const userId = auth?.userProfile?.id;
+  const userId = auth?.userProfile?.user_id;
   const [sharedLink, setSharedLink] = useState<SharedLinkType>(
     {} as SharedLinkType
   );

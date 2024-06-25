@@ -2,6 +2,7 @@ import axiosInstance from "./axios";
 import { FIND_USER_BY_QUERY_URL } from "../constants";
 
 export async function getUserByQuery(token: string, query: string) {
+  console.log("from getUserByQuery, token: ", token);
   const formData = new URLSearchParams();
   formData.append("query", query);
   const config = {
@@ -17,6 +18,7 @@ export async function getUserByQuery(token: string, query: string) {
       formData.toString(),
       config
     );
+    console.log("from getUserByQuery, response: ", response);
     return response.data.result;
   } catch (error) {
     console.error(error);

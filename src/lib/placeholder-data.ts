@@ -1,12 +1,11 @@
 // person model
-import { groups } from "d3";
 // import { PersonType } from "./interfaces";
 import { SharedLinkType } from "./interfaces";
 import { UserProfileType } from "./interfaces";
 // data
 export const people: UserProfileType[] = [
   {
-    id: 1,
+    user_id: 1,
     first_name: "John Doe",
     last_name: "Smith",
     title: "CEO",
@@ -28,7 +27,7 @@ export const people: UserProfileType[] = [
     },
   },
   {
-    id: 2,
+    user_id: 2,
     first_name: "Jane",
     last_name: "Doe",
     email: "example@example.com",
@@ -46,7 +45,7 @@ export const people: UserProfileType[] = [
     },
   },
   {
-    id: 3,
+    user_id: 3,
     first_name: "Michael",
     last_name: "Johnson",
     email: "example@example.com",
@@ -65,7 +64,7 @@ export const people: UserProfileType[] = [
     },
   },
   {
-    id: 4,
+    user_id: 4,
     first_name: "Jane",
     last_name: "Smith",
     email: "example@example.com",
@@ -84,7 +83,7 @@ export const people: UserProfileType[] = [
     },
   },
   {
-    id: 5,
+    user_id: 5,
     first_name: "John",
     last_name: "Doe",
     email: "example@example.com",
@@ -103,7 +102,7 @@ export const people: UserProfileType[] = [
   },
   // New people
   {
-    id: 6,
+    user_id: 6,
     first_name: "Jane",
     last_name: "Taylor",
     email: "example@example.com",
@@ -121,7 +120,7 @@ export const people: UserProfileType[] = [
     },
   },
   {
-    id: 7,
+    user_id: 7,
     first_name: "Michael",
     last_name: "White",
     email: "example@example.com",
@@ -139,7 +138,7 @@ export const people: UserProfileType[] = [
     },
   },
   {
-    id: 8,
+    user_id: 8,
     first_name: "Jane",
     last_name: "Brown",
     title: "HR Manager",
@@ -157,7 +156,7 @@ export const people: UserProfileType[] = [
     },
   },
   {
-    id: 9,
+    user_id: 9,
     first_name: "Michael",
     last_name: "Green",
     email: "example@example.com",
@@ -175,7 +174,7 @@ export const people: UserProfileType[] = [
     },
   },
   {
-    id: 10,
+    user_id: 10,
     first_name: "Jane",
     last_name: "Black",
     email: "example@example.com",
@@ -261,7 +260,7 @@ export const thumbnails = [
 export const user: UserProfileType = people[0];
 
 export const groupOne = {
-  id: 1,
+  group_id: 1,
   name: "Group One",
   members: [people[0], people[1], people[2]],
   description: "This is the first group",
@@ -270,7 +269,7 @@ export const groupOne = {
 };
 
 export const groupTwo = {
-  id: 2,
+  group_id: 2,
   name: "Group Two",
   members: [people[3], people[4], people[5], people[6], people[7]],
   description: "This is the second group",
@@ -279,7 +278,7 @@ export const groupTwo = {
 };
 
 export const groupThree = {
-  id: 3,
+  group_id: 3,
   name: "Group Three",
   members: [people[8], people[9]],
   description: "This is the third group",
@@ -288,7 +287,7 @@ export const groupThree = {
 };
 
 export const groupDefault = {
-  id: 0,
+  group_id: 0,
   name: "Default Group",
   members: [people[4]],
   description: "This is the default group",

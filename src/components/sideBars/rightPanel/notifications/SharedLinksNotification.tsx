@@ -53,8 +53,7 @@ export default function SharedLinksNotification({
               />
               <p>
                 {sender.first_name} {sender.last_name} (
-                {/* {notification.linkdata.length}) */}
-                1000
+                {notification.links.length})
               </p>
             </div>
             <p className="text-2xs">{dateToDisplay}</p>
@@ -64,7 +63,7 @@ export default function SharedLinksNotification({
             {!isExpanded && ""}
             {isExpanded && (
               <div className="flex flex-col gap-2">
-                {notification.linkdata.map(
+                {notification.links.map(
                   (link: SharedLinkType, index: number) => (
                     <SharedLinkNotification key={index} link={link} />
                   )

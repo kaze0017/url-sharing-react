@@ -1,7 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { SharedLinkType } from "../../lib/interfaces";
-// import { sharedLinks } from "../../lib/placeholder-data";
 import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
 import { CiEdit } from "react-icons/ci";
 import GradientIcon from "../customIcons/GradientIcon";

@@ -17,14 +17,14 @@ export default function UserInfo({ user, toggledCollapse }: Props) {
   const { userProfile } = useContext(UserProfileContext);
 
   let person: UserProfileType = {
-    id: userProfile.user_id || 0,
+    user_id: userProfile.user_id || 0,
     first_name: userProfile.first_name || "NA",
     last_name: userProfile.last_name || "NA",
     email: userProfile.email || "NA",
     profile_picture:
       userProfile.profile_picture || "images/defaults/personDefaultImage.png",
     title: userProfile.title || "NA",
-    subscribers:userProfile.subscribers || [],
+    subscribers: userProfile.subscribers || [],
     publications: userProfile.publications || {
       links: [],
       categories: "",

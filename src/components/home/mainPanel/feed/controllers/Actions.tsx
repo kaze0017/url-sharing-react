@@ -1,9 +1,12 @@
-import { useContext } from "react";
-import { HomeContext } from "../../../../../context/HomeProvider";
-
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../../../state/store";
 import FeederBtn from "../../../../FeederBtn";
+import { setView } from "../../../../../state/home/homeSlice";
+
 export default function Actions() {
-  const { view, setView } = useContext(HomeContext);
+  const { view } = useSelector((state: RootState) => state.home);
+  const dispatch = useDispatch();
+
   return (
     <div className="flex gap-2 uppercase text-xs text-blue-950">
       <FeederBtn title="Create" onClick={() => console.log("Create")} />
@@ -14,15 +17,7 @@ export default function Actions() {
         title={
           view === "grid" ? "Grid" : view === "cardImgIconS" ? "Card" : "List"
         }
-        onClick={() =>
-          setView(
-            view === "grid"
-              ? "cardImgIconS"
-              : view === "cardImgIconS"
-              ? "cardSharedLg"
-              : "grid"
-          )
-        }
+        onClick={() => dispatch(setView())}
       />
     </div>
   );

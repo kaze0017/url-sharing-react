@@ -1,126 +1,23 @@
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useReducer, useState } from "react";
+import { useState } from "react";
 
-type Person = {
-  select: boolean;
-  photo: string;
-  firstName: string;
-  lastName: string;
-  age: number;
-  visits: number;
-  status: string;
-  progress: number;
-};
-
-const defaultData: Person[] = [
-  {
-    select: false,
-    firstName: "tanner",
-    lastName: "linsley",
-    age: 24,
-    visits: 100,
-    status: "In Relationship",
-    progress: 50,
-    photo: "https://randomuser.me/api/portraits/men/76.jpg",
-  },
-  {
-    select: false,
-    firstName: "tandy",
-    lastName: "miller",
-    age: 40,
-    visits: 40,
-    status: "Single",
-    progress: 80,
-    photo: "https://randomuser.me/api/portraits/men/77.jpg",
-  },
-  {
-    select: false,
-    firstName: "joe",
-    lastName: "dirte",
-    age: 45,
-    visits: 20,
-    status: "Complicated",
-    progress: 10,
-    photo: "https://randomuser.me/api/portraits/men/78.jpg",
-  },
-];
-
-const columnHelper = createColumnHelper<Person>();
-
-const columns = [
-  columnHelper.accessor("select", {
-    header: ({ table }) => (
-      <input
-        checked={table.getIsAllRowsSelected()}
-        onChange={table.getToggleAllRowsSelectedHandler()} //or getToggleAllPageRowsSelectedHandler
-        type="checkbox"
-      />
-    ),
-    cell: ({ row }) => (
-      <input
-        checked={row.getIsSelected()}
-        disabled={!row.getCanSelect()}
-        onChange={row.getToggleSelectedHandler()}
-        type="checkbox"
-      />
-    ),
-    // footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("photo", {
-    header: () => "Photo",
-    cell: (info) => (
-      <img
-        className="rounded-lg h-16 aspect-video mx-auto"
-        src={info.getValue()}
-        alt="person"
-      />
-    ),
-
-    // footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("firstName", {
-    cell: (info) => info.getValue(),
-    header: () => <span>First Name</span>,
-    // footer: (info) => info.column.id,
-  }),
-
-  columnHelper.accessor((row) => row.lastName, {
-    id: "lastName",
-    cell: (info) => <i>{info.getValue()}</i>,
-    header: () => <span>Last Name</span>,
-    // footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("age", {
-    header: () => "Age",
-    cell: (info) => info.renderValue(),
-    // footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("visits", {
-    header: () => <span>Visits</span>,
-    // footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("status", {
-    header: "Status",
-    // footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("progress", {
-    header: "Profile Progress",
-    // footer: (info) => info.column.id,
-  }),
-];
-
-export default function Table2({columns, data, showFilter} : {columns: any[], data: any[], showFilter: boolean}) {
-  // const [data, _setData] = useState(() => [...defaultData]);
+export default function Table2({
+  columns,
+  data,
+  showFilter,
+}: {
+  columns: any[];
+  data: any[];
+  showFilter: boolean;
+}) {
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
-
 
   const table = useReactTable({
     data,
@@ -131,17 +28,12 @@ export default function Table2({columns, data, showFilter} : {columns: any[], da
       rowSelection,
     },
     onColumnVisibilityChange: setColumnVisibility,
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
     columnResizeMode: "onChange",
-    enableRowSelection: true, 
+    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-
-
 
   return (
     <div className="p-2 text-xs uppercase flex w-full flex-col gap-2">

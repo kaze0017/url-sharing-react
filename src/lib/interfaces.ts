@@ -18,7 +18,7 @@
 // };
 
 export type UserProfileType = {
-  id: number;
+  // id: number;
   first_name: string;
   last_name: string;
   email: string;
@@ -33,7 +33,7 @@ export type UserProfileType = {
   payment_method?: string;
   sub_name?: string;
   sub_remaining_days?: number;
-  user_id?: number;
+  user_id: number;
   publications?: {
     links: { title: string; url: string }[];
     categories: string | string[];
@@ -108,9 +108,9 @@ export interface CategoryType {
 
 export interface groupType {
   id: number;
-  name: string;
-  members: UserProfileType[];
   description: string;
+  members: UserProfileType[];
+  name: string;
   color: string;
   tags: string[];
 }

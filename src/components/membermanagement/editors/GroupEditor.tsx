@@ -1,32 +1,54 @@
-import React, { useEffect } from "react";
-import { getGroup } from "../../../lib/placeholder-data";
+import React, { useEffect, useContext } from "react";
+import AuthContext from "../../../context/AuthProvider";
+
 import { CiEdit } from "react-icons/ci";
 import { CiFloppyDisk } from "react-icons/ci";
 import TagSelector from "../../TagSelector";
 import GroupDnD from "./GroupDnD";
 import DnDTrashCan from "./DnDTrashCan";
 import { UserProfileType } from "../../../lib/interfaces";
+import { postUserGroups } from "../../../api/postUserGroups";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../state/store";
+import { removeMember, setSelectedGroup } from "../../../state/networks/groupsSlice";
 
-interface GroupEditorProps {
-  groupId: string;
-}
 
-export default function GroupEditor({ groupId }: GroupEditorProps) {
-  const group = getGroup(groupId);
-  const [userToDel, setUserToDel] = React.useState<UserProfileType[]>([]);
 
-  const [name, setName] = React.useState(group?.name);
-  const [description, setDescription] = React.useState(group?.description);
-  const [members, setMembers] = React.useState(group?.members || []);
-  const [tags, setTags] = React.useState(group?.tags || []);
-  const [color, setColor] = React.useState(group?.color);
+export default function GroupEditor() {
+  const { auth } = useContext(AuthContext);
+  const token = auth?.token || "";
+  const { selectedGroup } = useSelector((state: RootState) => state.netWorkGroups);
+  const dispatch = useDispatch();
+
+  async function saveGroup() {
+    const user_ids = selectedGroup.members.map((member) => member.user_id);
+    const description = selectedGroup.description;
+    const response = await postUserGroups({
+      token,
+      user_ids,
+      description,
+    });
+  }
+
+
+  function setName(name: string) {
+    dispatch(setSelectedGroup({ ...selectedGroup, name }));
+  }
+  function setDescription(description: string) {
+    dispatch(setSelectedGroup({ ...selectedGroup, description }));
+  }
+  function setTags(tags: string[]) {
+    dispatch(setSelectedGroup({ ...selectedGroup, tags }));
+  }
+  function setColor(color: string) {
+    dispatch(setSelectedGroup({ ...selectedGroup, color }));
+  }
 
   const [editMode, setEditMode] = React.useState(false);
 
-  useEffect(() => {
-    // Delete the user from the members array
-    setMembers((prev) => prev.filter((member) => !userToDel.includes(member)));
-  }, [userToDel]);
+  function handelRemoveMember(user: UserProfileType) {
+    dispatch(removeMember(user));
+  }
 
   const labelClass = editMode
     ? " font-semibold w-20 min-w-20 uppercase text-xs "
@@ -47,9 +69,18 @@ export default function GroupEditor({ groupId }: GroupEditorProps) {
       <div className="panel-light flex gap-2 w-full h-52 uppercase p-2 ">
         <div className="flex items-center justify-center text-8xl  text-gray-500 border-r-2 border-gray-500 h-full w-52 ">
           {editMode ? (
-            <CiFloppyDisk onClick={() => setEditMode(false)} />
+            <CiFloppyDisk
+              onClick={() => {
+                saveGroup();
+                setEditMode(false);
+              }}
+            />
           ) : (
-            <CiEdit onClick={() => setEditMode(true)} />
+            <CiEdit
+              onClick={() => {
+                setEditMode(true);
+              }}
+            />
           )}
         </div>
         <div className="flex flex-col gap-1 text-xs ">
@@ -59,7 +90,7 @@ export default function GroupEditor({ groupId }: GroupEditorProps) {
             </label>
             <input
               type="text"
-              value={name}
+              value={selectedGroup.name}
               onChange={(e) => setName(e.target.value)}
               name="name"
               readOnly={!editMode}
@@ -71,7 +102,7 @@ export default function GroupEditor({ groupId }: GroupEditorProps) {
               Description
             </label>
             <textarea
-              value={description}
+              value={selectedGroup.description}
               onChange={(e) => setDescription(e.target.value)}
               name="description"
               readOnly={!editMode}
@@ -83,11 +114,11 @@ export default function GroupEditor({ groupId }: GroupEditorProps) {
               Tags
             </label>
 
-            <TagSelector
-              selectedTags={tags}
+            {/* <TagSelector
+              selectedTags={selectedGroup.tags || []}
               setSelectedTags={setTags}
               editMode={editMode}
-            />
+            /> */}
           </div>
           <div className={inputWrapperClass}>
             <label htmlFor="color" className={labelClass}>
@@ -95,7 +126,7 @@ export default function GroupEditor({ groupId }: GroupEditorProps) {
             </label>
             <input
               type="color"
-              value={color}
+              value={selectedGroup.color}
               onChange={(e) => setColor(e.target.value)}
               name="color"
               readOnly={!editMode}
@@ -105,9 +136,9 @@ export default function GroupEditor({ groupId }: GroupEditorProps) {
         </div>
       </div>
       <div className="relative flex flex-grow p-1 panel-light">
-        <GroupDnD members={members} setMembers={setMembers} />
+        <GroupDnD />
         <div className="absolute bottom-0 right-0">
-          <DnDTrashCan setUserToDel={setUserToDel} />
+          <DnDTrashCan removeMember={handelRemoveMember} />
         </div>
       </div>
     </div>

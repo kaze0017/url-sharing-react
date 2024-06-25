@@ -26,6 +26,10 @@ import Approval from "./components/shareLinks/Approval";
 import ShareByDiagram from "./components/shareLinks/ShareByDiagram";
 import ShareOnInternet from "./components/shareLinks/ShareOnInternet";
 import EditLink from "./components/linkManagement/EditLink";
+import Groups from "./components/membermanagement/Groups";
+import Graphs from "./components/membermanagement/Graphs";
+import Relations from "./components/membermanagement/Relations";
+import MainGroupEditor from "./components/membermanagement/GEditor";
 
 function App() {
   return (
@@ -66,9 +70,12 @@ function App() {
                 <Route path="/shareLinks/approval" element={<Approval />} />
               </Route>
               <Route path="/networks" element={<MemberManagement />}>
-                <Route path="/networks" element={<NetworkMainPanel />} />
-                <Route path="/networks/editor/:id" element={<Editor />} />
-                <Route path="/networks/editor/" element={<Editor />} />
+                <Route index element={<NetworkMainPanel />} />
+                <Route path="groups" element={<Groups />} />
+                <Route path="graphs" element={<Graphs />} />
+                <Route path="relations" element={<Relations />} />
+                <Route path="editor/:id" element={<Editor />} />
+                <Route path="groupEditor/" element={<MainGroupEditor />} />
               </Route>
               <Route path="/settings" element={<Settings />} />
               <Route path="/profile/:userId" element={<Profile />} />

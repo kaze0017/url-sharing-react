@@ -18,7 +18,7 @@ const UserProfileContext = createContext<UserProfileContextType>({
   userProfile: {
     email: "",
     first_name: "",
-    id: 0,
+    user_id: 0,
     last_name: "",
     org_email: "",
     org_foa: "",
@@ -29,7 +29,6 @@ const UserProfileContext = createContext<UserProfileContextType>({
     profile_picture: "",
     sub_name: "",
     sub_remaining_days: 0,
-    user_id: 0,
     user_name: "",
     title: "",
     publications: {
@@ -54,7 +53,7 @@ export default function UserProfileProvider({
   const { auth } = useContext(AuthContext);
   const [userProfile, setUserProfile] = useState<UserProfileType>(
     auth?.userProfile || {
-      id: 0,
+      user_id: 0,
       first_name: "",
       last_name: "",
       profile_picture: "",
@@ -69,7 +68,6 @@ export default function UserProfileProvider({
       payment_method: "",
       sub_name: "",
       sub_remaining_days: 0,
-      user_id: 0,
       publications: {
         links: [],
         categories: "",

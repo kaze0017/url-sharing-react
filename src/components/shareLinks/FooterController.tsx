@@ -1,18 +1,21 @@
-import { useContext, useEffect, useState } from "react";
-import ShareWithGroupsContext from "../../context/ShareWithGroupsProvider";
+import { useEffect, useState } from "react";
 import ProgressBarComp from "../ProgressBarComp";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../state/store";
+import { setStatus } from "../../state/share/shareSlice";
 
 export default function FooterController() {
   const navigate = useNavigate();
-  const { status, setStatus , selectedGroups, selectedPeople} = useContext(ShareWithGroupsContext);
+  const { status, selectedPeople, selectedGroups} = useSelector((state: RootState) => state.share);
+  const dispatch = useDispatch();
   const [progress, setProgress] = useState(0);
 
   const goToLinkManagement = () => {
     navigate("/linkManagement");
   };
   function handelShareNow() {
-    setStatus("approval");
+    dispatch(setStatus("approval"));
     navigate("/shareLinks/approval");
   }
 
