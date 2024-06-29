@@ -16,6 +16,7 @@ export default function Controller() {
 
   function shareWithGroup() {
     dispatch(setStatus("selectingRecipients"));
+    console.log("shareByDiagram");
     navigate("/shareLinks/shareWithGroups");
   }
   function shareByDiagram() {
@@ -50,7 +51,7 @@ export default function Controller() {
             />
             <MenuBtnCard
               icon={TbWorldUpload}
-              title="By a network"
+              title="Make Public"
               callBacFunc={shareOnInternet}
             />
           </div>

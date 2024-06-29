@@ -1,14 +1,19 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { UserProfileType, groupType } from "../../lib/interfaces";
+import {
+  SharedLinkType,
+  UserProfileType,
+  groupType,
+} from "../../lib/interfaces";
 import { GroupType } from "../../lib/interfaces/group";
 import { getUserGroups } from "../../api/getUserGroups";
 import { getTopUsers } from "../../api/getTopUsers";
 import { getUserByQuery } from "../../api/getUserByQuery";
+import { postShareLinks } from "../../api/postShareLinks";
+import { RootState } from "../store";
 
 export const fetchUserGroups = createAsyncThunk(
   "groups/fetchUserGroups",
   async (token: string) => {
-    console.log("fetching user groups");
     const response = await getUserGroups(token);
     return response;
   }
@@ -17,7 +22,6 @@ export const fetchUserGroups = createAsyncThunk(
 export const fetchTopUsers = createAsyncThunk(
   "groups/fetchTopUsers",
   async (token: string) => {
-    console.log("fetching top users");
     const response = await getTopUsers(token);
     return response;
   }
@@ -28,7 +32,6 @@ export const fetchSearchedUsers = createAsyncThunk(
   async (args: { token: string; query: string }, { dispatch }) => {
     dispatch(setQuery(args.query));
     if (args.query === "") {
-      console.log("query is empty");
       return [];
     }
     const response = await getUserByQuery(args.token, args.query);
@@ -45,6 +48,34 @@ export const handelSearch = createAsyncThunk(
     }
     await dispatch(fetchSearchedUsers(args));
     await dispatch(fetchUserGroups(args.token));
+  }
+);
+
+// Share Links with Groups and Individuals
+
+export const shareWithGroups = createAsyncThunk(
+  "share/shareWithGroups",
+  async (token: string, { getState }) => {
+    const shareState = (getState() as RootState).share;
+    const linkManagementState = (getState() as RootState).linkManagement;
+
+    const data = {
+      message: shareState.description,
+      description: shareState.description,
+      link_ids: linkManagementState.selectedLinks.map(
+        (link: SharedLinkType) => link.id
+      ),
+      user_ids: shareState.selectedPeople.map(
+        (person: UserProfileType) => person.user_id
+      ),
+      group_ids: shareState.selectedGroups.map(
+        (group: GroupType) => group.group_id
+      ),
+      expirationDate: shareState.expirationDate,
+      publicationDate: shareState.publicationDate,
+    };
+    const response = await postShareLinks({ token, data });
+    return { status: response?.status, message: response?.data?.message };
   }
 );
 
@@ -253,7 +284,18 @@ const shareWithGroupsSlice = createSlice({
       }
     });
 
-    
+    builder.addCase(shareWithGroups.pending, (state) => {
+      state.status = "loading";
+    });
+
+    builder.addCase(shareWithGroups.fulfilled, (state, action) => {
+      if (action.payload.status === 200) {
+        state.status = "success";
+      } else {
+        state.status = "error";
+        console.log("error", action.payload.message);
+      }
+    });
   },
 });
 

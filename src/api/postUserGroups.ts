@@ -12,17 +12,16 @@ export async function postUserGroups({
   user_ids,
   description,
 }: PostUserGroupsInterface) {
+  console.log("API: postUserGroups");
   const formData = new URLSearchParams();
   formData.append("user_ids", user_ids.join(","));
   formData.append("description", description);
-console.log("postUserGroups -> formData", description)
   const config = {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       auth: token,
     },
   };
-
   try {
     const response = await axiosInstance.post(
       POST_USER_GROUPS_URL,

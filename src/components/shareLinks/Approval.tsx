@@ -4,15 +4,14 @@ import MainPanelWrapper from "../MainPanelWrapper";
 import { GiWingedEmblem } from "react-icons/gi";
 import Dates from "./approval/Dates";
 import Description from "./approval/Description";
-import { shareLinks } from "../../api/postShareLinks";
+// import { shareLinks } from "../../api/postShareLinks";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../state/store";
+import { AppDispatch, RootState } from "../../state/store";
 import { setSelectedLinks } from "../../state/linkManagement/linkManagementSlice";
 import {
-  setSelectedGroups,
-  setSelectedPeople,
   setStatus,
   initState,
+  shareWithGroups,
 } from "../../state/share/shareSlice";
 
 export default function Approval() {
@@ -22,35 +21,16 @@ export default function Approval() {
   const { selectedLinks } = useSelector(
     (state: RootState) => state.linkManagement
   );
-  const dispatch = useDispatch();
-  const {
-    selectedPeople,
-    selectedGroups,
-    status,
-    expirationDate,
-    publicationDate,
-    description,
-  } = useSelector((state: RootState) => state.share);
+  const dispatch = useDispatch<AppDispatch>();
+  const { selectedPeople, selectedGroups, status } = useSelector(
+    (state: RootState) => state.share
+  );
 
   async function shareNow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
-    const link_ids = selectedLinks.map((link) => link.id);
-    const user_ids = selectedPeople.map((person) => person.user_id);
-    const message = "Check this out!";
-    const group_ids = selectedGroups.map((group) => group.group_id);
-    const response = await shareLinks({
-      token,
-      link_ids,
-      user_ids,
-      group_ids,
-      message,
-      description,
-      expirationDate,
-      publicationDate,
-    });
-    setResponseMessage(response?.data?.message);
+
+    dispatch(shareWithGroups(token));
     dispatch(setSelectedLinks([]));
-    // dispatch(setSelectedPeople([]));
     dispatch(initState());
     dispatch(setStatus("success"));
   }

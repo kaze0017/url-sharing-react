@@ -12,7 +12,7 @@ import AuthContext from "../../context/AuthProvider";
 import { RxCheckCircled } from "react-icons/rx";
 import { RxCrossCircled } from "react-icons/rx";
 import { useParams } from "react-router-dom";
-import { getLinkById } from "../../api/grtLinkById";
+import { getLinkById } from "../../api/getLinkById";
 import { updateLink } from "../../api/postUpdateLink";
 import { useNavigate } from "react-router-dom";
 

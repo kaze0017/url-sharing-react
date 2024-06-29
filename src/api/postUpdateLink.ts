@@ -8,6 +8,7 @@ interface UpdateLinkInterface {
 }
 
 export async function updateLink({ id, token, formData }: UpdateLinkInterface) {
+  console.log("API: updateLink");
   const config = {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -18,7 +19,6 @@ export async function updateLink({ id, token, formData }: UpdateLinkInterface) {
 
   try {
     const response = await axiosInstance.post(url, formData.toString(), config);
-    console.log("updateLink", response);
     return response;
   } catch (error) {
     console.error(error);

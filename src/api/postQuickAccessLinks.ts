@@ -12,6 +12,7 @@ export async function postQuickAccessLinks({
   links_add,
   links_remove,
 }: postQuickAccessLinksInterface) {
+  console.log("API: postQuickAccessLinks");
   const config = {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -29,7 +30,6 @@ export async function postQuickAccessLinks({
       body,
       config
     );
-    console.log(response);
     return response;
   } catch (error) {
     console.error(error);

@@ -8,7 +8,7 @@ interface GetQuickAccessLinksParams {
 export async function getQuickAccessLinks({
   token,
 }: GetQuickAccessLinksParams) {
-
+  console.log("API: getQuickAccessLinks");
   try {
     const response = await axiosInstance.get(QUICK_ACCESS_LINKS_URL, {
       headers: {
@@ -16,7 +16,6 @@ export async function getQuickAccessLinks({
         auth: token,
       },
     });
-    console.log("get", response);
     return response.data.result;
   } catch (error) {
     console.error(error);

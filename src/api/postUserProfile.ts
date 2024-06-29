@@ -11,6 +11,7 @@ export async function postUserProfile({
   token,
   userProfile,
 }: UserProfileInterface) {
+  console.log("API: postUserProfile");
   const formData = new URLSearchParams();
   for (const [key, value] of Object.entries(userProfile)) {
     formData.append(key, String(value));
@@ -29,7 +30,6 @@ export async function postUserProfile({
       formData.toString(),
       config
     );
-    console.log(response);
     return response;
   } catch (error) {
     console.error(error);

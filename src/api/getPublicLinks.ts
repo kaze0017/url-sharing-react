@@ -3,6 +3,7 @@ import { PUBLIC_URL } from "../constants";
 import { SharedLinkType } from "../lib/interfaces";
 
 export async function getPublicLinks(token: string) {
+  console.log("API: getPublicLinks");
   try {
     const response = await axiosInstance.get(PUBLIC_URL, {
       headers: {
@@ -10,7 +11,6 @@ export async function getPublicLinks(token: string) {
         auth: token,
       },
     });
-    console.log("getPublicLinks", response);
     return checkData({ sharedLinks: response.data.result });
   } catch (error) {
     console.error(error);

@@ -15,16 +15,16 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   // <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <Provider store={store}>
-          <UserProfileProvider>
-            <App />
-          </UserProfileProvider>
-        </Provider>
-      </AuthProvider>
-    </BrowserRouter>
-  // </React.StrictMode>
+  <BrowserRouter>
+    <AuthProvider>
+      <Provider store={store}>
+        <UserProfileProvider>
+          <App />
+        </UserProfileProvider>
+      </Provider>
+    </AuthProvider>
+  </BrowserRouter>
+  //</React.StrictMode>
 );
 serviceWorkerRegistration.register();
 swDev();

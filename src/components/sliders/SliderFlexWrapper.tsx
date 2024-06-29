@@ -6,6 +6,7 @@ import CardSharedMd from "../cards/CardSharedMd";
 import CardSharedSm from "../cards/CardSharedSm";
 import CardSharedXs from "../cards/CardSharedXs";
 import LazyLoad from "react-lazyload";
+import { index } from "d3";
 
 interface SliderFlexWrapperProps {
   CardComponent: React.ComponentType<any>;
@@ -33,7 +34,6 @@ export default function SliderFlexWrapper({
     //   const scrollTop = ref.current.scrollTop;
     //   const scrollHeight = ref.current.scrollHeight;
     //   const clientHeight = ref.current.clientHeight;
-
     //   if (scrollTop === 0) {
     //     handleScrollEnd("up");
     //   } else if (scrollTop + clientHeight === scrollHeight) {
@@ -59,58 +59,31 @@ export default function SliderFlexWrapper({
     }, 1000);
   };
 
-  useEffect(() => {
-    // Clear timeout when component unmounts
-    // return () => {
-    //   if (scrollTimeout) {
-    //     clearTimeout(scrollTimeout);
-    //   }
-    // };
-  }, []);
+const gridItems = [];
 
-  useEffect(() => {
-    // Add event listener for wheel event
-    // const handleWheel = () => {
-    //   clearTimeout(scrollTimeout as NodeJS.Timeout);
-    // };
-    // if (ref.current) {
-    //   ref.current.addEventListener("wheel", handleWheel);
-    // }
-    // // Remove event listener when component unmounts
-    // return () => {
-    //   if (ref.current) {
-    //     ref.current.removeEventListener("wheel", handleWheel);
-    //   }
-    // };
-  }, [scrollTimeout]);
+for (let i = 0; i < sharedLinks.length; i += 8) {
+  const currentGroup = sharedLinks.slice(i, i + 8);
+  gridItems.push(
+    <CardSharedMd key={`card-md-${i}`} sharedLink={currentGroup[0]} />,
+    <div key={`group-1-${i}`} className="flex flex-col gap-1 justify-between">
+      <div key={`group-1-row-1-${i}`} className="flex justify-between w-full">
+        <CardSharedXs key={`card-xs-1-${i}`} sharedLink={currentGroup[1]} />
+        <CardSharedXs key={`card-xs-2-${i}`} sharedLink={currentGroup[2]} />
+      </div>
+      <CardSharedSm key={`card-sm-1-${i}`} sharedLink={currentGroup[3]} />
+      <div key={`group-1-row-2-${i}`} className="flex justify-between w-full">
+        <CardSharedXs key={`card-xs-3-${i}`} sharedLink={currentGroup[4]} />
+        <CardSharedXs key={`card-xs-4-${i}`} sharedLink={currentGroup[5]} />
+      </div>
+    </div>,
+    <div key={`group-2-${i}`} className="flex flex-col gap-2">
+      <CardSharedSm key={`card-sm-2-${i}`} sharedLink={currentGroup[6]} />
+      <CardSharedSm key={`card-sm-3-${i}`} sharedLink={currentGroup[7]} />
+    </div>
+  );
+}
 
-  const gridItems = [];
 
-  for (let i = 0; i < sharedLinks.length; i += 8) {
-    const currentGroup = sharedLinks.slice(i, i + 8);
-    gridItems.push(
-      // <div key={i} className="flex flex-wrap gap-2">
-      <>
-        <CardSharedMd sharedLink={currentGroup[0]} />
-        <div className="flex flex-col gap-1 justify-between">
-          <div className="flex justify-between w-full">
-            <CardSharedXs sharedLink={currentGroup[1]} />
-            <CardSharedXs sharedLink={currentGroup[2]} />
-          </div>
-          <CardSharedSm sharedLink={currentGroup[3]} />
-          <div className="flex justify-between w-full">
-            <CardSharedXs sharedLink={currentGroup[4]} />
-            <CardSharedXs sharedLink={currentGroup[5]} />
-          </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <CardSharedSm sharedLink={currentGroup[6]} />
-          <CardSharedSm sharedLink={currentGroup[7]} />
-        </div>
-      </>
-      // </div>
-    );
-  }
 
   const wrapperClass = `p-2 h-full  flex flex-wrap gap-2 overflow-x-hidden overflow-y-scroll scrollbar-hide items-center mx-auto justify-center`;
   if (multi === true) {

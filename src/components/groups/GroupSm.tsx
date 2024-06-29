@@ -45,7 +45,7 @@ export default function GroupSm({ group, selected }: GroupSmProps) {
       }}
       style={{ boxShadow: `0 0 0 1px ${group.color}` }}
     >
-      {/* <h3 className="text-2xs absolute top-0 left-0 px-1 uppercase">
+      <h3 className="text-2xs absolute top-0 left-0 px-1 uppercase">
         {group.description}
       </h3>
       {group.members.map((member, index) => (
@@ -59,7 +59,7 @@ export default function GroupSm({ group, selected }: GroupSmProps) {
           alt={member.first_name}
           className="rounded-full w-8 h-8"
         />
-      ))} */}
+      ))}
     </div>
   );
 }

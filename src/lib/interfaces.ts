@@ -72,6 +72,7 @@ export type SharedLinkType = {
   sharedby?: UserProfileType;
   suggestedby?: UserProfileType;
   audience?: true | false;
+  event_id?: number;
   url: string;
   back_up_link_1st?: string;
   back_up_link_2nd?: string;

@@ -2,15 +2,13 @@ import axiosInstance from "./axios";
 import { GET_USER_GROUPS_URL } from "../constants";
 
 export async function getUserGroups(token: string) {
+  console.log("API: getUserGroups");
   const config = {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       auth: token,
     },
   };
-
-
-  console.log("from getUserGroups, token: ", token);
   try {
     const response = await axiosInstance.get(
       GET_USER_GROUPS_URL,
@@ -22,10 +20,7 @@ export async function getUserGroups(token: string) {
       
       }
     );
-    
-    // config
-    console.log("from getUserGroups, response: ", response);
-    return response.data.result;
+        return response.data.result;
   } catch (error) {
     console.error(error);
     return [];

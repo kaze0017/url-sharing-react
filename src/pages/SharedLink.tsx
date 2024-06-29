@@ -3,7 +3,7 @@ import CardSingle from "../components/cards/CardSingle";
 import PanelTop from "../components/home/PanelTop";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthProvider";
-import { getLinkById } from "../api/grtLinkById";
+import { getLinkById } from "../api/getLinkById";
 import { SharedLinkType } from "../lib/interfaces";
 import NotFound from "../components/NotFound";
 

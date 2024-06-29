@@ -7,6 +7,7 @@ interface functionInterface {
 }
 
 export async function getUserInfoById({ token, userId }: functionInterface) {
+  console.log("API: getUserInfoById");
   const formData = new URLSearchParams();
   formData.append("user_id", userId);
   const config = {

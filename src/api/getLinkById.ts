@@ -8,6 +8,8 @@ interface GetLinkByIdInterface {
 }
 
 export async function getLinkById({ token, id }: GetLinkByIdInterface) {
+  console.log("API: getLinkById");
+
   const formData = new URLSearchParams();
   formData.append("link_id", id);
   const config = {
@@ -19,8 +21,7 @@ export async function getLinkById({ token, id }: GetLinkByIdInterface) {
 
   try {
     const response = await axiosInstance.post(
-      "https://api.url.faraertebat.com/link_management/filter_links_by_id/",
-
+      GET_LINK_BY_ID_URL,
       formData.toString(),
       config
     );

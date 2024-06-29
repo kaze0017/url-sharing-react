@@ -3,6 +3,7 @@ import { POPULAR_URL } from "../constants";
 import { SharedLinkType } from "../lib/interfaces";
 
 export async function getPopularLinks(token: string) {
+  console.log("API: getPopularLinks");
   try {
     const response = await axiosInstance.get(POPULAR_URL, {
       headers: {

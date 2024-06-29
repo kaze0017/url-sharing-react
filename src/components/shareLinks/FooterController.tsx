@@ -7,14 +7,25 @@ import { setStatus } from "../../state/share/shareSlice";
 
 export default function FooterController() {
   const navigate = useNavigate();
-  const { status, selectedPeople, selectedGroups} = useSelector((state: RootState) => state.share);
   const dispatch = useDispatch();
+
+  const { status, selectedPeople, selectedGroups } = useSelector(
+    (state: RootState) => state.share
+  );
+
   const [progress, setProgress] = useState(0);
 
   const goToLinkManagement = () => {
     navigate("/linkManagement");
   };
-  function handelShareNow() {
+  function handelShare() {
+    if (selectedPeople.length + selectedGroups.length === 0) {
+      return;
+    }
+    if (status === "approval") {
+      
+      return;
+    }
     dispatch(setStatus("approval"));
     navigate("/shareLinks/approval");
   }
@@ -29,7 +40,8 @@ export default function FooterController() {
     }
   }, [status]);
 
-  const mainBtnClass = "font-bold text-blue-950  px-2 cursor-pointer uppercase disabled:opacity-50";
+  const mainBtnClass =
+    "font-bold text-blue-950  px-2 cursor-pointer uppercase disabled:opacity-50";
 
   return (
     <div className="flex flex-col">
@@ -40,17 +52,18 @@ export default function FooterController() {
         <div className={mainBtnClass} onClick={goToLinkManagement}>
           Cancel
         </div>
-        {/* {status === "sharingOptions" && <div>Next</div>} */}
-        {status === "selectingRecipients" && (
-          <button className={mainBtnClass} onClick={handelShareNow} disabled={selectedPeople.length + selectedGroups.length === 0}>
-            Share Now
-          </button>
-        )}
-        {status === "success" && (
-          <div className={mainBtnClass} onClick={goToLinkManagement}>
-            Done
-          </div>
-        )}
+
+        <button
+          className={mainBtnClass}
+          onClick={handelShare}
+          disabled={selectedPeople.length + selectedGroups.length === 0}
+        >
+          {status === "selectingRecipients"
+            ? selectedPeople.length + selectedGroups.length === 0
+              ? "Select recipients"
+              : "Next"
+            : "Share"}
+        </button>
       </div>
     </div>
   );

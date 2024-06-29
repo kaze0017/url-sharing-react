@@ -2,7 +2,7 @@ import axiosInstance from "./axios";
 import { NOTIFICATION_URL } from "../constants";
 
 export async function getNotifications(token: string) {
-  console.log("getNotifications", " token", token)
+  console.log("API: getNotifications");
   try {
     const response = await axiosInstance.get(NOTIFICATION_URL, {
       headers: {
@@ -10,7 +10,7 @@ export async function getNotifications(token: string) {
         auth: token,
       },
     });
-    console.log("getNotifications", response);
+    console.log(response);
     if (typeof response.data.result.shared === "string") {
       return [response.data.result.shared];
     } else if (Array.isArray(response.data.result.shared)) {

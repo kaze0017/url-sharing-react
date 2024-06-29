@@ -7,16 +7,15 @@ interface postLoginInterface {
 }
 
 export async function postLogin({ username, password }: postLoginInterface) {
+  console.log("API: postLogin");
   const formData = new URLSearchParams();
   formData.append("username", username);
   formData.append("password", password);
-
   try {
     const response = await axiosInstance.post(LOGIN_URL, formData.toString(), {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       withCredentials: true,
     });
-    console.log("login response", response);
     return response;
   } catch (error) {
     console.error(error);

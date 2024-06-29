@@ -8,12 +8,9 @@ interface CardImgIconSProps {
 }
 
 export default function CardImgIconS({ sharedLink }: CardImgIconSProps) {
-
   return (
-    <Link to={`/category/${sharedLink.id}`}>
-      <div className="w-[200px] aspect-video">
-        <FeaturedImage sharedLink={sharedLink} twClass="w-full h-full" />
-      </div>
-    </Link>
+    <div className="w-[200px] aspect-video">
+      <FeaturedImage sharedLink={sharedLink} twClass="w-full h-full" />
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { NotificationsType } from "../../lib/interfaces/notifications";
+
 interface RightPanelState {
   toggleRightPanel: boolean;
   notifications: NotificationsType;
