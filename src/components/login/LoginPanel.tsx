@@ -3,10 +3,7 @@ import Social from "./Social";
 import { useEffect, useState, useRef } from "react";
 import useAuth from "../../hooks/useAuth";
 
-import {
-  USER_REGEX,
-  PASSWORD_REGEX,
-} from "../../constants";
+import { USER_REGEX, PASSWORD_REGEX } from "../../api/constants";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import axiosInstance from "../../api/axios";
@@ -35,8 +32,6 @@ export default function LoginPanel() {
   // const [isPending, startTransition] = useTransition();
 
   // Login
-
-
 
   useEffect(() => {
     userRef.current?.focus();
@@ -78,7 +73,6 @@ export default function LoginPanel() {
     formType === "register"
       ? "login-wrapper-translate transition-transform duration-1000"
       : "translate-x-0 transition-transform duration-1000 ";
-
 
   function handleShowRegister() {
     setFormType("register");

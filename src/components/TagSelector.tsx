@@ -3,8 +3,10 @@ import FadeInOut from "./login/FadeInOut";
 import { IoIosClose } from "react-icons/io";
 
 interface TagSelectorProps {
-  selectedTags: string[];
-  setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedTags: string[] 
+  setSelectedTags:
+    | React.Dispatch<React.SetStateAction<string[]>>
+    | ((tags:string[]) => void);
   editMode?: boolean;
   inSuggestions?: string[];
 }
@@ -35,6 +37,8 @@ export default function TagSelector({
     }
     if (!selectedTags.includes(tag)) {
       setSelectedTags([...selectedTags, tag]);
+      console.log(tag);
+      console.log(selectedTags);
     }
     setInputValue("");
   }

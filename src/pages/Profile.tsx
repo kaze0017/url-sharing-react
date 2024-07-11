@@ -7,7 +7,7 @@ import CardSharedLg from "../components/cards/CardSharedLg";
 import PageTitle from "../components/profile/PageTitle";
 import Controls from "../components/profile/Controls";
 import AuthContext from "../context/AuthProvider";
-import { getUserInfoById } from "../api/getUserInfoById";
+import { getUserInfoById } from "../api/gets/getUserInfoById";
 import NotFound from "../components/NotFound";
 
 export default function Profile() {

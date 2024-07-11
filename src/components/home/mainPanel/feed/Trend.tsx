@@ -7,7 +7,7 @@ import { SharedLinkType } from "../../../../lib/interfaces";
 import SliderFlexWrapper from "../../../sliders/SliderFlexWrapper";
 import AuthContext from "../../../../context/AuthProvider";
 import NotFound from "../../../NotFound";
-import { getPopularLinks } from "../../../../api/getPopularLinks";
+import { getPopularLinks } from "../../../../api/gets/getPopularLinks";
 import { RootState } from "../../../../state/store";
 
 export default function Trend() {

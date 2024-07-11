@@ -7,7 +7,7 @@ import Description from "./approval/Description";
 // import { shareLinks } from "../../api/postShareLinks";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
-import { setSelectedLinks } from "../../state/linkManagement/linkManagementSlice";
+import { setSelectedContents } from "../../state/linkManagement/linkManagementSlice";
 import {
   setStatus,
   initState,
@@ -30,7 +30,7 @@ export default function Approval() {
     e.preventDefault();
 
     dispatch(shareWithGroups(token));
-    dispatch(setSelectedLinks([]));
+    dispatch(setSelectedContents([]));
     dispatch(initState());
     dispatch(setStatus("success"));
   }

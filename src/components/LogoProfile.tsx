@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthProvider";
 import { UserProfileType } from "../lib/interfaces";
 import ProfilePictureLg from "./profilePictures/ProfilePictureLg";
 import InfoReport from "./InfoReport";
-import { getTopUsers } from "../api/getTopUsers";
+import { getTopUsers } from "../api/gets/getTopUsers";
 function LogoProfile({ toggledCollapse = false }) {
   const defaultPerson: UserProfileType = {
     user_id: 0,

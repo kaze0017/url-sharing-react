@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import Suggestions from "./rightPanel/Suggestions";
 import Searches from "./rightPanel/Searches";
-import ActionBtns from "./rightPanel/ActionBtns";
+import ActionBtns from "./topPanel/ActionBtns";
 import { useDraggable } from "react-use-draggable-scroll";
 import Histories from "./rightPanel/Histories";
 import Notifications from "./rightPanel/Notifications";
-import { getNotifications } from "../../api/getNotifications";
+import { getNotifications } from "../../api/gets/getNotifications";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../state/store";
 import {

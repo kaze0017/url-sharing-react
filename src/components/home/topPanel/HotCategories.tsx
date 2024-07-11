@@ -1,5 +1,5 @@
 import CardCategoryHot from "../../cards/CardCategoryHot";
-import { getTopSharedCategories } from "../../../api/getTopSharedCategories";
+import { getTopSharedCategories } from "../../../api/gets/getTopSharedCategories";
 import SliderRow from "../../sliders/SliderRow";
 import { useContext } from "react";
 import AuthContext from "../../../context/AuthProvider";

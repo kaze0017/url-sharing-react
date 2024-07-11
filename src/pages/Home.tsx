@@ -10,21 +10,22 @@ export default function Home() {
   const { isNewUser } = useContext(AuthContext);
 
   return (
-    // <UserProfileProvider>
-    <div className="flex w-full h-full p-1 gap-1 overflow-hidden">
+    <div className="flex  w-full h-full p-1 gap-1 overflow-hidden">
       {isNewUser ? (
         <InitialProfile />
       ) : (
         <>
+        {/* <PanelTop /> */}
+        {/* <div className="flex gap-1"> */}
           <PanelLeft />
           <div className="flex flex-col w-full h-full gap-1">
             <Outlet />
             <ActionBtns />
           </div>
           <PanelRight />
+        {/* </div> */}
         </>
       )}
     </div>
-    // </UserProfileProvider>
   );
 }

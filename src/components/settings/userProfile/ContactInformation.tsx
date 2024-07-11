@@ -4,7 +4,7 @@ import AuthContext from "../../../context/AuthProvider";
 import SubSettingContainer from "../SubSettingContainer";
 import { countries } from "../../../lib/countries";
 import Select from "react-select";
-import { postUserProfile } from "../../../api/postUserProfile";
+import { postUserProfile } from "../../../api/posts/postUserProfile";
 
 export default function ContactInformation() {
   const { auth } = useContext(AuthContext);
@@ -29,9 +29,6 @@ export default function ContactInformation() {
       </div>
     ),
   }));
-
-
-
 
   async function handelSubmit() {
     postUserProfile({ token: "", userProfile });

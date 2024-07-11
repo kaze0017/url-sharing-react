@@ -35,3 +35,34 @@ this.addEventListener("fetch", (event) => {
     );
   }
 });
+
+
+const CACHE_NAME = "api-cache";
+const API_URL = "/api/notifications";
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener("fetch", (event) => {
+  if (event.request.url.includes(API_URL)) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(event.request).then((response) => {
+          const fetchPromise = fetch(event.request).then((networkResponse) => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+          return response || fetchPromise;
+        });
+      })
+    );
+  } else {
+    event.respondWith(fetch(event.request));
+  }
+});
+

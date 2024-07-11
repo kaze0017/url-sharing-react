@@ -2,7 +2,7 @@ import React, { useState, useRef, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { UserProfileContext } from "../../context/UserProfileProvider";
 import axiosInstance from "../../api/axios";
-import { REGISTER_URL } from "../../constants";
+import { REGISTER_URL } from "../../api/constants";
 import { useNavigate } from "react-router-dom";
 import FadeInOut from "./FadeInOut";
 import SubmitBtn from "./SubmitBtn";

@@ -1,4 +1,4 @@
-import { updateLink } from "../../api/postUpdateLink";
+import { updateLink } from "../../api/posts/postUpdateLink";
 
 import { useEffect, useState, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";

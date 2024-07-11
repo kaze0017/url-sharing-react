@@ -3,7 +3,7 @@ import SubmitBtn from "./SubmitBtn";
 import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { UserProfileContext } from "../../context/UserProfileProvider";
-import { postLogin } from "../../api/postLogin";
+import { postLogin } from "../../api/posts/postLogin";
 import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps {

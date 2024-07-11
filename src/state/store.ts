@@ -6,6 +6,9 @@ import RightPanelReducer from "./rightPanel/rightPanelSlice";
 import RelationsReducer from "./relations/relationsSlice";
 import ShareReducer from "./share/shareSlice"
 import NetworkGroupsReducer from "./networks/groupsSlice";
+import CategoryReducer from "./linkManagement/categorySlice";
+import LinkReducer from "./linkManagement/linkSlice";
+import AUthReducer from "./auth/authSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,7 +19,9 @@ export const store = configureStore({
     rightPanel: RightPanelReducer,
     relations: RelationsReducer,
     share: ShareReducer,
-
+    category: CategoryReducer,
+    link: LinkReducer,
+    auth: AUthReducer,
   },
 });
 

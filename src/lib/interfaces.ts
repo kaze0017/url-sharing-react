@@ -16,6 +16,7 @@
 //   org_picture?: string;
 //   connections?: PersonType[];
 // };
+import { CategoryType } from "./interfaces/categoryType";
 
 export type UserProfileType = {
   // id: number;
@@ -78,14 +79,14 @@ export type SharedLinkType = {
   back_up_link_2nd?: string;
   back_up_link_3rd?: string;
   category: string | null;
-  class_type: "link" | "category";
+  class_type: "link";
   contentDescription: string | null;
   health_backup_1st?: true | false;
   health_backup_2nd?: true | false;
   health_backup_3rd?: true | false;
   health_main_url?: true | false;
   icon_id: string | null;
-  likeCount: number;
+  likeCount?: number;
   publicationDate?: string;
   expirationDate?: string;
   rankCount: number;
@@ -101,7 +102,7 @@ export type SharedLinkType = {
   short_url?: string;
 };
 
-export interface CategoryType {
+export interface CategoryTypeo {
   id?: number;
   title: string;
   owner: UserProfileType;

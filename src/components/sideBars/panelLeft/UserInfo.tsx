@@ -5,7 +5,7 @@ import { GoDotFill } from "react-icons/go";
 import { useContext } from "react";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
 import AuthContext from "../../../context/AuthProvider";
-import { getUserProfile } from "../../../api/getUserProfile";
+import { getUserProfile } from "../../../api/gets/getUserProfile";
 
 interface Props {
   user: UserProfileType;

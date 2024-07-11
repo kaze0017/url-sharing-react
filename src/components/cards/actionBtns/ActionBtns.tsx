@@ -6,9 +6,12 @@ import { IoPricetagOutline } from "react-icons/io5";
 import { SharedLinkType } from "../../../lib/interfaces";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../state/store";
-import { setSelectedLinks } from "../../../state/linkManagement/linkManagementSlice";
-import { postQuickAccessLinks } from "../../../api/postQuickAccessLinks";
+import { RootState, AppDispatch } from "../../../state/store";
+import {
+  likeTheLink,
+  postQuickAccess,
+  setSelectedLinks,
+} from "../../../state/linkManagement/linkSlice";
 
 interface Props {
   id: number;
@@ -19,18 +22,15 @@ interface Props {
 }
 
 export default function ActionBtns(props: Props) {
-  const {auth} = useContext(AuthContext);
-  const token = auth?.token || "";
-  const { selectedLinks } = useSelector(
-    (state: RootState) => state.linkManagement
-  );
-  const dispatch = useDispatch();
+  const { selectedLinks } = useSelector((state: RootState) => state.link);
+  const dispatch = useDispatch<AppDispatch>();
   const [saved, setSaved] = useState<boolean>(false);
   const [shared, setShared] = useState<boolean>(false);
   const [ranked, setRanked] = useState<boolean>(false);
 
   async function rankUp(event: any) {
     event.stopPropagation();
+    likeTheLink(props.id);
 
     try {
       setRanked(!ranked);
@@ -44,11 +44,7 @@ export default function ActionBtns(props: Props) {
     setShared(!shared);
 
     try {
-      if (selectedLinks !== undefined && props.link !== undefined) {
-        dispatch(setSelectedLinks([...selectedLinks, props.link]));
-      } else if (props.link !== undefined) {
-        dispatch(setSelectedLinks([props.link]));
-      }
+      dispatch(setSelectedLinks([props.link!]));
     } catch (error) {
       console.error(error);
     }
@@ -57,11 +53,7 @@ export default function ActionBtns(props: Props) {
 
   async function save(event: any) {
     event.stopPropagation();
-    try {
-      await postQuickAccessLinks({ token, links_add: props.id });
-    } catch (error) {
-      console.error(error);
-    }
+    dispatch(postQuickAccess(props.id as number));
   }
 
   const wrapperClass =

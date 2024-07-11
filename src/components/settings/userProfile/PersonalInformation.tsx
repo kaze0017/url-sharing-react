@@ -5,7 +5,7 @@ import FullScreenOverlay from "../../FullScreenOverlay";
 import ChangeProfilePicture from "./forms/ChangeProfilePicture";
 import SubSettingContainer from "../SubSettingContainer";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
-import { postUserProfile } from "../../../api/postUserProfile";
+import { postUserProfile } from "../../../api/posts/postUserProfile";
 import AuthContext from "../../../context/AuthProvider";
 import { IoPersonOutline } from "react-icons/io5";
 
@@ -46,7 +46,7 @@ export default function PersonalInformation() {
   const textareaClass = editMode
     ? "border-b border-gray-300 flex flex-grow"
     : "bg-transparent border-none flex flex-grow";
-    
+
   const btnClass = "bg-blue-950 text-white p-2 rounded-md w-20";
 
   return (

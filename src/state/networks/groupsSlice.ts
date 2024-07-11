@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { GroupType } from "../../lib/interfaces/group";
-import { getUserGroups } from "../../api/getUserGroups";
+import { getUserGroups } from "../../api/gets/getUserGroups";
 import { UserProfileType } from "../../lib/interfaces";
-import { getTopUsers } from "../../api/getTopUsers";
-import { getUserByQuery } from "../../api/getUserByQuery";
+import { getTopUsers } from "../../api/gets/getTopUsers";
+import { getUserByQuery } from "../../api/gets/getUserByQuery";
 
 export const fetchUserGroups = createAsyncThunk(
   "groups/fetchUserGroups",

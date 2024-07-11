@@ -7,17 +7,20 @@ import TagSelector from "../../TagSelector";
 import GroupDnD from "./GroupDnD";
 import DnDTrashCan from "./DnDTrashCan";
 import { UserProfileType } from "../../../lib/interfaces";
-import { postUserGroups } from "../../../api/postUserGroups";
+import { postUserGroups } from "../../../api/posts/postUserGroups";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../state/store";
-import { removeMember, setSelectedGroup } from "../../../state/networks/groupsSlice";
-
-
+import {
+  removeMember,
+  setSelectedGroup,
+} from "../../../state/networks/groupsSlice";
 
 export default function GroupEditor() {
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
-  const { selectedGroup } = useSelector((state: RootState) => state.netWorkGroups);
+  const { selectedGroup } = useSelector(
+    (state: RootState) => state.netWorkGroups
+  );
   const dispatch = useDispatch();
 
   async function saveGroup() {
@@ -29,7 +32,6 @@ export default function GroupEditor() {
       description,
     });
   }
-
 
   function setName(name: string) {
     dispatch(setSelectedGroup({ ...selectedGroup, name }));

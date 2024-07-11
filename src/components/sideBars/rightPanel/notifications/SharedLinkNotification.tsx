@@ -3,7 +3,7 @@ import AuthContext from "../../../../context/AuthProvider";
 import { SharedLinkType } from "../../../../lib/interfaces";
 import { RiCheckLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
-import { postAcceptRejectLinks } from "../../../../api/postAcceptRejectLinks";
+import { postAcceptRejectLinks } from "../../../../api/posts/postAcceptRejectLinks";
 
 export default function SharedLinkNotification({
   link,
@@ -45,7 +45,6 @@ export default function SharedLinkNotification({
     } else {
       setState("acceptanceFailed");
     }
-
   }
   return (
     <div className="flex flex-col gap-1 border border-gray-500 rounded-md p-1">

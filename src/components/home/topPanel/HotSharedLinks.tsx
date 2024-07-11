@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useContext } from "react";
-import { getTopSharedLinks } from "../../../api/getTopSharedLinks";
+import { getTopSharedLinks } from "../../../api/gets/getTopSharedLinks";
 import CardLinkHot from "../../cards/CardLinkHot";
 import SliderRow from "../../sliders/SliderRow";
 import { SharedLinkType } from "../../../lib/interfaces";

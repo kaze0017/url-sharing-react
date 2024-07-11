@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { SharedLinkType } from "../../../lib/interfaces";
+import { ContentType } from "../../../lib/interfaces/contentType";
 import {
   createColumnHelper,
   flexRender,
@@ -14,7 +15,7 @@ import {
   ColumnFiltersState,
   RowData,
 } from "@tanstack/react-table";
-import Filter from "./Filter";
+import Filter from "../../trash/Filter";
 declare module "@tanstack/react-table" {
   //allows us to define custom properties for our columns
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -23,10 +24,10 @@ declare module "@tanstack/react-table" {
 }
 
 interface TableProps {
+  contentsToDisplay: ContentType[];
+  selectedContents: ContentType[];
+  setSelectedContents: React.Dispatch<ContentType[]>;
   columns: any;
-  setSelectedLinks: React.Dispatch<SharedLinkType[]>;
-  selectedLinks: SharedLinkType[];
-  sharedLinks: SharedLinkType[];
   showFilter?: boolean;
 }
 
@@ -35,12 +36,13 @@ interface ExpandedSharedLinkType extends SharedLinkType {
 }
 
 export default function Table({
-  sharedLinks,
-  setSelectedLinks,
+  contentsToDisplay,
+  setSelectedContents,
   columns,
   showFilter,
 }: TableProps) {
-  const [data, _setData] = useState([...sharedLinks]);
+  console.log("Table -> contentsToDisplay", contentsToDisplay);
+  const [data, _setData] = useState([...contentsToDisplay]);
 
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
@@ -53,7 +55,7 @@ export default function Table({
   const rerender = useReducer(() => ({}), {})[1];
 
   const table = useReactTable({
-    data: sharedLinks,
+    data: contentsToDisplay,
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {
@@ -71,14 +73,14 @@ export default function Table({
     onRowSelectionChange: setRowSelection,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination, //update the pagination state when internal APIs mutate the pagination state
+    onPaginationChange: setPagination,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
   });
 
   useEffect(() => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
-    setSelectedLinks(selectedRows.map((row) => row.original));
+    setSelectedContents(selectedRows.map((row) => row.original));
   }, [rowSelection]);
   return (
     <div className="p-2 text-xs uppercase h-full overflow-y-auto">
@@ -233,6 +235,7 @@ export default function Table({
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
           }}
+          className="text-xs"
         >
           {[10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
@@ -240,10 +243,6 @@ export default function Table({
             </option>
           ))}
         </select>
-      </div>
-      <div>
-        Showing {table.getRowModel().rows.length.toLocaleString()} of{" "}
-        {table.getRowCount().toLocaleString()} Rows
       </div>
     </div>
   );

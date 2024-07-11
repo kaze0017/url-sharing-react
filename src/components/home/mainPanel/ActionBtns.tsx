@@ -12,8 +12,8 @@ export default function ActionBtns() {
   const rMode = useSelector((state: RootState) => state.home.mode);
   const dispatch = useDispatch();
 
-  const active = "text-blue-500 text-2xl";
-  const inactive = "text-gray-600 text-2xl";
+  const active = "text-2xl active-primary hover-primary";
+  const inactive = "text-2xl inactive-primary hover-primary";
   let location = useLocation();
   const navigate = useNavigate();
 

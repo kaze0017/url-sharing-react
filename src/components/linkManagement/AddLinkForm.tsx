@@ -10,11 +10,12 @@ import { CiCirclePlus } from "react-icons/ci";
 import TagSelector from "../TagSelector";
 import AuthContext from "../../context/AuthProvider";
 import axiosInstance from "../../api/axios";
-import { CREATE_URL } from "../../constants";
+import { CREATE_URL } from "../../api/constants";
 import { useDraggable } from "react-use-draggable-scroll";
 import { FaRegEye } from "react-icons/fa";
 import { RxCheckCircled } from "react-icons/rx";
 import { RxCrossCircled } from "react-icons/rx";
+import { postCreateLink } from "../../api/posts/postCreateLink";
 
 // Steps
 
@@ -23,7 +24,7 @@ const steps = getSteps();
 //   Css Classes
 
 const formClass =
-  "relative w-full h-[500px] flex flex-col gap-2 mb-2 p-4 overflow-hidden  ";
+  "relative w-full h-[500px] flex flex-col gap-1 p-2 overflow-y-auto  ";
 const longTextInputClass = "text-xs w-full ";
 const lineClass = "grow border border-2 border-blue-800";
 
@@ -103,7 +104,8 @@ export default function AddLinkForm() {
 
   const [showThumbnailSelector, setShowThumbnailSelector] = useState(false);
   const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
-  const [selectedCategory, setSelectedCategory] = useState<Array<string>>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [apiResponse, setApiResponse] = useState<string>();
 
   const {
     register,
@@ -130,6 +132,7 @@ export default function AddLinkForm() {
   };
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    console.log("submitting data", data);
     const isValid = await trigger();
 
     // Check if there are any errors
@@ -137,41 +140,24 @@ export default function AddLinkForm() {
       // Proceed with form submission
       setCurrentStep(3);
 
-      const formData = new URLSearchParams();
-      formData.append("title", data.title);
-      formData.append("url", data.url);
-      formData.append("content_description", data.contentDescription);
-      formData.append("category", data.category);
-      formData.append("thumbnail", selectedImage);
-      formData.append("tags", selectedTags.join(","));
-      formData.append("url_username", data.url_username);
-      formData.append("url_pass", data.url_pass);
-      formData.append("sharing_dept_level", data.sharingDeptLevel);
-      formData.append("back_up_link_1st", data.back_up_link_1st);
-      formData.append("back_up_link_2nd", data.back_up_link_2nd);
-      formData.append("class_type", "link");
-      formData.append("url_type", data.url_type);
-
-      // const URL = "http://18.224.166.225:8000/link_management/create/";
-      formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
+      const response = await postCreateLink({
+        token: auth?.token || "",
+        data: {
+          title: data.title,
+          url: data.url,
+          contentDescription: data.contentDescription,
+          category: selectedCategory || "",
+          thumbnail: selectedImage,
+          tags: selectedTags,
+          url_username: data.url_username,
+          url_pass: data.url_pass,
+          sharingDeptLevel: data.sharingDeptLevel,
+          back_up_link_1st: data.back_up_link_1st,
+          back_up_link_2nd: data.back_up_link_2nd,
+          url_type: data.url_type,
+        },
       });
-
-      try {
-        const response = await axiosInstance.post(
-          CREATE_URL,
-          formData.toString(),
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              auth: auth?.token,
-            },
-          }
-        );
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
+      setApiResponse(response?.data?.message);
     } else {
       // If there are errors, do not proceed with submission
       console.log("Form has errors. Please fill in all required fields.");
@@ -217,7 +203,7 @@ export default function AddLinkForm() {
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
   const mainWrapperClass =
-    "panel-light relative p-1 justify-center flex flex-wrap gap-x-2 gap-y-2 overflow-x-scroll overflow-y-scroll scrollbar-hide w-[700px]";
+    "panel-light relative p-1 justify-center flex flex-col gap-x-2 gap-y-1 overflow-x-scroll   w-[700px] w-full overflow-y-auto";
 
   const summeryCheckWrapperClass = "flex items-center gap-1 w-[250px]";
 
@@ -228,12 +214,12 @@ export default function AddLinkForm() {
       // {...events}
       ref={ref}
     >
-      <div className="px-2">
+      <div className="px-2 ">
         <h2 className="uppercase">Link Definition</h2>
         <p className="text-xs text-gray-500">
           Boost your link into the trends and maximize visibility by adding a
           few extra details - more Information means more engagement. Make your
-          content the star of the show.{" "}
+          content the star of the show.
         </p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className={formClass}>
@@ -336,10 +322,11 @@ export default function AddLinkForm() {
                 </button>
               </div>
 
-              <TagSelector
-                setSelectedTags={setSelectedCategory}
-                selectedTags={selectedCategory}
-                inSuggestions={categorySuggestions}
+              <input
+                placeholder="Category"
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                value={selectedCategory}
+                className="text-xs w-full"
               />
               <input
                 type="text"
@@ -376,19 +363,21 @@ export default function AddLinkForm() {
             initial={{ x: delta >= 0 ? "50%" : "-10%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-full flex flex-col gap-2 h-full"
+            className="w-full flex flex-col gap-1 h-full"
           >
             {/* Username For Authentication */}
             <input
               type="text"
               placeholder="Username For Authentication"
               {...register("url_username")}
+              className="text-xs w-full"
             />
 
             <input
               type="text"
               placeholder="Password For Authentication"
               {...register("url_pass")}
+              className="text-xs w-full"
             />
 
             <div className="flex gap-2 items-center">
@@ -410,7 +399,11 @@ export default function AddLinkForm() {
               </label>
             </div>
 
-            <select id="sharingDeptLevel" {...register("sharingDeptLevel")}>
+            <select
+              id="sharingDeptLevel"
+              {...register("sharingDeptLevel")}
+              className="text-xs w-full"
+            >
               <option value="1">Level 1</option>
               <option value="2">Level 2</option>
               <option value="3">Level 3</option>
@@ -424,7 +417,7 @@ export default function AddLinkForm() {
             initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-full grow flex flex-col gap-2 "
+            className="w-full grow flex flex-col gap-1 "
           >
             {/* Summery */}
             <div className="relative flex w-full h-full overflow-hidden">
@@ -536,10 +529,10 @@ export default function AddLinkForm() {
             initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-full flex flex-col gap-2 grow items-center justify-center "
+            className="w-full flex flex-col gap-1 grow items-center justify-center "
           >
             <h3 className="text-center  text-green-600 w-full text-2xl">
-              Link Created Successfully
+              {apiResponse}
             </h3>
             <CiCirclePlus
               className="text-2xl text-blue-600 mt-4 cursor-pointer"
@@ -565,7 +558,7 @@ export default function AddLinkForm() {
           </div>
         )}
         {currentStep < 3 && (
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             {currentStep > 0 && (
               <button onClick={(e) => handlePrevious(e)}>Back</button>
             )}

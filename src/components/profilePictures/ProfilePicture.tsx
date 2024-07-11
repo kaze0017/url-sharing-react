@@ -19,7 +19,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({ person }) => {
           alt={person.first_name + " " + person.last_name}
           width={32}
           height={32}
-          className="object-cover transition-transform transform hover:scale-110"
+          className="object-cover transition-transform transform hover:scale-110 w-8 h-8"
         />
       </Link>
     </div>

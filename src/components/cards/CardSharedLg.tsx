@@ -22,6 +22,7 @@ export default function CardSharedLg({ sharedLink }: CardSharedLgProps) {
     navigate(`/sharedLink/${sharedLink.id}`);
   }
 
+  console.log("CardSharedLg: sharedLink", sharedLink);  
   return (
     <div className={mainWrapperClass} onClick={(event) => showTheLink(event)}>
       <div className="flex h-3/4 gap-2">
@@ -60,7 +61,7 @@ export default function CardSharedLg({ sharedLink }: CardSharedLgProps) {
         <div className="flex grow"></div>
         <div className="w-1/3 stopPropagation">
           <ActionBtns
-            rank={sharedLink.rankCount}
+            rank={sharedLink.likeCount || 0}
             shared={sharedLink.sharedCount}
             saved={sharedLink.savedCount}
             id={sharedLink.id}

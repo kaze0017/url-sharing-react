@@ -5,12 +5,11 @@ import TabBtnText from "./TabBtnText";
 
 import { GroupType } from "../../../lib/interfaces/group";
 import { groupsPH } from "../../../lib/placeholder-data";
-import { getTopUsers } from "../../../api/getTopUsers";
-import { getUserByQuery } from "../../../api/getUserByQuery";
+import { getTopUsers } from "../../../api/gets/getTopUsers";
+import { getUserByQuery } from "../../../api/gets/getUserByQuery";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../../state/store";
 import { handelSearch } from "../../../state/share/shareSlice";
-
 
 export default function Controller() {
   const { selectedPeople, selectedGroups, mode, query } = useSelector(

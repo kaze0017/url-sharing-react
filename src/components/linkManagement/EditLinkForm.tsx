@@ -12,8 +12,8 @@ import AuthContext from "../../context/AuthProvider";
 import { RxCheckCircled } from "react-icons/rx";
 import { RxCrossCircled } from "react-icons/rx";
 import { useParams } from "react-router-dom";
-import { getLinkById } from "../../api/getLinkById";
-import { updateLink } from "../../api/postUpdateLink";
+import { getLinkById } from "../../api/gets/getLinkById";
+import { updateLink } from "../../api/posts/postUpdateLink";
 import { useNavigate } from "react-router-dom";
 
 // Steps
@@ -102,6 +102,7 @@ export default function EditLinkForm() {
 
   async function getTheLink() {
     const tempLink = await getLinkById({ token, id });
+    console.log(tempLink);
     if (tempLink.tags?.length > 0) {
       setSelectedTags(tempLink.tags);
     }
@@ -262,7 +263,7 @@ export default function EditLinkForm() {
 
               <TagSelector
                 setSelectedTags={setSelectedTags}
-                selectedTags={selectedTags}
+                selectedTags={selectedTags ? selectedTags : []}
                 inSuggestions={tagSuggestions}
               />
               <div className="flex flex-col gap-1 w-full">

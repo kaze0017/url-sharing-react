@@ -5,10 +5,10 @@ import {
   groupType,
 } from "../../lib/interfaces";
 import { GroupType } from "../../lib/interfaces/group";
-import { getUserGroups } from "../../api/getUserGroups";
-import { getTopUsers } from "../../api/getTopUsers";
-import { getUserByQuery } from "../../api/getUserByQuery";
-import { postShareLinks } from "../../api/postShareLinks";
+import { getUserGroups } from "../../api/gets/getUserGroups";
+import { getTopUsers } from "../../api/gets/getTopUsers";
+import { getUserByQuery } from "../../api/gets/getUserByQuery";
+import { postShareLinks } from "../../api/posts/postShareLinks";
 import { RootState } from "../store";
 
 export const fetchUserGroups = createAsyncThunk(

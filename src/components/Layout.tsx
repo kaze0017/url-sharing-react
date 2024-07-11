@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import React from "react";
-import PanelLeft from "./sideBars/PanelLeft";
-import PanelRight from "./sideBars/PanelRight";
+
 
 export default function Layout() {
   return (

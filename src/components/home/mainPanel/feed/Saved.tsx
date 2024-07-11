@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getSharedLinks } from "../../../../api/getSharedLinks";
+import { getSharedLinks } from "../../../../api/gets/getSharedLinks";
 import CardSharedMd from "../../../cards/CardSharedMd";
 import CardImgIconS from "../../../cards/CardImgIconS";
 import CardSharedLg from "../../../cards/CardSharedLg";
@@ -9,7 +9,7 @@ import AuthContext from "../../../../context/AuthProvider";
 import NotFound from "../../../NotFound";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../state/store";
-import { getQuickAccessLinks } from "../../../../api/getQuickAccessLinks";
+import { getQuickAccessLinks } from "../../../../api/gets/getQuickAccessLinks";
 
 export default function Wall() {
   const { auth } = useContext(AuthContext);
@@ -20,10 +20,9 @@ export default function Wall() {
 
   const { query, view } = useSelector((state: RootState) => state.home);
 
-  
   useEffect(() => {
     async function getAndSetQuickAccessLinks() {
-      const links = await getQuickAccessLinks({token});
+      const links = await getQuickAccessLinks({ token });
       setSharedLinks(links);
       setLinksToDisplay(links);
       setIsLoading(false); // Set loading to false after fetching data

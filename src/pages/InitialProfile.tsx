@@ -2,14 +2,14 @@ import { useState, useContext } from "react";
 import { UserProfileContext } from "../context/UserProfileProvider";
 import AuthContext from "../context/AuthProvider";
 import ProgressBarComp from "../components/ProgressBarComp";
-import { postUserProfile } from "../api/postUserProfile";
+import { postUserProfile } from "../api/posts/postUserProfile";
 import { useNavigate } from "react-router-dom";
 import MainPanelWrapper from "../components/MainPanelWrapper";
 
 export default function InitialProfile() {
   const navigate = useNavigate();
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
-  const { auth , setIsNewUser } = useContext(AuthContext);
+  const { auth, setIsNewUser } = useContext(AuthContext);
   const token = auth?.token || "";
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
@@ -17,8 +17,6 @@ export default function InitialProfile() {
   const [phone, setPhone] = useState("");
   const [org_name, setOrg_name] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
-
-
 
   async function handelSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

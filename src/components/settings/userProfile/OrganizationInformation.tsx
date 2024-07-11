@@ -4,7 +4,7 @@ import EditableField from "../EditableField";
 import SubSettingContainer from "../SubSettingContainer";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
 import AuthContext from "../../../context/AuthProvider";
-import { postUserProfile } from "../../../api/postUserProfile";
+import { postUserProfile } from "../../../api/posts/postUserProfile";
 import { IoPersonOutline } from "react-icons/io5";
 
 export default function OrganizationInformation() {
@@ -42,25 +42,25 @@ export default function OrganizationInformation() {
   return (
     <SubSettingContainer title="Organization Information">
       <div className="flex gap-2">
-          <div className="relative w-32 h-36">
-            <picture className="absolute top-0 left-0 w-full h-full">
-              {userProfile.org_picture !== "null" &&
-              userProfile.org_picture !== null &&
-              userProfile.org_picture !== "" ? (
-                <img
-                  className="object-cover w-full h-full rounded-full"
-                  src={userProfile.org_picture}
-                  alt="profile picture"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <IoPersonOutline className="text-8xl text-gray-500" />
-                </div>
-              )}
-            </picture>
-            {/* shadow */}
-            <div className="absolute left-0 -bottom-8 w-full h-8 rounded-full bg-[radial-gradient(50%_50%_at_50%_40%,rgba(0,0,0,0.40)_0%,rgba(255,255,255,0.00)_100%)]"></div>
-          </div>
+        <div className="relative w-32 h-36">
+          <picture className="absolute top-0 left-0 w-full h-full">
+            {userProfile.org_picture !== "null" &&
+            userProfile.org_picture !== null &&
+            userProfile.org_picture !== "" ? (
+              <img
+                className="object-cover w-full h-full rounded-full"
+                src={userProfile.org_picture}
+                alt="profile picture"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <IoPersonOutline className="text-8xl text-gray-500" />
+              </div>
+            )}
+          </picture>
+          {/* shadow */}
+          <div className="absolute left-0 -bottom-8 w-full h-8 rounded-full bg-[radial-gradient(50%_50%_at_50%_40%,rgba(0,0,0,0.40)_0%,rgba(255,255,255,0.00)_100%)]"></div>
+        </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2 flex-grow">
             <label htmlFor="org_name" className="text-sm font-semibold w-20">

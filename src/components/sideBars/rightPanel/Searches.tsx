@@ -6,17 +6,18 @@ import { BsArrowsExpandVertical } from "react-icons/bs";
 import Person from "./search/Person";
 import Link from "./search/Link";
 import Controller from "./search/Controller";
-import { getSharedLinks } from "../../../api/getSharedLinks";
+import { getSharedLinks } from "../../../api/gets/getSharedLinks";
 import { SharedLinkType } from "../../../lib/interfaces";
-import { getTopUsers } from "../../../api/getTopUsers";
+import { getTopUsers } from "../../../api/gets/getTopUsers";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../state/store";
 import { setToggleRightPanel } from "../../../state/rightPanel/rightPanelSlice";
 
 export default function Searches() {
-  const { toggleRightPanel } = useSelector((state: RootState) => state.rightPanel);
+  const { toggleRightPanel } = useSelector(
+    (state: RootState) => state.rightPanel
+  );
   const dispatch = useDispatch();
-
 
   const [query, setQuery] = useState<string>("");
   const people = getNPeople(10);

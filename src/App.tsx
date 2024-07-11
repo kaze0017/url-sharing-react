@@ -30,6 +30,7 @@ import Groups from "./components/membermanagement/Groups";
 import Graphs from "./components/membermanagement/Graphs";
 import Relations from "./components/membermanagement/Relations";
 import MainGroupEditor from "./components/membermanagement/GEditor";
+import CreateGroup from "./components/linkManagement/CreateCategory";
 
 function App() {
   return (
@@ -47,6 +48,10 @@ function App() {
                 <Route
                   path="/linkManagement/createLink"
                   element={<CreateLink />}
+                />
+                <Route
+                  path="/linkManagement/createGroup"
+                  element={<CreateGroup />}
                 />
                 <Route
                   path="/linkManagement/editLink/:id"

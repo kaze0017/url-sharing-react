@@ -1,10 +1,10 @@
 import ProfilePicture from "../profilePictures/ProfilePicture";
 import InfoReport from "../InfoReport";
 
-import { CategoryType } from "../../lib/interfaces";
+import { CategoryTypeo } from "../../lib/interfaces";
 
 interface CategoryHotProps {
-  link: CategoryType;
+  link: CategoryTypeo;
 }
 
 export default function CategoryHot({ link }: CategoryHotProps) {

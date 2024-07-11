@@ -3,7 +3,7 @@ import CardSingle from "../components/cards/CardSingle";
 import PanelTop from "../components/home/PanelTop";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthProvider";
-import { getLinkById } from "../api/getLinkById";
+import { getLinkById } from "../api/gets/getLinkById";
 import { SharedLinkType } from "../lib/interfaces";
 import NotFound from "../components/NotFound";
 
@@ -21,9 +21,10 @@ export default function SharedLink() {
   const [editable, setEditable] = useState(false);
   async function fetchSharedLink() {
     const link = await getLinkById({ token, id: id });
+    console.log("Link", link);
     if (link) {
       setSharedLink(link);
-      if (userId === link.owner.id) {
+      if (userId === link.owner.user_id) {
         setEditable(true);
       }
       setIsLoading(false);
