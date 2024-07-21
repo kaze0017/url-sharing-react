@@ -1,5 +1,6 @@
 import { UserProfileType } from "../interfaces";
 import { SharedLinkType } from "../interfaces";
+
 export type NotificationType = {
   sender: UserProfileType;
   links: SharedLinkType[];
@@ -7,3 +8,6 @@ export type NotificationType = {
   publicationDate?: Date;
 };
 export type NotificationsType = Array<NotificationType>;
+
+
+

@@ -14,6 +14,7 @@ import {
   createCategory,
   setSelectedCategory,
 } from "../../state/linkManagement/categorySlice";
+import { CategoryType } from "../../lib/interfaces/categoryType";
 
 // Steps
 const steps = getSteps();
@@ -32,19 +33,20 @@ const circleCurrentClass =
   "w-[20px] h-[20px]  rounded-full bg-gray-400 border-4 outline  outline-blue-800";
 
 // Interfaces
-interface IFormInput {
-  category_id: number;
-  title: string;
-  contentDescription: string;
-  thumbnail: string;
-  tags: string[];
-  audience: boolean;
-  sharingAbility: boolean;
-  externalSharingAbility: boolean;
-  sharingDeptLevel: string;
-  owner: "add";
-  class_type: "category";
-}
+// interface IFormInput {
+//   category_id: number;
+//   title: string;
+//   contentDescription: string;
+//   thumbnail: string;
+//   tags: string[];
+//   audience: boolean;
+//   sharingAbility: boolean;
+//   externalSharingAbility: boolean;
+//   sharingDeptLevel: string;
+//   owner: "add";
+//   class_type: "category";
+// }
+// interface IFormInput : CategoryType {}
 
 // AddCategoryForm Component
 export default function AddCategoryForm() {
@@ -72,7 +74,7 @@ export default function AddCategoryForm() {
     reset,
     formState: { errors },
     watch,
-  } = useForm<IFormInput>();
+  } = useForm<CategoryType>();
   const watched = watch();
 
   useEffect(() => {
@@ -80,7 +82,14 @@ export default function AddCategoryForm() {
       setSelectedCategory({
         category_id: 0,
         title: "",
-        owner: "add",
+        owner: {
+          user_id: 0,
+          email: "",
+          first_name: "",
+          last_name: "",
+          tags: [],
+          categories: [],
+        },
         contentDescription: "",
         thumbnail: "/images/defaults/thumbnails/th1.jpg",
         tags: [],
@@ -88,6 +97,8 @@ export default function AddCategoryForm() {
         sharingAbility: false,
         externalSharingAbility: false,
         sharingDeptLevel: "",
+        publication_date: "",
+        links: [],
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,9 +113,9 @@ export default function AddCategoryForm() {
     register("tags", { value: selectedTags });
   }, [selectedTags, register]);
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<CategoryType> = async (data) => {
     const isValid = await trigger();
-    data ={...data, owner: "add", class_type: "category"}
+    data = { ...data };
 
     if (isValid) {
       setCurrentStep(3);
@@ -152,9 +163,9 @@ export default function AddCategoryForm() {
       <div className="px-2">
         <h2 className="uppercase">Category Definition</h2>
         <p className="text-xs text-gray-500">
-          Boost your Category into the trends and maximize visibility by adding a
-          few extra details - more Information means more engagement. Make your
-          content the star of the show.
+          Boost your Category into the trends and maximize visibility by adding
+          a few extra details - more Information means more engagement. Make
+          your content the star of the show.
         </p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className={formClass}>
@@ -349,7 +360,14 @@ export default function AddCategoryForm() {
                     sharingAbility: false,
                     externalSharingAbility: false,
                     sharingDeptLevel: "",
-                    owner: "add",
+                    owner: {
+                      user_id: 0,
+                      email: "",
+                      first_name: "",
+                      last_name: "",
+                    },
+                    publication_date: "",
+                    links: [],
                   })
                 );
               }}

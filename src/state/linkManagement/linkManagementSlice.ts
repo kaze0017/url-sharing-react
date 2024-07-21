@@ -1,60 +1,86 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { AppThunk } from "../store";
 import { SharedLinkType } from "../../lib/interfaces";
 import { CategoryType } from "../../lib/interfaces/categoryType";
 import { ContentType } from "../../lib/interfaces/contentType";
-import { getUserLinks } from "../../api/gets/getUserLinks";
-import { deleteLinks } from "../../api/posts/postDeleteLinks";
-import { fetchUserLinks } from "./linkSlice";
-import { title } from "process";
+import { fetchUserLinks, setSelectedLinks } from "./linkSlice";
+import { fetchUserCategories, setSelectedCategories } from "./categorySlice";
+import mapCategoryToContent from "../../lib/functions/mapCategoryToContent";
+import mapLinkToContent from "../../lib/functions/mapLinkToContent";
+import { get } from "http";
 
-// export const fetchUserLinks = createAsyncThunk(
-//   "linkManagement/fetchUserLinks",
-//   async (token: string) => {
-//     const response = await getUserLinks(token);
-//     return response;
-//   }
-// );
-
+// Thunk action to fetch user content and map it to ContentType[]
 export const fetchUserContent = createAsyncThunk(
   "linkManagement/fetchContent",
   async (_, { dispatch }) => {
-    console.log("contentSlice -> fetchUserContent");
     const links = (await dispatch(
       fetchUserLinks()
     ).unwrap()) as SharedLinkType[];
-    const contents: ContentType[] = links.map((link) => {
-      return mapLinkToContent(link);
-    });
+
+    const categories = (await dispatch(
+      fetchUserCategories()
+    ).unwrap()) as CategoryType[];
+
+    const contents: ContentType[] = links
+      .map((link) => mapLinkToContent(link))
+      .concat(categories.map((category) => mapCategoryToContent(category)));
+
     return contents;
   }
 );
 
-// export const deleteSelectedLinks = createAsyncThunk(
-//   "linkManagement/deleteSelectedLinks",
-//   async (token: string, { getState, dispatch }) => {
-//     const state = getState() as { linkManagement: LinkManagementState };
-//     const selectedLinksIds = state.linkManagement.selectedLinks.map(
-//       (link) => link.id
-//     );
-//     const response = await deleteLinks({ token, ids: selectedLinksIds });
-//     await dispatch(fetchUserLinks(token));
-//     return response.data;
-//   }
-// );
+// Thunk action to set selected contents and update other slices accordingly
+// export const updateSelectedContents =
+//   (contents: ContentType[]): AppThunk =>
+//   (dispatch, getState) => {
+//     // Update selected contents in linkManagement slice
+//     dispatch(setSelectedContents(contents));
 
-// interface LinkManagementState {
-//   linkMode: "edit" | "create";
-//   linkClass: "all" | "link" | "category";
-//   linkType: "all" | "article" | "video" | "podcast" | "image" | "other";
-//   selectedLinks: SharedLinkType[];
-//   userLinks: SharedLinkType[];
-//   linksToDisplay: SharedLinkType[];
-//   query: string;
-//   timeSensitive: "all" | "scheduled" | "expiresSoon" | "comeSoon";
-//   viewSize: "small" | "medium" | "large" | "details";
-//   showSelector: string;
-//   showFilter: boolean;
-// }
+//     // Extract and update selected links and categories in their respective slices
+//     const selectedLinks = contents.filter(
+//       (content) => content.contentClass === "link"
+//     );
+//     const selectedCategories = contents.filter(
+//       (content) => content.contentClass === "category"
+//     );
+
+//     dispatch(setSelectedLinks(selectedLinks));
+//     dispatch(setSelectedCategories(selectedCategories));
+//   };
+
+export const setSelectedContentsLinksCategories =
+  (Contents: ContentType[]): AppThunk =>
+  (dispatch : any, getState : any) => {
+    dispatch(setSelectedContents(Contents));
+
+    // Filter contents to get the links
+    const SelectedLinksIds = Contents.filter(
+      (content) => content.contentClass === "link"
+    ).map((content) => content.id);
+    const SelectedCategoriesIds = Contents.filter(
+      (content) => content.contentClass === "category"
+    ).map((content) => content.id);
+
+    console.log("ff Selected Links Ids:", SelectedLinksIds);
+
+    // Example of how you might want to use getState() and dispatch more actions
+    const state = getState();
+    const links = state.link.userLinks;
+    console.log("ff Links:", links);
+    const selectedLinks = links.filter((link: SharedLinkType) =>
+      SelectedLinksIds.includes(link.id)
+    );
+    console.log("ff Selected Links:", selectedLinks);
+
+    dispatch(setSelectedLinks(selectedLinks));
+    dispatch(setSelectedCategories(state.category.userCategories.filter((category: CategoryType) => SelectedCategoriesIds.includes(category.category_id))));
+
+    console.log("Current state:", state);
+
+    // Dispatch additional actions as needed, e.g., to update links or categories
+    // dispatch(updateLinks(SelectedLinksIds));
+    // dispatch(updateCategories(...));
+  };
 interface LinkManagementState {
   contentClass: "all" | "link" | "category";
   type: "all" | "article" | "video" | "podcast" | "image" | "other";
@@ -70,19 +96,6 @@ interface LinkManagementState {
   selectedCategories: CategoryType[];
 }
 
-// const initialState: LinkManagementState = {
-//   linkMode: "create",
-//   selectedLinks: [],
-//   userLinks: [],
-//   linksToDisplay: [],
-//   query: "",
-//   linkClass: "all",
-//   linkType: "all",
-//   timeSensitive: "all",
-//   viewSize: "details",
-//   showSelector: "",
-//   showFilter: false,
-// };
 const initialState: LinkManagementState = {
   contents: [],
   contentsToDisplay: [],
@@ -111,9 +124,7 @@ const linkManagementSlice = createSlice({
         state.contentsToDisplay = state.contents;
       } else {
         state.contentsToDisplay = state.contents.filter((content) =>
-          content.contentClass === "link"
-            ? content.link.title.includes(action.payload)
-            : content.category.title.includes(action.payload)
+          content.title.toLowerCase().includes(action.payload.toLowerCase())
         );
       }
     },
@@ -141,8 +152,8 @@ const linkManagementSlice = createSlice({
       } else {
         state.contentsToDisplay = state.contents.filter((content) =>
           content.contentClass === "link"
-            ? content.link.url_type === action.payload
-            : content.category.type === action.payload
+            ? content.type === action.payload
+            : content
         );
       }
     },
@@ -166,29 +177,20 @@ const linkManagementSlice = createSlice({
     },
     setSelectedContents: (state, action: PayloadAction<ContentType[]>) => {
       state.selectedContents = action.payload;
+      const categories = state.selectedContents.filter(
+        (content) => content.contentClass === "category"
+      );
     },
-    // Working on this ******************************************************
     deleteSelectedContents: (state) => {
       state.selectedContents = [];
     },
   },
-  // extraReducers: (builder) => {
-  //   builder.addCase(fetchUserLinks.fulfilled, (state, action) => {
-  //     return {
-  //       ...state,
-  //       userLinks: action.payload,
-  //       linksToDisplay: action.payload,
-  //       selectedLinks: [],
-  //     };
-  //   });
-  // },
   extraReducers: (builder) => {
     builder.addCase(fetchUserContent.fulfilled, (state, action) => {
-      console.log("contentSlice -> extraReducers -> fetchUserContent -> action", action);
       return {
         ...state,
-        content: action.payload,
-        contentToDisplay: action.payload,
+        contents: action.payload,
+        contentsToDisplay: action.payload,
       };
     });
   },
@@ -207,19 +209,3 @@ export const {
   deleteSelectedContents,
 } = linkManagementSlice.actions;
 export default linkManagementSlice.reducer;
-
-function mapLinkToContent(link: SharedLinkType) {
-  const content: ContentType = {
-    id: link.id,
-    contentClass: "link",
-    link: link,
-    category: {
-      category_id: 0,
-      title: "",
-      owner: "add",
-      tags: [],
-    },
-  };
-  console.log(" contentSlice -> mapLinkToContent -> content", content);
-  return content;
-}

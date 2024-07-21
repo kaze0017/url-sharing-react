@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserProfileType } from "../../lib/interfaces";
 
+
 interface AuthState {
   user: UserProfileType;
   token: string;

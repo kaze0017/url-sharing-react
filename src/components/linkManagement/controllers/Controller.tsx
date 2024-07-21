@@ -1,26 +1,61 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Dropdown from "react-dropdown";
 import { useNavigate } from "react-router-dom";
+import DropDownBtn from "./DropDownBtn";
+import SingleBtn from "./SingleBtn";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../state/store";
+import LinksSelectedMenu from "./LinksSelectedMenu";
 
 export default function Controller() {
-  function handleDropdownChange(e: any) {
-    console.log(e.target.value);
+  const { selectedContents } = useSelector(
+    (state: RootState) => state.linkManagement
+  );
+
+  const navigate = useNavigate();
+
+  function handleCreateLink() {
+    navigate("/linkmanagement/createlink");
   }
 
-  const options = ["one", "two", "three"];
-  const defaultOption = options[0];
+  function handleCreateGroup() {
+    navigate("/linkmanagement/creategroup");
+  }
 
-  const mainBtnClass =
-    "p-2 px-2 flex items-center justify-center text-xs bg-gray-300 h-10 rounded-xl min-w-24 max-w-24 uppercase hover:bg-gray-600 text-xs text-black hover:text-white";
+  function handleAddLinksToCategory() {
+    console.log("Add to category");
+  }
 
-  const [collapsed, setCollapsed] = useState(true);
-  const navigate = useNavigate();
   return (
-    <div className="flex w-full items-center uppercase p-4 gap-4 ">
-      {/* <div className="left flex gap-2 z-20"> */}
-      {/* Create Link Menu */}
-      <div className="w-20 h-8 flex items-center justify-center relative text-xs uppercase">
+    <div className="flex w-full items-center uppercase p-4 gap-4">
+      {selectedContents.length === 0 ? (
+        <>
+          <DropDownBtn
+            title="+"
+            options={[
+              { label: "Link", action: handleCreateLink },
+              { label: "Category", action: handleCreateGroup },
+            ]}
+          />
+          {/* <SingleBtn
+            title="add to category"
+            action={handleAddLinksToCategory}
+          /> */}
+        </>
+      ) : (
+        <LinksSelectedMenu />
+      )}
+    </div>
+  );
+}
+
+{
+  /* <div className="left flex gap-2 z-20"> */
+}
+{
+  /* Create Link Menu */
+}
+{
+  /* <div className="w-20 h-8 flex items-center justify-center relative text-xs uppercase">
         <div
           className="text-lg select-none w-full h-full hover:bg-gray-300 flex items-center justify-center border border-gray-900 cursor-pointer"
           onClick={() => setCollapsed(!collapsed)}
@@ -34,28 +69,30 @@ export default function Controller() {
         >
           <div
             className="select-none	w-full text-center cursor-pointer hover:bg-slate-300"
-            onClick={() => {
-              navigate("/linkmanagement/createlink");
-            }}
+            onClick={handelCreateLink}
           >
             Link
           </div>
           <div
             className="w-full text-center select-none	 cursor-pointer hover:bg-slate-300"
-            onClick={() => {
-              navigate("/linkmanagement/creategroup");
-            }}
+            onClick={handelCreateGroup}
           >
             Category
           </div>
         </div>
-      </div>
+      </div> */
+}
 
-      {/* <Link to={"/linkmanagement/createlink"} className={mainBtnClass}>
+{
+  /* <Link to={"/linkmanagement/createlink"} className={mainBtnClass}>
           Create a link
-        </Link> */}
-      {/* View Menu */}
-      {/* <div className="relative">
+        </Link> */
+}
+{
+  /* View Menu */
+}
+{
+  /* <div className="relative">
           <FeederBtn
             title="View"
             onClick={() => handelSetShowSelector("viewSize")}
@@ -67,10 +104,16 @@ export default function Controller() {
               setShow={handelSetShowSelector}
             />
           </FadeInOut>
-        </div> */}
-      {/* Class Menu */}
-      {/* <div className="relative"> */}
-      {/* <FeederBtn
+        </div> */
+}
+{
+  /* Class Menu */
+}
+{
+  /* <div className="relative"> */
+}
+{
+  /* <FeederBtn
             title={`Class: ${linkClass}`}
             onClick={() => handelSetShowSelector("linkClass")}
           />
@@ -81,9 +124,13 @@ export default function Controller() {
               setShow={handelSetShowSelector}
             />
           </FadeInOut>
-        </div> */}
-      {/* Type Menu */}
-      {/* <div className="relative">
+        </div> */
+}
+{
+  /* Type Menu */
+}
+{
+  /* <div className="relative">
           <FeederBtn
             title={`Type: ${linkType}`}
             onClick={() => handelSetShowSelector("linkType")}
@@ -95,8 +142,10 @@ export default function Controller() {
               setShow={handelSetShowSelector}
             />
           </FadeInOut>
-        </div> */}
-      {/* 
+        </div> */
+}
+{
+  /* 
         <div className="relative">
           <FeederBtn
             title={`Time: ${timeSensitive}`}
@@ -109,8 +158,10 @@ export default function Controller() {
               setShow={handelSetShowSelector}
             />
           </FadeInOut>
-        </div> */}
-      {/* 
+        </div> */
+}
+{
+  /* 
         {viewSize === "details" && (
           <FeederBtn
             title="Columns"
@@ -119,11 +170,13 @@ export default function Controller() {
               // setShowSelector("");
             }}
           />
-        )} */}
-      {/* </div> */}
-      {/* <div className="uppercase flex-grow">
+        )} */
+}
+{
+  /* </div> */
+}
+{
+  /* <div className="uppercase flex-grow">
         <SearchBar query={query} setQuery={handelSetQuery} />
-      </div> */}
-    </div>
-  );
+      </div> */
 }

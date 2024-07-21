@@ -10,7 +10,6 @@ export async function getNotifications(token: string) {
         auth: token,
       },
     });
-    console.log(response);
     if (typeof response.data.result.shared === "string") {
       return [response.data.result.shared];
     } else if (Array.isArray(response.data.result.shared)) {

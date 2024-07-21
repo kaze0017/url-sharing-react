@@ -31,6 +31,8 @@ import Graphs from "./components/membermanagement/Graphs";
 import Relations from "./components/membermanagement/Relations";
 import MainGroupEditor from "./components/membermanagement/GEditor";
 import CreateGroup from "./components/linkManagement/CreateCategory";
+import Category from "./components/linkManagement/Category";
+import AddLinksToCategory from "./components/linkManagement/AddLinksToCategory";
 
 function App() {
   return (
@@ -56,6 +58,14 @@ function App() {
                 <Route
                   path="/linkManagement/editLink/:id"
                   element={<EditLink />}
+                />
+                <Route
+                  path="/linkManagement/category/:id"
+                  element={<Category />}
+                />
+                <Route
+                  path="/linkManagement/addLinksToCategory"
+                  element={<AddLinksToCategory />}
                 />
               </Route>
               <Route path="/shareLinks" element={<ShareLinks />}>

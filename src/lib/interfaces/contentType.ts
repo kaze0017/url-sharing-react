@@ -28,9 +28,27 @@ import { CategoryType } from "./categoryType";
 //   short_url?: string;
 // }
 
-export interface ContentType{
-  id: number,
-  link: SharedLinkType,
-  category: CategoryType,
-  contentClass: "link" | "category",
+export interface ContentType {
+  id: number;
+  contentClass: "link" | "category";
+  thumbnail: string;
+  title: string;
+  description: string;
+  owner: UserProfileType;
+  suggestedBy: UserProfileType;
+  sharedBy: UserProfileType;
+  status: boolean;
+  audience: boolean;
+  type: "article" | "video" | "podcast" | "image" | "other";
+  publicationDate: string;
+  expirationDate: string;
+  likeCount: number;
+  sharedCount: number;
+  archivedCount: number;
+  qrCode: string;
+  shortUrl: string;
+  rankCount?: number;
+  savedCount?: number;
+  qr_code?: string;
+  short_url?: string;
 }

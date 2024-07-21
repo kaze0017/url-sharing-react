@@ -85,3 +85,11 @@ export const LIKE_LINK_URL =
 export const CREATE_CATEGORY_URL =
   "https://api.url.faraertebat.com/link_management/create_category_data/";
 
+// Get: Get User's Categories
+export const GET_USER_CATEGORIES_URL =
+  "https://api.url.faraertebat.com/link_management/user_categories/";
+
+// Post: Add links to category
+
+export const ADD_LINKS_TO_CATEGORY_URL =
+  "https://api.url.faraertebat.com/link_management/links_to_category/";

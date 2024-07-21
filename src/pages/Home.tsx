@@ -5,6 +5,7 @@ import ActionBtns from "../components/home/mainPanel/ActionBtns";
 import { useContext } from "react";
 import AuthContext from "../context/AuthProvider";
 import InitialProfile from "./InitialProfile";
+import PanelTop from "../components/sideBars/PanelTop";
 
 export default function Home() {
   const { isNewUser } = useContext(AuthContext);
@@ -15,8 +16,8 @@ export default function Home() {
         <InitialProfile />
       ) : (
         <>
-        {/* <PanelTop /> */}
-        {/* <div className="flex gap-1"> */}
+        {/* <PanelTop />
+        <div className="flex gap-1"> */}
           <PanelLeft />
           <div className="flex flex-col w-full h-full gap-1">
             <Outlet />

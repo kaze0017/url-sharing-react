@@ -1,7 +1,10 @@
+import { SharedLinkType, UserProfileType } from "../interfaces";
 export interface CategoryType {
   category_id: number;
   title: string;
-  owner: "add"
+  owner:  UserProfileType;
+  sharedBy?: UserProfileType;
+  suggestedBy?: UserProfileType;
   contentDescription?: string;
   thumbnail?: string;
   tags: string[];
@@ -10,4 +13,6 @@ export interface CategoryType {
   externalSharingAbility?: boolean;
   sharingDeptLevel?: string;
   type?: "article" | "video" | "podcast" | "image" | "other";
+  publication_date: string;
+  links: SharedLinkType[];
 }

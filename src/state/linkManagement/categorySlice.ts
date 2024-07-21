@@ -1,11 +1,59 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { CategoryType } from "../../lib/interfaces/categoryType";
+import { ContentType } from "../../lib/interfaces/contentType";
 import { postCreateCategory } from "../../api/posts/postCreateCategory";
+import { getUserCategories } from "../../api/gets/getUserCategories";
+import { postAddLinksToCategory } from "../../api/posts/postAddLinksToCategory";
+import { SharedLinkType } from "../../lib/interfaces";
+
+export const addLinksToCategory = createAsyncThunk(
+  "category/addLinksToCategory",
+  async (_, { getState }) => {
+    const state = getState() as {
+      auth: { token: string };
+      content: { selectedContents: ContentType[] };
+      category: { selectedCategories: CategoryType[] };
+      link: { selectedLinkIds: number[] };
+    };
+
+    const link_ids = state.link.selectedLinkIds;
+    const category_id = state.category.selectedCategories[0].category_id;
+    console.log("link_ids", link_ids);
+    const response = await postAddLinksToCategory({
+      token: state.auth.token,
+      category_id: category_id,
+      link_ids: link_ids,
+    });
+    return response?.data;
+  }
+);
+
+export const fetchUserCategories = createAsyncThunk(
+  "category/fetchUserCategories",
+  async (_, { getState }) => {
+    const state = getState() as { auth: { token: string } };
+    const response = await getUserCategories(state.auth.token);
+
+    console.log("dfgfdg",response);
+
+    response.sort((a: CategoryType, b: CategoryType) => {
+      const dateA = new Date(a.publication_date);
+      const dateB = new Date(b.publication_date);
+      return dateB.getTime() - dateA.getTime(); 
+    });
+
+    return response;
+  }
+);
+
 
 export const createCategory = createAsyncThunk(
   "category/createCategory",
-  async (_,{ getState }) => {
-    const state = getState() as { category: categoryState , auth: { token: string }};
+  async (_, { getState }) => {
+    const state = getState() as {
+      category: categoryState;
+      auth: { token: string };
+    };
     const response = await postCreateCategory({
       token: state.auth.token,
       data: state.category.selectedCategory,
@@ -29,7 +77,15 @@ const initialState: categoryState = {
     category_id: 0,
     title: "",
     tags: [],
-    owner: "add",
+    owner: {
+      user_id: 0,
+      email: "",
+      first_name: "",
+      last_name: "",
+      tags: [],
+    },
+    publication_date: "",
+    links: [],
   },
   selectedCategories: [],
   userCategories: [],
@@ -71,6 +127,10 @@ const categorySlice = createSlice({
     builder.addCase(createCategory.fulfilled, (state, action) => {
       console.log(action.payload);
       return initialState;
+    });
+    builder.addCase(fetchUserCategories.fulfilled, (state, action) => {
+      state.userCategories = action.payload;
+      state.categoriesToDisplay = action.payload;
     });
   },
 });
