@@ -9,6 +9,7 @@ export async function getUserCategories(token: string) {
         auth: token,
       },
     });
+    console.log("getUserCategories", response);
     return response.data.categories;
   } catch (error) {
     console.error(error);

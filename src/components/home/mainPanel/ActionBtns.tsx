@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
 import { useDispatch } from "react-redux";
 import { setMode } from "../../../state/home/homeSlice";
+import { Tabs, Tab } from "@mui/material";
 
 export default function ActionBtns() {
   const rMode = useSelector((state: RootState) => state.home.mode);
@@ -34,7 +35,53 @@ export default function ActionBtns() {
     <div className="flex flex-row w-full gap-4 p-1 items-center justify-center text-gray-600 panel-light">
       <div className="flex  w-[25%] ml-2 border border-gray-600 "></div>
       <div className={iconWrapperClasses} title="Saved Links">
-        <FiEye
+        <Tabs
+          value={rMode}
+          onChange={(e, newValue) => handleModeChange(newValue)}
+          aria-label="simple tabs example"
+          sx={{ padding: 0, margin: 0, minHeight: 0 }}
+          TabIndicatorProps={{
+            style: { display: "none" },
+          }}
+        >
+          <Tab
+            value="saved"
+            className={rMode === "saved" ? active : inactive}
+            icon={
+              <FiEye
+                onClick={() => handleModeChange("saved")}
+                className="text-2xl"
+                // className={rMode === "saved" ? active : inactive}
+              />
+            }
+            sx={{ minWidth: 50, padding: 0, margin: 0, minHeight: 0 }}
+          />
+
+          <Tab
+            value="public"
+            className={rMode === "public" ? active : inactive}
+            icon={
+              <FiCompass
+                className="text-2xl"
+                onClick={() => handleModeChange("public")}
+              />
+            }
+            sx={{ minWidth: 50, padding: 0, margin: 0, minHeight: 0 }}
+          />
+          <Tab
+            value="trend"
+            className={rMode === "trend" ? active : inactive}
+            icon={
+              <FiTrendingUp
+                className="text-2xl"
+                onClick={() => handleModeChange("trend")}
+              />
+            }
+            sx={{ minWidth: 50, padding: 0, margin: 0, minHeight: 0 }}
+          />
+        </Tabs>
+
+        {/* <FiEye
           onClick={() => handleModeChange("saved")}
           className={rMode === "saved" ? active : inactive}
         />
@@ -49,7 +96,7 @@ export default function ActionBtns() {
         <FiTrendingUp
           className={rMode === "trend" ? active : inactive}
           onClick={() => handleModeChange("trend")}
-        />
+        /> */}
       </div>
       <div className="flex w-[25%] mr-2 border border-gray-600 "></div>
     </div>

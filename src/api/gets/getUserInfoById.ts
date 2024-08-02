@@ -23,6 +23,7 @@ export async function getUserInfoById({ token, userId }: functionInterface) {
       formData.toString(),
       config
     );
+    console.log("getUserInfoById", response.data.result);
     return response.data.result;
   } catch (error) {
     console.error(error);

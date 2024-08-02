@@ -11,9 +11,7 @@ import { RootState } from "../../state/store";
 export default function ShareOnInternet() {
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
-  const { selectedLinks } = useSelector(
-    (state: RootState) => state.linkManagement
-  );
+  const { selectedLinkIds } = useSelector((state: RootState) => state.link);
   const [query, setQuery] = useState<string>("");
   const [peopleToDisplay, setPeopleToDisplay] = useState<any[]>([]);
   const people = getNPeople(10);
@@ -23,9 +21,9 @@ export default function ShareOnInternet() {
     const formData = new URLSearchParams();
 
     async function updateLinks() {
-      selectedLinks.forEach(async (link) => {
+      selectedLinkIds.forEach(async (id) => {
         formData.append("audience", "True");
-        await updateLink({ token, id: link.id, formData });
+        await updateLink({ token, id: id, formData });
       });
     }
     updateLinks();

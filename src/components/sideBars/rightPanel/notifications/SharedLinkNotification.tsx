@@ -3,12 +3,17 @@ import AuthContext from "../../../../context/AuthProvider";
 import { SharedLinkType } from "../../../../lib/interfaces";
 import { RiCheckLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
-import { postAcceptRejectLinks } from "../../../../api/posts/postAcceptRejectLinks";
+import { postAcceptRejectEvents } from "../../../../api/posts/postAcceptRejectEvents";
+import { useDispatch } from "react-redux";
+import { AppDispatch, AppThunk } from "../../../../state/store";
+import { acceptLinks } from "../../../../state/notifications/notificationSlice";
 
 export default function SharedLinkNotification({
   link,
+  sharedIndex,
 }: {
   link: SharedLinkType;
+  sharedIndex: number;
 }) {
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
@@ -24,7 +29,7 @@ export default function SharedLinkNotification({
   >("none");
   async function handelReject() {
     setState("rejecting");
-    const response = await postAcceptRejectLinks({
+    const response = await postAcceptRejectEvents({
       token,
       data: { shared_reject: [link.event_id || 0] },
     });
@@ -34,18 +39,25 @@ export default function SharedLinkNotification({
       setState("rejectionFailed");
     }
   }
+  // async function handelAccept() {
+  //   setState("accepting");
+  //   const response = await postAcceptRejectLinks({
+  //     token,
+  //     data: { shared_accept: [link.event_id || 0] },
+  //   });
+  //   if (response?.status === 200) {
+  //     setState("accepted");
+  //   } else {
+  //     setState("acceptanceFailed");
+  //   }
+  // }
+
+  const dispatch = useDispatch<AppDispatch>();
+
   async function handelAccept() {
-    setState("accepting");
-    const response = await postAcceptRejectLinks({
-      token,
-      data: { shared_accept: [link.event_id || 0] },
-    });
-    if (response?.status === 200) {
-      setState("accepted");
-    } else {
-      setState("acceptanceFailed");
-    }
+    dispatch(acceptLinks({ links: [link.event_id || 0], sharedIndex }));
   }
+
   return (
     <div className="flex flex-col gap-1 border border-gray-500 rounded-md p-1">
       {/* {state === "rejecting" && (

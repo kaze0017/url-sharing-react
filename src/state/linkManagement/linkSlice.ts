@@ -17,8 +17,9 @@ export const fetchUserLinks = createAsyncThunk(
 
 export const deleteSelectedLinks = createAsyncThunk(
   "link/deleteSelectedLinks",
-  async (token: string, { getState, dispatch }) => {
+  async (_, { getState, dispatch }) => {
     const state = getState() as { link: LinkState; auth: { token: string } };
+    const token = state.auth.token;
     const selectedLinksIds = state.link.selectedLinks.map((link) => link.id);
     const response = await deleteLinks({ token, ids: selectedLinksIds });
     await dispatch(fetchUserLinks());

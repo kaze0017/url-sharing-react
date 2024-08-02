@@ -23,7 +23,6 @@ export default function FooterController() {
       return;
     }
     if (status === "approval") {
-      
       return;
     }
     dispatch(setStatus("approval"));
@@ -41,7 +40,7 @@ export default function FooterController() {
   }, [status]);
 
   const mainBtnClass =
-    "font-bold text-blue-950  px-2 cursor-pointer uppercase disabled:opacity-50";
+    "font-bold text-blue-950  px-2 cursor-pointer uppercase disabled:opacity-50 disabled:cursor-not-allowed";
 
   return (
     <div className="flex flex-col">
@@ -49,14 +48,29 @@ export default function FooterController() {
         <ProgressBarComp steps={2} percent={progress} />
       </div>
       <div className="flex items-center justify-between px-4 py-1">
-        <div className={mainBtnClass} onClick={goToLinkManagement}>
+        <button
+          className={mainBtnClass}
+          onClick={goToLinkManagement}
+          disabled={status === "success"}
+          title={status === "success" ? "Go to link management" : "Cancel"}
+        >
           Cancel
-        </div>
+        </button>
 
         <button
           className={mainBtnClass}
           onClick={handelShare}
-          disabled={selectedPeople.length + selectedGroups.length === 0}
+          disabled={
+            selectedPeople.length + selectedGroups.length === 0 ||
+            status === "approval"
+          }
+          title={
+            selectedPeople.length + selectedGroups.length === 0
+              ? "Select Recipients"
+              : status === "approval"
+              ? "Please Confirm"
+              : "Next"
+          }
         >
           {status === "selectingRecipients"
             ? selectedPeople.length + selectedGroups.length === 0

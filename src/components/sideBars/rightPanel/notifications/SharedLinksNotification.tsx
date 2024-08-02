@@ -1,18 +1,25 @@
 import React from "react";
 import { SharedLinkType } from "../../../../lib/interfaces";
-import { NotificationType } from "../../../../lib/interfaces/notifications";
+// import { NotificationType } from "../../../../lib/interfaces/NotificationType";
 import { RxCross1 } from "react-icons/rx";
 import { RiCheckLine } from "react-icons/ri";
 import { RiDatabase2Line } from "react-icons/ri";
 import SharedLinkNotification from "./SharedLinkNotification";
 import UndoTimerBtn from "./UndoTimerBtn";
+import { SharedType } from "../../../../lib/interfaces/SharedType";
+import { Avatar } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../state/store";
+import { acceptLinks } from "../../../../state/notifications/notificationSlice";
 
 interface SharedLinksNotificationProps {
-  notification: NotificationType;
+  notification: SharedType;
+  notificationIndex: number;
 }
 
 export default function SharedLinksNotification({
   notification,
+  notificationIndex,
 }: SharedLinksNotificationProps) {
   const [state, setState] = React.useState<"rejecting" | "accepting" | "none">(
     "none"
@@ -32,6 +39,13 @@ export default function SharedLinksNotification({
   const btnAcceptClass = "text-green-500" + btn;
   const btnExpandClass = "text-blue-500" + btn;
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  async function handelAcceptAll() {
+    const links = notification.links.map((link) => link.event_id);
+    dispatch(acceptLinks({ links, sharedIndex: notificationIndex }));
+  }
+
   return (
     <div className="text-xs flex flex-col gap-1 p-1 w-full border border-gray-950 bg-gray-100 rounded-md">
       {state === "rejecting" && (
@@ -45,11 +59,9 @@ export default function SharedLinksNotification({
         <>
           <div className="flex flex-row uppercase justify-between p-1">
             <div className="flex items-center gap-2 font-semibold">
-              <img
-                src={sender.profile_picture}
-                alt=""
-                width={30}
-                className="rounded-full aspect-square"
+              <Avatar
+                src={notification.sender.profile_picture}
+                alt={notification.sender.first_name}
               />
               <p>
                 {sender.first_name} {sender.last_name} (
@@ -65,17 +77,18 @@ export default function SharedLinksNotification({
               <div className="flex flex-col gap-2">
                 {notification.links.map(
                   (link: SharedLinkType, index: number) => (
-                    <SharedLinkNotification key={index} link={link} />
+                    <SharedLinkNotification
+                      key={index}
+                      link={link}
+                      sharedIndex={notificationIndex}
+                    />
                   )
                 )}
               </div>
             )}
           </div>
           <div className="flex w-full text-2xs">
-            <button
-              className={btnRejectClass}
-              onClick={() => setState("rejecting")}
-            >
+            <button className={btnRejectClass} onClick={() => handelAcceptAll()}>
               <div className="flex flex-col items-center">
                 <RxCross1 className="text-2xl" />
                 <span className="text-gray-900">reject all</span>
@@ -94,7 +107,7 @@ export default function SharedLinksNotification({
             </button>
             <button
               className={btnAcceptClass}
-              onClick={() => setState("accepting")}
+              onClick={() => handelAcceptAll()}
             >
               <div className="flex flex-col items-center">
                 <RiCheckLine className="text-2xl" />

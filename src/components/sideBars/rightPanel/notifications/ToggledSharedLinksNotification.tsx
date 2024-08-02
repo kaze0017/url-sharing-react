@@ -1,11 +1,13 @@
 import { useContext } from "react";
-import { NotificationType } from "../../../../lib/interfaces/notifications";
-import {  useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../state/store";
 import { setToggleRightPanel } from "../../../../state/rightPanel/rightPanelSlice";
+import Badge from "@mui/material/Badge";
+import { Avatar } from "@mui/material";
+import { SharedType } from "../../../../lib/interfaces/SharedType";
 
 interface ToggledSharedLinksNotificationProps {
-  notification: NotificationType;
+  notification: SharedType;
 }
 export default function ToggledSharedLinksNotification({
   notification,
@@ -15,17 +17,14 @@ export default function ToggledSharedLinksNotification({
   return (
     <div
       className="flex items-center justify-center relative cursor-pointer"
-      onClick={() => dispatch(setToggleRightPanel(true))}
+      onClick={() => dispatch(setToggleRightPanel(false))}
     >
-      <img
-        src={notification.sender.profile_picture}
-        alt=""
-        width={30}
-        className="rounded-full aspect-square"
-      />
-      <div className="absolute top-0 right-0 translate-x-1 -translate-y-1 text-sm text-red-500">
-        {notification.links.length}
-      </div>
+      <Badge badgeContent={notification.links.length} color="success">
+        <Avatar
+          src={notification.sender.profile_picture}
+          alt={notification.sender.first_name}
+        />
+      </Badge>
     </div>
   );
 }

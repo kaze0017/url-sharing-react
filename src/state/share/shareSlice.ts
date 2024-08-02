@@ -57,14 +57,12 @@ export const shareWithGroups = createAsyncThunk(
   "share/shareWithGroups",
   async (token: string, { getState }) => {
     const shareState = (getState() as RootState).share;
-    const linkManagementState = (getState() as RootState).linkManagement;
+    const linkState = (getState() as RootState).link;
 
     const data = {
       message: shareState.description,
       description: shareState.description,
-      link_ids: linkManagementState.selectedLinks.map(
-        (link: SharedLinkType) => link.id
-      ),
+      link_ids: linkState.selectedLinkIds,
       user_ids: shareState.selectedPeople.map(
         (person: UserProfileType) => person.user_id
       ),

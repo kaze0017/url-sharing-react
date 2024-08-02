@@ -41,7 +41,6 @@ export const POPULAR_URL =
 export const UPDATE_LINK_URL =
   "https://api.url.faraertebat.com/link_management/update_link_version/";
 
-
 export const GET_LINK_BY_ID_URL =
   "https://api.url.faraertebat.com/link_management/filter_links_by_id/";
 
@@ -89,7 +88,21 @@ export const CREATE_CATEGORY_URL =
 export const GET_USER_CATEGORIES_URL =
   "https://api.url.faraertebat.com/link_management/user_categories/";
 
-// Post: Add links to category
+// Post: Delete Category
+export const DELETE_CATEGORY_URL =
+  "https://api.url.faraertebat.com/link_management/remove_category/";
 
+// Post: Add links to category
 export const ADD_LINKS_TO_CATEGORY_URL =
   "https://api.url.faraertebat.com/link_management/links_to_category/";
+
+// Get: User's Connections
+export const GET_USER_CONNECTIONS_URL =
+  "https://api.url.faraertebat.com/member_management/people_connection_list/";
+
+// Post: Connect to person
+export const CONNECT_TO_PERSON_URL =
+  "https://api.url.faraertebat.com/member_management/people_connection/";
+// Post Remove Connection
+export const REMOVE_CONNECTION_URL =
+  "https://api.url.faraertebat.com/member_management/people_connection_remove/";

@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { UserProfileContext } from "../../../context/UserProfileProvider";
 import AuthContext from "../../../context/AuthProvider";
 import { getUserProfile } from "../../../api/gets/getUserProfile";
+import { Avatar } from "@mui/material";
 
 interface Props {
   user: UserProfileType;
@@ -37,7 +38,10 @@ export default function UserInfo({ user, toggledCollapse }: Props) {
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center uppercase">
-      <ProfilePictureLg person={person} />
+      <Avatar src={person.profile_picture} alt={fullName}>
+        {person.first_name[0].toUpperCase()}
+        {person.last_name[0].toUpperCase()}
+      </Avatar>
       <InfoReport title="subscribers" data={person.subscribers?.length || 0} />
       {!toggledCollapse && (
         <>

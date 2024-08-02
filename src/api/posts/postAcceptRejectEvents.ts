@@ -6,10 +6,12 @@ interface AcceptRejectLinksInterface {
   data: {
     shared_accept?: number[];
     shared_reject?: number[];
+    connection_accept?: number;
+    connection_reject?: number;
   };
 }
 
-export async function postAcceptRejectLinks({
+export async function postAcceptRejectEvents({
   token,
   data,
 }: AcceptRejectLinksInterface) {
@@ -22,12 +24,20 @@ export async function postAcceptRejectLinks({
   if (data.shared_reject) {
     formData.append("shared_reject", data.shared_reject.join(","));
   }
+  if (data.connection_accept) {
+    formData.append("connection_accept", data.connection_accept.toString());
+  }
+  if (data.connection_reject) {
+    formData.append("connection_reject", data.connection_reject.toString());
+  }
   const config = {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       auth: token,
     },
   };
+
+  // formData.append("shared_accept", "154");
 
   try {
     const response = await axiosInstance.post(

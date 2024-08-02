@@ -13,14 +13,13 @@ import {
   initState,
   shareWithGroups,
 } from "../../state/share/shareSlice";
+import { set } from "react-hook-form";
 
 export default function Approval() {
   const [responseMessage, setResponseMessage] = useState("");
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
-  const { selectedLinks } = useSelector(
-    (state: RootState) => state.linkManagement
-  );
+  const { selectedLinkIds } = useSelector((state: RootState) => state.link);
   const dispatch = useDispatch<AppDispatch>();
   const { selectedPeople, selectedGroups, status } = useSelector(
     (state: RootState) => state.share
@@ -29,7 +28,18 @@ export default function Approval() {
   async function shareNow(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
 
-    dispatch(shareWithGroups(token));
+    try {
+      const resultAction = await dispatch(shareWithGroups(token));
+      if (shareWithGroups.fulfilled.match(resultAction)) {
+        const response = resultAction.payload;
+        setResponseMessage(response.message);
+      } else {
+        console.log("Share failed");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+
     dispatch(setSelectedContents([]));
     dispatch(initState());
     dispatch(setStatus("success"));
@@ -50,7 +60,7 @@ export default function Approval() {
               <div className="flex items-center gap-1">
                 <div className="">
                   <p className="text-2xl text-blue-950">
-                    {selectedLinks.length} links
+                    {selectedLinkIds.length} links
                   </p>
                 </div>
                 <div className="">
@@ -80,7 +90,7 @@ export default function Approval() {
             </div>
           </>
         ) : (
-          <div className="flex flex-col gap-2 items-center text-4xl text-blue-950">
+          <div className="flex flex-col gap-2 items-center text-md text-blue-950">
             <GiWingedEmblem className="text-6xl" />
             <p>{responseMessage}</p>
           </div>

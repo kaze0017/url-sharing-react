@@ -3,11 +3,18 @@ import { AppThunk } from "../store";
 import { SharedLinkType } from "../../lib/interfaces";
 import { CategoryType } from "../../lib/interfaces/categoryType";
 import { ContentType } from "../../lib/interfaces/contentType";
-import { fetchUserLinks, setSelectedLinks } from "./linkSlice";
-import { fetchUserCategories, setSelectedCategories } from "./categorySlice";
+import {
+  deleteSelectedLinks,
+  fetchUserLinks,
+  setSelectedLinks,
+} from "./linkSlice";
+import {
+  deleteSelectedCategories,
+  fetchUserCategories,
+  setSelectedCategories,
+} from "./categorySlice";
 import mapCategoryToContent from "../../lib/functions/mapCategoryToContent";
 import mapLinkToContent from "../../lib/functions/mapLinkToContent";
-import { get } from "http";
 
 // Thunk action to fetch user content and map it to ContentType[]
 export const fetchUserContent = createAsyncThunk(
@@ -50,7 +57,7 @@ export const fetchUserContent = createAsyncThunk(
 
 export const setSelectedContentsLinksCategories =
   (Contents: ContentType[]): AppThunk =>
-  (dispatch : any, getState : any) => {
+  (dispatch: any, getState: any) => {
     dispatch(setSelectedContents(Contents));
 
     // Filter contents to get the links
@@ -73,7 +80,13 @@ export const setSelectedContentsLinksCategories =
     console.log("ff Selected Links:", selectedLinks);
 
     dispatch(setSelectedLinks(selectedLinks));
-    dispatch(setSelectedCategories(state.category.userCategories.filter((category: CategoryType) => SelectedCategoriesIds.includes(category.category_id))));
+    dispatch(
+      setSelectedCategories(
+        state.category.userCategories.filter((category: CategoryType) =>
+          SelectedCategoriesIds.includes(category.category_id)
+        )
+      )
+    );
 
     console.log("Current state:", state);
 
@@ -81,6 +94,18 @@ export const setSelectedContentsLinksCategories =
     // dispatch(updateLinks(SelectedLinksIds));
     // dispatch(updateCategories(...));
   };
+
+export const deleteSelectedContents = createAsyncThunk(
+  "linkManagement/deleteSelectedContents",
+  async (_, { dispatch }) => {
+    await dispatch(deleteSelectedLinks());
+    await dispatch(deleteSelectedCategories());
+    const updatedContents = await dispatch(fetchUserContent());
+    dispatch(setSelectedContents([]));
+    dispatch(setContentToDisplay(updatedContents.payload as ContentType[]));
+  }
+);
+
 interface LinkManagementState {
   contentClass: "all" | "link" | "category";
   type: "all" | "article" | "video" | "podcast" | "image" | "other";
@@ -181,9 +206,9 @@ const linkManagementSlice = createSlice({
         (content) => content.contentClass === "category"
       );
     },
-    deleteSelectedContents: (state) => {
-      state.selectedContents = [];
-    },
+    // deleteSelectedContents: (state) => {
+    //   state.selectedContents = [];
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserContent.fulfilled, (state, action) => {
@@ -206,6 +231,6 @@ export const {
   setShowFilter,
   setContentToDisplay,
   setSelectedContents,
-  deleteSelectedContents,
+  // deleteSelectedContents,
 } = linkManagementSlice.actions;
 export default linkManagementSlice.reducer;

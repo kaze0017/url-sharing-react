@@ -16,6 +16,22 @@ import { FaRegEye } from "react-icons/fa";
 import { RxCheckCircled } from "react-icons/rx";
 import { RxCrossCircled } from "react-icons/rx";
 import { postCreateLink } from "../../api/posts/postCreateLink";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../state/store";
+import {
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {
+  addLinksToCategory,
+  setSelectedCategories,
+  setSelectedCategoriesIds,
+} from "../../state/linkManagement/categorySlice";
+import { setSelectedLinkIds } from "../../state/linkManagement/linkSlice";
 
 // Steps
 
@@ -56,6 +72,7 @@ interface IFormInput {
 
 // AddLinkForm
 export default function AddLinkForm() {
+  const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
   // const tagSuggestions = Object.keys(auth?.userProfile?.tags || {});
   const tagSuggestions = ["fun", "sport", "sport2", "kids"];
@@ -66,6 +83,9 @@ export default function AddLinkForm() {
     "category3",
     "category4",
   ];
+
+  const { userCategories } = useSelector((state: RootState) => state.category);
+
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
@@ -105,7 +125,9 @@ export default function AddLinkForm() {
   const [showThumbnailSelector, setShowThumbnailSelector] = useState(false);
   const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>();
-  const [apiResponse, setApiResponse] = useState<string>();
+  const [apiCreateLinkResponse, setApiCreateLinkResponse] = useState<string>();
+  const [apiAddToCategoryResponse, setApiAddToCategoryResponse] =
+    useState<string>();
 
   const {
     register,
@@ -131,6 +153,14 @@ export default function AddLinkForm() {
     enter: 13,
   };
 
+  const selectedLinkId = useSelector(
+    (state: RootState) => state.link.selectedLinkIds
+  );
+  const selectedCategoriesIds = useSelector(
+    (state: RootState) => state.category.selectedCategoriesIds
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log("submitting data", data);
     const isValid = await trigger();
@@ -138,9 +168,8 @@ export default function AddLinkForm() {
     // Check if there are any errors
     if (isValid) {
       // Proceed with form submission
-      setCurrentStep(3);
 
-      const response = await postCreateLink({
+      const linkResponse = await postCreateLink({
         token: auth?.token || "",
         data: {
           title: data.title,
@@ -157,7 +186,20 @@ export default function AddLinkForm() {
           url_type: data.url_type,
         },
       });
-      setApiResponse(response?.data?.message);
+      setApiCreateLinkResponse(linkResponse?.data?.message);
+      const new_link_id = [linkResponse?.data?.new_link];
+      dispatch(setSelectedLinkIds(new_link_id));
+      if (selectedCategory) {
+        dispatch(setSelectedCategoriesIds([Number(selectedCategory)]));
+
+        const categoryResponse = await dispatch(addLinksToCategory());
+        console.log(
+          "response add to category",
+          categoryResponse.payload.message || ""
+        );
+        setApiAddToCategoryResponse(categoryResponse.payload.message || "");
+      }
+      setCurrentStep(3);
     } else {
       // If there are errors, do not proceed with submission
       console.log("Form has errors. Please fill in all required fields.");
@@ -188,6 +230,11 @@ export default function AddLinkForm() {
   function changeThumbnail(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setShowThumbnailSelector(!showThumbnailSelector);
+  }
+
+  function handelCancel(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    navigate("/linkmanagement");
   }
 
   useEffect(() => {
@@ -322,12 +369,44 @@ export default function AddLinkForm() {
                 </button>
               </div>
 
-              <input
+              {/* <input
                 placeholder="Category"
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 value={selectedCategory}
                 className="text-xs w-full"
-              />
+              /> */}
+              <div className="flex flex-col w-full">
+                <FormControl sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-helper-label">
+                    Category
+                  </InputLabel>
+                  <Select
+                    // labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    placeholder="Category"
+                    value={selectedCategory}
+                    label="Category"
+                    onChange={(e) => {
+                      setSelectedCategory(e.target.value);
+                    }}
+                    MenuProps={{
+                      style: {
+                        maxHeight: 300,
+                      },
+                    }}
+                  >
+                    {userCategories.map((category) => (
+                      <MenuItem
+                        key={category.category_id}
+                        value={category.category_id}
+                      >
+                        {category.title}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+
               <input
                 type="text"
                 className={longTextInputClass}
@@ -532,7 +611,10 @@ export default function AddLinkForm() {
             className="w-full flex flex-col gap-1 grow items-center justify-center "
           >
             <h3 className="text-center  text-green-600 w-full text-2xl">
-              {apiResponse}
+              {apiCreateLinkResponse}
+            </h3>
+            <h3 className="text-center  text-green-600 w-full text-2xl">
+              {apiAddToCategoryResponse}
             </h3>
             <CiCirclePlus
               className="text-2xl text-blue-600 mt-4 cursor-pointer"
@@ -559,9 +641,22 @@ export default function AddLinkForm() {
         )}
         {currentStep < 3 && (
           <div className="flex gap-1">
-            {currentStep > 0 && (
-              <button onClick={(e) => handlePrevious(e)}>Back</button>
-            )}
+            <div className="flex gap-2">
+              <button
+                className="text-gray-600 border border-gray-500 rounded-sm font-bold py-1 px-2 text-xs w-20"
+                onClick={handelCancel}
+              >
+                Cancel
+              </button>
+              {currentStep > 0 && (
+                <button
+                  className="text-gray-600 border border-gray-500 rounded-sm font-bold py-1 px-2 text-xs w-20"
+                  onClick={(e) => handlePrevious(e)}
+                >
+                  Back
+                </button>
+              )}
+            </div>
             <div className="flex-grow"></div>
             <div className="flex gap-4">
               {currentStep === 0 && (

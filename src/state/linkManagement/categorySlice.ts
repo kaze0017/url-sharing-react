@@ -5,6 +5,7 @@ import { postCreateCategory } from "../../api/posts/postCreateCategory";
 import { getUserCategories } from "../../api/gets/getUserCategories";
 import { postAddLinksToCategory } from "../../api/posts/postAddLinksToCategory";
 import { SharedLinkType } from "../../lib/interfaces";
+import { postDeleteCategories } from "../../api/posts/postDeleteCategories";
 
 export const addLinksToCategory = createAsyncThunk(
   "category/addLinksToCategory",
@@ -12,12 +13,20 @@ export const addLinksToCategory = createAsyncThunk(
     const state = getState() as {
       auth: { token: string };
       content: { selectedContents: ContentType[] };
-      category: { selectedCategories: CategoryType[] };
+      category: {
+        selectedCategories: CategoryType[];
+        selectedCategoriesIds: number[];
+      };
       link: { selectedLinkIds: number[] };
     };
 
     const link_ids = state.link.selectedLinkIds;
-    const category_id = state.category.selectedCategories[0].category_id;
+    let category_id = 0;
+    if (state.category.selectedCategoriesIds.length > 0) {
+      category_id = state.category.selectedCategoriesIds[0];
+    } else {
+      category_id = state.category.selectedCategories[0].category_id;
+    }
     console.log("link_ids", link_ids);
     const response = await postAddLinksToCategory({
       token: state.auth.token,
@@ -34,18 +43,17 @@ export const fetchUserCategories = createAsyncThunk(
     const state = getState() as { auth: { token: string } };
     const response = await getUserCategories(state.auth.token);
 
-    console.log("dfgfdg",response);
+    console.log("dfgfdg", response);
 
     response.sort((a: CategoryType, b: CategoryType) => {
       const dateA = new Date(a.publication_date);
       const dateB = new Date(b.publication_date);
-      return dateB.getTime() - dateA.getTime(); 
+      return dateB.getTime() - dateA.getTime();
     });
 
     return response;
   }
 );
-
 
 export const createCategory = createAsyncThunk(
   "category/createCategory",
@@ -62,10 +70,28 @@ export const createCategory = createAsyncThunk(
   }
 );
 
+export const deleteSelectedCategories = createAsyncThunk(
+  "category/deleteCategories",
+  async (_, { getState }) => {
+    const state = getState() as {
+      category: categoryState;
+      auth: { token: string };
+    };
+    const response = await postDeleteCategories({
+      token: state.auth.token,
+      ids: state.category.selectedCategories.map(
+        (category) => category.category_id
+      ),
+    });
+    return response?.data;
+  }
+);
+
 interface categoryState {
   categoryMode: "edit" | "create";
   selectedCategory: CategoryType;
   selectedCategories: CategoryType[];
+  selectedCategoriesIds: number[];
   userCategories: CategoryType[];
   categoriesToDisplay: CategoryType[];
   query: string;
@@ -91,6 +117,7 @@ const initialState: categoryState = {
   userCategories: [],
   categoriesToDisplay: [],
   query: "",
+  selectedCategoriesIds: [],
 };
 
 const categorySlice = createSlice({
@@ -121,6 +148,9 @@ const categorySlice = createSlice({
     setQuery: (state, action: PayloadAction<string>) => {
       state.query = action.payload;
     },
+    setSelectedCategoriesIds: (state, action: PayloadAction<number[]>) => {
+      state.selectedCategoriesIds = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -144,6 +174,7 @@ export const {
   setUserCategories,
   setCategoriesToDisplay,
   setQuery,
+  setSelectedCategoriesIds,
 } = categorySlice.actions;
 
 export default categorySlice.reducer;

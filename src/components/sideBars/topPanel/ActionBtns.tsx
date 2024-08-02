@@ -5,93 +5,105 @@ import { MdOutlineNotificationImportant } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../state/store";
 import { setContent } from "../../../state/rightPanel/rightPanelSlice";
+import Badge from "@mui/material/Badge";
+import { useEffect } from "react";
+import { Tabs, Tab } from "@mui/material";
 
-interface ActionBtnsProps {
-  variant: "expanded" | "collapsed";
-  notifications?: number;
-}
+export default function ActionBtns() {
+  const { content, toggleRightPanel } = useSelector(
+    (state: RootState) => state.rightPanel
+  );
+  const { notifications } = useSelector(
+    (state: RootState) => state.notifications
+  );
 
-export default function ActionBtns(props: ActionBtnsProps) {
-  const { content } = useSelector((state: RootState) => state.rightPanel);
   const dispatch = useDispatch();
 
   const activeBtnClass = "text-2xl text-gray-900 cursor-pointer";
   const passiveBtnClass = "text-2xl text-gray-500 cursor-pointer";
 
-  return props.variant === "expanded" ? (
-    <div className="flex items-center justify-between gap-2 text-xs">
-      <div
-        className="flex flex-col items-center"
-        onClick={() => dispatch(setContent("history"))}
-      >
-        <MdOutlineHistory
-          className={content === "history" ? activeBtnClass : passiveBtnClass}
-          title="History"
-        />
-      </div>
-      <div
-        className="flex flex-col items-center"
-        onClick={() => dispatch(setContent("suggestions"))}
-      >
-        <AiOutlineUsergroupAdd
-          className={
-            content === "suggestions" ? activeBtnClass : passiveBtnClass
-          }
-          title="Suggestions"
-        />
-
-      </div>
-      <div
-        className="flex flex-col items-center"
-        onClick={() => dispatch(setContent("search"))}
-      >
-        <FiSearch
-          className={content === "search" ? activeBtnClass : passiveBtnClass}
-          title="Search"
-        />
-      </div>
-      <div
-        className="flex flex-col items-center"
-        onClick={() => dispatch(setContent("notifications"))}
-      >
-        <div className="relative">
-          <MdOutlineNotificationImportant
-            className={
-              content === "notifications" ? activeBtnClass : passiveBtnClass
+  return !toggleRightPanel ? (
+    <Tabs
+      value={content}
+      onChange={(event, newValue) => dispatch(setContent(newValue))}
+      indicatorColor="primary"
+      textColor="primary"
+      variant="fullWidth"
+      scrollButtons="auto"
+      orientation="horizontal"
+    >
+      <Tab
+        value="history"
+        icon={<MdOutlineHistory className="text-2xl" />}
+        sx={{ minWidth: 50 }}
+      />
+      <Tab
+        value="suggestions"
+        icon={<AiOutlineUsergroupAdd className="text-2xl" />}
+        sx={{ minWidth: 50 }}
+      />
+      <Tab
+        value="search"
+        icon={<FiSearch className="text-2xl" />}
+        sx={{ minWidth: 50 }}
+      />
+      <Tab
+        value="notifications"
+        icon={
+          <Badge
+            badgeContent={
+              notifications.shared.length +
+              notifications.connection_request.length
             }
-            title="Notifications"
-          />
-          <p className="absolute top-0 right-0 translate-x-1 -translate-y-1 text-red-700 font-semibold rounded-full bg-gray-50">
-            {props.notifications}
-          </p>
-        </div>
-      </div>
-    </div>
+            color="success"
+          >
+            {/* <MailIcon color="action" /> */}
+            <MdOutlineNotificationImportant
+              className="text-2xl"
+              title="Notifications"
+            />
+          </Badge>
+        }
+        sx={{ minWidth: 50 }}
+      />
+    </Tabs>
   ) : (
     <div className="flex flex-col gap-1 p-1">
-      <MdOutlineHistory
-        className={content === "history" ? activeBtnClass : passiveBtnClass}
-        onClick={() => dispatch(setContent("history"))}
-      />
-      <AiOutlineUsergroupAdd
-        className={content === "suggestions" ? activeBtnClass : passiveBtnClass}
-        onClick={() => dispatch(setContent("suggestions"))}
-      />
-      <FiSearch
-        className={content === "search" ? activeBtnClass : passiveBtnClass}
-        onClick={() => dispatch(setContent("search"))}
-      />
-      <div className="relative">
-        <MdOutlineNotificationImportant
-          className={
-            content === "notifications" ? activeBtnClass : passiveBtnClass
-          }
-          onClick={() => dispatch(setContent("notifications"))}
+      <Tabs
+        value={content}
+        onChange={(event, newValue) => dispatch(setContent(newValue))}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="scrollable"
+        scrollButtons="auto"
+        orientation="vertical"
+      >
+        <Tab value="history" icon={<MdOutlineHistory className="text-2xl" />} />
+        <Tab
+          value="suggestions"
+          icon={<AiOutlineUsergroupAdd className="text-2xl" />}
         />
-        <p className="absolute top-0 right-0 translate-x-1 -translate-y-1 text-red-700 font-semibold rounded-full">
-          {props.notifications}
-        </p>
-      </div>
+        <Tab value="search" icon={<FiSearch className="text-2xl" />} />
+        <Tab
+          value="notifications"
+          icon={
+            <Badge
+              badgeContent={
+                notifications.shared.length +
+                notifications.connection_request.length
+              }
+              color="error"
+              overlap="circular"
+              variant="dot"
+            >
+              <MdOutlineNotificationImportant
+                className="text-2xl"
+                onClick={() => dispatch(setContent("notifications"))}
+              />
+            </Badge>
+          }
+        />
+      </Tabs>
     </div>
   );
 }

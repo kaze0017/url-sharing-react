@@ -30,7 +30,12 @@ import { SharedLinkType, UserProfileType } from "../../../lib/interfaces";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../state/store";
-import { setSelectedContents, setSelectedContentsLinksCategories } from "../../../state/linkManagement/linkManagementSlice";
+import {
+  setSelectedContents,
+  setSelectedContentsLinksCategories,
+  setShowFilter,
+} from "../../../state/linkManagement/linkManagementSlice";
+import Backdrop from "@mui/material/Backdrop";
 
 declare module "@tanstack/react-table" {
   //allows us to define custom properties for our columns
@@ -106,8 +111,11 @@ export default function Table({
       )
     );
   }, [rowSelection]);
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    dispatch(setShowFilter(false));
+  };
   return (
-
     <div className="p-2 text-xs uppercase h-full overflow-y-auto">
       {showFilter && (
         <div className="inline-block border border-gray-300 shadow rounded">
@@ -131,7 +139,7 @@ export default function Table({
                   key={column.id}
                   className="px-1 flex w-[150px] items-center"
                 >
-                  <label>
+                  <label className="flex gap-1">
                     <input
                       name="columnVisibility"
                       {...{

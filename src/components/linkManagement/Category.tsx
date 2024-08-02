@@ -5,11 +5,16 @@ import { RootState } from "../../state/store";
 import { ContentType } from "../../lib/interfaces/contentType";
 import { SharedLinkType } from "../../lib/interfaces";
 import Table from "./table/Table";
-import { setContentToDisplay, setSelectedContents } from "../../state/linkManagement/linkManagementSlice";
+import {
+  setContentToDisplay,
+  setSelectedContents,
+} from "../../state/linkManagement/linkManagementSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../state/store";
 import { CategoryType } from "../../lib/interfaces/categoryType";
 import mapLinkToContent from "../../lib/functions/mapLinkToContent";
+import Title from "./category/Title";
+import Controller from "./category/Controller";
 
 export default function Category() {
   const { id } = useParams();
@@ -22,8 +27,6 @@ export default function Category() {
   const contentsToDisplay = categoryToDisplay?.links.map((link) => {
     return mapLinkToContent(link);
   });
-
-  
 
   const dispatch = useDispatch<AppDispatch>();
   console.log("category_id", categoryToDisplay);
@@ -45,6 +48,8 @@ export default function Category() {
 
   return (
     <div>
+      {categoryToDisplay && <Title categoryToDisplay={categoryToDisplay} />}
+      <Controller />
       <Table showFilter={showFilter} />
     </div>
   );

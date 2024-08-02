@@ -10,7 +10,6 @@ import { mapSelectedContentsToSelectedLinksIds } from "../../../state/linkManage
 export default function LinksSelectedMenu() {
   const { auth } = useContext(AuthContext);
   const token = auth?.token || "";
-  
 
   const { selectedContents } = useSelector(
     (state: RootState) => state.linkManagement
@@ -36,6 +35,7 @@ export default function LinksSelectedMenu() {
   }
 
   function handleShareBtnClick() {
+    dispatch(mapSelectedContentsToSelectedLinksIds());
     navigate("/sharelinks");
   }
 
@@ -49,7 +49,12 @@ export default function LinksSelectedMenu() {
 
   return (
     <div className="left flex gap-2 z-20 p-4">
-      <button className={mainBtnClass} disabled={isCategorySelected} title={isCategorySelected ? "Category selected!" : "Move to a category"} onClick={handelAddLinksToCategory}>
+      <button
+        className={mainBtnClass}
+        disabled={isCategorySelected}
+        title={isCategorySelected ? "Category selected!" : "Move to a category"}
+        onClick={handelAddLinksToCategory}
+      >
         Move to a category
       </button>
       <button className={mainBtnClass} onClick={handleShareBtnClick}>

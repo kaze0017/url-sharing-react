@@ -1,11 +1,16 @@
 import { Outlet } from "react-router-dom";
-import React from "react";
 
+import { SnackbarProvider } from "notistack";
 
 export default function Layout() {
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center overflow-hidden scrollbar-hide">
-      <Outlet />
-    </div>
+    <SnackbarProvider
+      maxSnack={3}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+    >
+      <div className="flex w-full h-full items-center justify-center">
+        <Outlet />
+      </div>
+    </SnackbarProvider>
   );
 }

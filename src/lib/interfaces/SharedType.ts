@@ -1,13 +1,12 @@
 import { UserProfileType } from "../interfaces";
 import { SharedLinkType } from "../interfaces";
 
-export type NotificationType = {
+type linkType = SharedLinkType & { event_id: number };
+
+export type SharedType = {
   sender: UserProfileType;
-  links: SharedLinkType[];
+  links: linkType[];
   description: string;
   publicationDate?: Date;
 };
-export type NotificationsType = Array<NotificationType>;
-
-
 

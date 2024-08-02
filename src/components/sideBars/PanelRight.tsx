@@ -8,23 +8,27 @@ import ActionBtns from "./topPanel/ActionBtns";
 import { useDraggable } from "react-use-draggable-scroll";
 import Histories from "./rightPanel/Histories";
 import Notifications from "./rightPanel/Notifications";
-import { getNotifications } from "../../api/gets/getNotifications";
+
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../state/store";
+import { RootState, AppDispatch } from "../../state/store";
 import {
   setNotifications,
   setToggleRightPanel,
 } from "../../state/rightPanel/rightPanelSlice";
+import { fetchNotifications } from "../../state/notifications/notificationSlice";
 
 interface PanelLeftProps {
   className?: string;
 }
 
 export default function PanelRight(props: PanelLeftProps) {
-  const { toggleRightPanel, notifications, content } = useSelector(
+  const { toggleRightPanel, content } = useSelector(
     (state: RootState) => state.rightPanel
   );
-  const dispatch = useDispatch();
+  const { notifications } = useSelector(
+    (state: RootState) => state.notifications
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
   const { auth } = useContext(AuthContext);
   const token = auth?.token;
@@ -50,11 +54,15 @@ export default function PanelRight(props: PanelLeftProps) {
   `;
 
   useEffect(() => {
-    async function retrieveNotifications() {
-      const response = await getNotifications(token || "");
-      dispatch(setNotifications(response));
+    async function loadNotifications() {
+      const response = dispatch(fetchNotifications());
+      // dispatch(setNotifications(response));
     }
-    retrieveNotifications();
+    loadNotifications();
+    // async function loadNotifications() {
+    //   const response = await dispatch(fetchNotifications());
+    // }
+    // loadNotifications();
   }, [token, dispatch]);
 
   useEffect(() => {
@@ -77,10 +85,7 @@ export default function PanelRight(props: PanelLeftProps) {
           <FiMenu className="text-2xl text-gray-800 text-center" />
         )}
       </div>
-      <ActionBtns
-        variant={toggleRightPanel ? "collapsed" : "expanded"}
-        notifications={notifications.length || 0}
-      />
+      <ActionBtns />
       {content === "suggestions" && (
         <Suggestions variant={toggleRightPanel ? "collapsed" : "expanded"} />
       )}

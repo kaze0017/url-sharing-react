@@ -10,14 +10,19 @@ import { getSharedLinks } from "../../../api/gets/getSharedLinks";
 import { SharedLinkType } from "../../../lib/interfaces";
 import { getTopUsers } from "../../../api/gets/getTopUsers";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../state/store";
+import { RootState , AppDispatch} from "../../../state/store";
 import { setToggleRightPanel } from "../../../state/rightPanel/rightPanelSlice";
+import { searchPeople, setSearchPeopleQuery } from "../../../state/rightPanel/searchPeopleSlice";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
 export default function Searches() {
   const { toggleRightPanel } = useSelector(
     (state: RootState) => state.rightPanel
   );
-  const dispatch = useDispatch();
+  const {searchPeopleResults, searchPeopleQuery} = useSelector((state: RootState) => state.searchPeople);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [query, setQuery] = useState<string>("");
   const people = getNPeople(10);
@@ -56,7 +61,8 @@ export default function Searches() {
         link.title.toLowerCase().includes(query.toLowerCase())
       )
     );
-  }, [query, mode]);
+    dispatch(searchPeople());
+  }, [searchPeopleQuery, mode]);
 
   return (
     <div className="flex flex-col gap-2 p-1 h-full">
@@ -68,11 +74,29 @@ export default function Searches() {
       ) : (
         <>
           <Controller mode={mode} setMode={setMode} />
-          <SearchBar query={query} setQuery={setQuery} />
+          {/* <SearchBar
+            query={searchPeopleQuery}
+            setQuery={dispatch(setSearchPeopleQuery)}
+          /> */}
+          <TextField
+            variant="outlined"
+            focused={false}
+            fullWidth
+            placeholder="Search..."
+            value={searchPeopleQuery}
+            onChange={(e) => dispatch(setSearchPeopleQuery(e.target.value))}
+            // InputProps={{
+            //   endAdornment: (
+            //     <InputAdornment position="end" >
+   
+            //     </InputAdornment>
+            //   ),
+            // }}
+          />
 
           <div className="uppercase text-xs font-semibold flex flex-col gap-1 overflow-y-auto h-full">
             {(mode === "people" || mode === "all") &&
-              peopleToDisplay
+              searchPeopleResults
                 .slice(0, 5)
                 .map((person, index) => <Person key={index} person={person} />)}
             {(mode === "links" || mode === "all") &&

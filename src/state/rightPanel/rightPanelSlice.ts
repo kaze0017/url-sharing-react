@@ -1,16 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { NotificationsType } from "../../lib/interfaces/notifications";
+import { NotificationType } from "../../lib/interfaces/NotificationType";
 
 interface RightPanelState {
   toggleRightPanel: boolean;
-  notifications: NotificationsType;
+  notifications: NotificationType;
   suggestionsCount: number;
   content: "history" | "suggestions" | "search" | "notifications";
 }
 
 const initialState: RightPanelState = {
   toggleRightPanel: false,
-  notifications: [],
+  notifications: {
+    connection_request: [],
+    shared: [],
+  },
   suggestionsCount: 0,
   content: "notifications",
 };
@@ -22,7 +25,7 @@ const rightPanelSlice = createSlice({
     setToggleRightPanel: (state, action: PayloadAction<boolean>) => {
       state.toggleRightPanel = action.payload;
     },
-    setNotifications: (state, action: PayloadAction<NotificationsType>) => {
+    setNotifications: (state, action: PayloadAction<NotificationType>) => {
       state.notifications = action.payload;
     },
     setSuggestionsCount: (state, action: PayloadAction<number>) => {

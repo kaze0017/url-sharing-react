@@ -2,44 +2,41 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DropDownBtn from "./DropDownBtn";
 import SingleBtn from "./SingleBtn";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../state/store";
 import LinksSelectedMenu from "./LinksSelectedMenu";
+
+import Create from "./controllerBtns/Create";
+import SearchBar from "../../SearchBar";
+import { setQuery } from "../../../state/linkManagement/linkManagementSlice";
+import { TextField } from "@mui/material";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import SelectClass from "./controllerBtns/SelectClass";
+import FieldsSelector from "./controllerBtns/FieldsSelector";
 
 export default function Controller() {
   const { selectedContents } = useSelector(
     (state: RootState) => state.linkManagement
   );
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { query } = useSelector((state: RootState) => state.linkManagement);
 
-  function handleCreateLink() {
-    navigate("/linkmanagement/createlink");
-  }
-
-  function handleCreateGroup() {
-    navigate("/linkmanagement/creategroup");
-  }
-
-  function handleAddLinksToCategory() {
-    console.log("Add to category");
+  function handleSetQuery(query: string) {
+    dispatch(setQuery(query));
   }
 
   return (
     <div className="flex w-full items-center uppercase p-4 gap-4">
       {selectedContents.length === 0 ? (
         <>
-          <DropDownBtn
-            title="+"
-            options={[
-              { label: "Link", action: handleCreateLink },
-              { label: "Category", action: handleCreateGroup },
-            ]}
-          />
-          {/* <SingleBtn
-            title="add to category"
-            action={handleAddLinksToCategory}
-          /> */}
+          <Create />
+          <SelectClass />
+          <FieldsSelector />
+          <div className="flex flex-grow"></div>
+          <div className="max-w-md flex-grow">
+            <SearchBar query={query} setQuery={handleSetQuery} />
+          </div>
         </>
       ) : (
         <LinksSelectedMenu />

@@ -40,7 +40,7 @@ export default function Profile() {
       }
 
       setSharedLinks(tempLinks);
-      setLinksToDisplay(tempLinks);
+      setLinksToDisplay(response.public_links);
     }
     getPerson();
   }, [userId, token]);

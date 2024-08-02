@@ -3,9 +3,29 @@ import { UserProfileType } from "../../../../lib/interfaces";
 import { AiOutlineMessage } from "react-icons/ai";
 import { SlUserFollow } from "react-icons/sl";
 import { GrOverview } from "react-icons/gr";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../state/store";
+import { connectToPerson } from "../../../../state/connections/connectionsSlice";
+import { Avatar } from "@mui/material";
 
 export default function Person({ person }: { person: UserProfileType }) {
+  console.log("person);", person);
   const [selected, setSelected] = useState(false);
+  const [connectionState, setConnectionState] = useState<
+    "connected" | "pending" | "not connected" | "warning"
+  >("not connected");
+
+  const dispatch = useDispatch<AppDispatch>();
+  async function connectUser() {
+    const response = await dispatch(connectToPerson(person.user_id));
+    console.log(response);
+    if (response.meta.requestStatus === "fulfilled") {
+      setConnectionState("pending");
+    } else {
+      setConnectionState("warning");
+    }
+  }
   return (
     <div
       className="flex flex-col p-1 bg-gray-100 items-center gap-2 border border-gray-500 rounded-md"
@@ -13,12 +33,11 @@ export default function Person({ person }: { person: UserProfileType }) {
     >
       <div className="flex flex-col w-full gap-1">
         <div className="flex w-full gap-2 items-center">
-          <img
+          <Avatar
             src={person.profile_picture}
-            alt=""
-            width={30}
-            className="rounded-full aspect-square"
+            alt={`${person.first_name} ${person.last_name}`}
           />
+
           <p className="flex">
             {person.first_name} {person.last_name}
           </p>
@@ -32,10 +51,23 @@ export default function Person({ person }: { person: UserProfileType }) {
         </div>
       </div>
       {selected && (
-        <div className="flex items-center p-1 px-2 justify-between w-full gap-2">
+        <div
+          className="flex items-center p-1 px-2 justify-between w-full gap-2"
+          onClick={(e) => e.stopPropagation()}
+        >
           <AiOutlineMessage className="text-lg text-blue-950 cursor-pointer" />
-          <SlUserFollow className="text-lg text-blue-950 cursor-pointer" />
-          <GrOverview className="text-lg text-blue-950 cursor-pointer" />
+          <button
+            onClick={connectUser}
+            className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={
+              connectionState === "connected" || connectionState === "pending"
+            }
+          >
+            <SlUserFollow className="text-lg text-blue-950" />
+          </button>
+          <Link to={`/profile/${person.user_id}`}>
+            <GrOverview className="text-lg text-blue-950 cursor-pointer" />
+          </Link>
         </div>
       )}
     </div>
