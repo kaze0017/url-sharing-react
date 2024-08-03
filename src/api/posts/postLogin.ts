@@ -18,7 +18,7 @@ export async function postLogin({ username, password }: postLoginInterface) {
     });
     console.log(response);
     return response;
-  } catch (error) {
-    console.error(error);
+  } catch (err : any) {
+    return err.response;
   }
 }

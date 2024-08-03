@@ -13,6 +13,8 @@ import SearchPeopleReducer from "./rightPanel/searchPeopleSlice";
 import ConnectionReducer from "./connections/connectionsSlice";
 import NotificationsReducer from "./notifications/notificationSlice";
 import AlertsReducer from "./alerts/alertsSlice";
+import RegisterReducer from "./loginAndRegister/registerSlice";
+import LoginReducer from "./loginAndRegister/loginSlice";
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +32,8 @@ export const store = configureStore({
     connections: ConnectionReducer,
     notifications: NotificationsReducer,
     alerts: AlertsReducer,
+    register: RegisterReducer,
+    login: LoginReducer,
   },
 });
 

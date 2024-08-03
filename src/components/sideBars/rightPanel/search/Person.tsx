@@ -8,9 +8,13 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../state/store";
 import { connectToPerson } from "../../../../state/connections/connectionsSlice";
 import { Avatar } from "@mui/material";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../state/store";
 
 export default function Person({ person }: { person: UserProfileType }) {
-  console.log("person);", person);
+  const { connections, requests } = useSelector(
+    (state: RootState) => state.connections
+  );
   const [selected, setSelected] = useState(false);
   const [connectionState, setConnectionState] = useState<
     "connected" | "pending" | "not connected" | "warning"
@@ -60,7 +64,11 @@ export default function Person({ person }: { person: UserProfileType }) {
             onClick={connectUser}
             className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={
-              connectionState === "connected" || connectionState === "pending"
+              connectionState === "connected" ||
+              connectionState === "pending" ||
+              (person.relationStatus && person.relationStatus === "true")
+                ? true
+                : false
             }
           >
             <SlUserFollow className="text-lg text-blue-950" />

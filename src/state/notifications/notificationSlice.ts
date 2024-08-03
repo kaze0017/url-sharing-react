@@ -59,6 +59,12 @@ const notificationSlice = createSlice({
     setNotifications: (state, action: PayloadAction<NotificationType>) => {
       state.notifications = action.payload;
     },
+    removeRequestFromNotifications: (state, action: PayloadAction<number>) => {
+      state.notifications.connection_request =
+        state.notifications.connection_request.filter(
+          (request) => request.event_id !== action.payload
+        );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchNotifications.fulfilled, (state, action) => {
@@ -86,5 +92,6 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { setNotifications } = notificationSlice.actions;
+export const { setNotifications, removeRequestFromNotifications } =
+  notificationSlice.actions;
 export default notificationSlice.reducer;

@@ -1,24 +1,28 @@
+import { Button } from "@mui/material";
 interface Props {
+  isLoading: boolean;
   isDisabled: boolean;
   title: string;
 }
-export default function SubmitBtn({ isDisabled, title }: Props) {
+export default function SubmitBtn({ isDisabled, isLoading, title }: Props) {
   return (
-    <button
+    <Button
       type="submit"
-      className="uppercase btn w-full bg-navy-800 text-white rounded-xl bg-blue-950  min-h-10 max-h-10 flex items-center justify-center hover:bg-blue-900 transition duration-200"
-      disabled={isDisabled}
+      disabled={isDisabled || isLoading}
+      variant="contained"
+      color="primary"
+      startIcon={
+        isLoading ? (
+          <img
+            src="/images/assets/Spinner.svg"
+            alt="loading"
+            width={25}
+            height={25}
+          />
+        ) : null
+      }
     >
-      {isDisabled ? (
-        <img
-          src="/images/assets/Spinner.svg"
-          alt="loading"
-          width={25}
-          height={25}
-        />
-      ) : (
-        title
-      )}
-    </button>
+      {title}
+    </Button>
   );
 }

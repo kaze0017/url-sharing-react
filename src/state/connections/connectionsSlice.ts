@@ -5,6 +5,8 @@ import { UserProfileType } from "../../lib/interfaces";
 import { postAcceptRejectEvents } from "../../api/posts/postAcceptRejectEvents";
 import { ConnectionRequestType } from "../../lib/interfaces/ConnectionRequestType";
 import { postRemoveConnection } from "../../api/posts/postRemoveConnection";
+import { setNotifications } from "../rightPanel/rightPanelSlice";
+import { removeRequestFromNotifications } from "../notifications/notificationSlice";
 
 interface ConnectionsState {
   connections: any[];
@@ -31,7 +33,7 @@ export const removeConnection = createAsyncThunk(
 
 export const acceptConnection = createAsyncThunk(
   "connections/acceptConnection",
-  async (event_id: number, { getState }) => {
+  async (event_id: number, { getState, dispatch }) => {
     const token = (getState() as any).auth.token;
     const apiResponse = await postAcceptRejectEvents({
       token,
@@ -41,6 +43,7 @@ export const acceptConnection = createAsyncThunk(
       status: apiResponse?.status,
       event_id,
     };
+    dispatch(removeRequestFromNotifications(event_id));
     return response;
   }
 );
@@ -112,11 +115,13 @@ const connectionsSlice = createSlice({
       state.connections = action.payload;
     });
     builder.addCase(connectToPerson.fulfilled, (state, action) => {});
+
     builder.addCase(acceptConnection.fulfilled, (state, action) => {
       state.requests = state.requests.filter(
         (request) => request.event_id !== action.payload.event_id
       );
     });
+
     builder.addCase(rejectConnection.fulfilled, (state, action) => {
       state.requests = state.requests.filter(
         (request) => request.event_id !== action.payload.event_id
