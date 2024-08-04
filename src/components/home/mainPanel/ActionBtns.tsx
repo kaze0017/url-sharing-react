@@ -51,6 +51,7 @@ export default function ActionBtns() {
               <FiEye
                 onClick={() => handleModeChange("saved")}
                 className="text-2xl"
+                title="Saved Links"
                 // className={rMode === "saved" ? active : inactive}
               />
             }
@@ -64,6 +65,7 @@ export default function ActionBtns() {
               <FiCompass
                 className="text-2xl"
                 onClick={() => handleModeChange("public")}
+                title="Public Links"
               />
             }
             sx={{ minWidth: 50, padding: 0, margin: 0, minHeight: 0 }}
@@ -75,28 +77,12 @@ export default function ActionBtns() {
               <FiTrendingUp
                 className="text-2xl"
                 onClick={() => handleModeChange("trend")}
+                title="Trending Links"
               />
             }
             sx={{ minWidth: 50, padding: 0, margin: 0, minHeight: 0 }}
           />
         </Tabs>
-
-        {/* <FiEye
-          onClick={() => handleModeChange("saved")}
-          className={rMode === "saved" ? active : inactive}
-        />
-      </div>
-      <div className={iconWrapperClasses} title="Public Links">
-        <FiCompass
-          className={rMode === "public" ? active : inactive}
-          onClick={() => handleModeChange("public")}
-        />
-      </div>
-      <div className={iconWrapperClasses} title="Trending Links">
-        <FiTrendingUp
-          className={rMode === "trend" ? active : inactive}
-          onClick={() => handleModeChange("trend")}
-        /> */}
       </div>
       <div className="flex w-[25%] mr-2 border border-gray-600 "></div>
     </div>

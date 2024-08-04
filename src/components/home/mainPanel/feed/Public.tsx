@@ -1,34 +1,33 @@
-import React, { useEffect, useContext, useState } from "react";
+import  { useEffect, useContext, useState } from "react";
 import CardSharedLg from "../../../cards/CardSharedLg";
 import CardSharedMd from "../../../cards/CardSharedMd";
 import CardSharedSm from "../../../cards/CardSharedSm";
-import AuthContext from "../../../../context/AuthProvider";
-import { getPublicLinks } from "../../../../api/gets/getPublicLinks";
-import { getUserLinks } from "../../../../api/gets/getUserLinks";
+
 import { SharedLinkType } from "../../../../lib/interfaces";
 import SliderFlexWrapper from "../../../sliders/SliderFlexWrapper";
 import NotFound from "../../../NotFound";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../state/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../../../state/store";
+import { loadPublicLinks } from "../../../../state/home/topContentsSlice";
+import LoadingBackdrop from "../../LoadingBackdrop";
+
 
 export default function Shared() {
   const [sharedLinks, setSharedLinks] = useState<SharedLinkType[] | null>(null);
   const [linksToDisplay, setLinksToDisplay] = useState<SharedLinkType[]>([]);
   const { query, view, sortBy } = useSelector((state: RootState) => state.home);
-  const { auth } = useContext(AuthContext);
-  const token = auth?.token || "";
   const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
+  const { publicLinks, loadingPublicLinks } = useSelector((state: RootState) => state.hotContents);
 
   useEffect(() => {
-    async function getAndSetSharedLinks() {
-      const sharedLinks = await getPublicLinks(token);
-      await getUserLinks(token);
-      setSharedLinks(sharedLinks);
-      setLinksToDisplay(sharedLinks);
-      setIsLoading(false); // Set loading to false after fetching data
+    async function loadPublics() {
+      await dispatch(loadPublicLinks());
+      setSharedLinks(publicLinks);
+      setLinksToDisplay(publicLinks);
     }
-    getAndSetSharedLinks();
-  }, [token]);
+    loadPublics();
+  }, []);
 
   useEffect(() => {
     if (sharedLinks) {
@@ -54,15 +53,10 @@ export default function Shared() {
     }
   }, [sortBy]);
 
-  if (isLoading) {
+  if (loadingPublicLinks) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <img
-          src="/images/assets/loading.svg"
-          alt="loading"
-          width="200px"
-          className="mx-auto"
-        />
+      <div className="w-full h-full flex items-center justify-center relative">
+        <LoadingBackdrop />
       </div>
     );
   }

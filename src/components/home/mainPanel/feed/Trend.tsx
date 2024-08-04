@@ -1,46 +1,36 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import CardSharedMd from "../../../cards/CardSharedMd";
 import CardSharedLg from "../../../cards/CardSharedLg";
 import CardImgIconS from "../../../cards/CardImgIconS";
 import { SharedLinkType } from "../../../../lib/interfaces";
 import SliderFlexWrapper from "../../../sliders/SliderFlexWrapper";
-import AuthContext from "../../../../context/AuthProvider";
 import NotFound from "../../../NotFound";
-import { getPopularLinks } from "../../../../api/gets/getPopularLinks";
-import { RootState } from "../../../../state/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../../../state/store";
+import { loadPopularLinks } from "../../../../state/home/topContentsSlice";
+import LoadingBackdrop from "../../LoadingBackdrop";
 
 export default function Trend() {
-  const { auth } = useContext(AuthContext);
   const view = useSelector((state: RootState) => state.home.view);
-  const token = auth?.token || "";
   const [sharedLinks, setSharedLinks] = useState<SharedLinkType[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
+  const { popularLinks, loadingPopularLinks } = useSelector(
+    (state: RootState) => state.hotContents
+  );
 
   useEffect(() => {
-    async function getAndSetSharedLinks() {
-      const links = await getPopularLinks(token);
-      setSharedLinks(links);
-      setIsLoading(false);
+    async function loadPopular() {
+      await dispatch(loadPopularLinks());
+      setSharedLinks(popularLinks);
     }
-    getAndSetSharedLinks();
-  }, [token]);
+    loadPopular();
+  }, []);
 
-  useEffect(() => {
-    if (sharedLinks !== null) {
-      setIsLoading(false);
-    }
-  }, [sharedLinks]);
-
-  if (isLoading) {
+  if (loadingPopularLinks) {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <img
-          src="/images/assets/loading.svg"
-          alt="loading"
-          width="200px"
-          className="mx-auto"
-        />
+        <LoadingBackdrop />
       </div>
     );
   }

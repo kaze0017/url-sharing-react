@@ -7,7 +7,7 @@ import { SharedLinkType } from "../../../lib/interfaces";
 import AuthContext from "../../../context/AuthProvider";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../state/store";
-import { loadHotLinks } from "../../../state/home/topContents";
+import { loadHotLinks } from "../../../state/home/topContentsSlice";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 
@@ -21,18 +21,13 @@ interface HotSharedLinksProps {
 }
 
 export default function HotSharedLinks({ mode }: HotSharedLinksProps) {
-  const dispatch = useDispatch<AppDispatch>();
   const { hotLinks } = useSelector((state: RootState) => state.hotContents);
 
   const wrapperClass = `w-[100%]`;
 
-  useEffect(() => {
-    async function fetchData() {
-      await dispatch(loadHotLinks());
-    }
-    fetchData();
-    console.log("from hot", hotLinks);
-  }, []);
+  const [isLoaded, setIsLoaded] = useState(true);
+
+
 
   return (
     <div className="inline_container">
@@ -60,7 +55,7 @@ export default function HotSharedLinks({ mode }: HotSharedLinksProps) {
       >
         {hotLinks.map((link, index) => (
           <SwiperSlide key={index}>
-            <CardLinkHot link={link}  variant="medium" />
+            <CardLinkHot link={link} variant="medium" />
           </SwiperSlide>
         ))}
       </Swiper>

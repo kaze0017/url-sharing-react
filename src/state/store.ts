@@ -16,7 +16,7 @@ import NotificationsReducer from "./notifications/notificationSlice";
 import AlertsReducer from "./alerts/alertsSlice";
 import RegisterReducer from "./loginAndRegister/registerSlice";
 import LoginReducer from "./loginAndRegister/loginSlice";
-import TopContents from "./home/topContents";
+import TopContents from "./home/topContentsSlice";
 
 export const store = configureStore({
   reducer: {

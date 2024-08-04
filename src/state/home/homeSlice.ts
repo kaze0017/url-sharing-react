@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { set } from "react-hook-form";
 
 interface HomeState {
   mode: "saved" | "public" | "trend";
   query: string;
   sortBy: "rank" | "shared" | "saved";
   view: "cardImgIconS" | "cardSharedLg" | "grid";
+  toggledTopPanel: boolean;
 }
 
 const initialState: HomeState = {
@@ -12,6 +14,7 @@ const initialState: HomeState = {
   query: "",
   sortBy: "rank",
   view: "cardImgIconS",
+  toggledTopPanel: false,
 };
 
 const homeSlice = createSlice({
@@ -40,9 +43,13 @@ const homeSlice = createSlice({
           break;
       }
     },
+    setToggledTopPanel: (state) => {
+      state.toggledTopPanel = !state.toggledTopPanel;
+    }
   },
 });
 
-export const { setMode, setQuery, setSortBy, setView } = homeSlice.actions;
+export const { setMode, setQuery, setSortBy, setView, setToggledTopPanel } =
+  homeSlice.actions;
 
 export default homeSlice.reducer;

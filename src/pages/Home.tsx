@@ -40,15 +40,26 @@ export default function Home() {
             gridTemplateColumns: `${toggledLeftPanel ? "90px" : "260px"} 1fr ${
               toggleRightPanel ? "90px" : "260px"
             }`,
+            columnGap: "2px",
             height: "100vh",
             width: "100vw",
           }}
         >
           <PanelLeft />
-          <div className="flex flex-col gap-1 mx-1">
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateRows: "1fr 35px",
+              rowGap: "2px",
+              height: "100vh",
+              width: "100%",
+
+            }}
+          >
             <Outlet />
             <ActionBtns />
-          </div>
+          </Box>
+
           <PanelRight />
         </Box>
       )}

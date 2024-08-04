@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CardCategoryHot from "../../cards/CardCategoryHot";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../state/store";
-import { loadHotCategories } from "../../../state/home/topContents";
+import { loadHotCategories } from "../../../state/home/topContentsSlice";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 
@@ -12,18 +12,11 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 export default function CardHotCategories() {
-  const dispatch = useDispatch<AppDispatch>();
 
   const { hotCategories } = useSelector(
     (state: RootState) => state.hotContents
   );
-  useEffect(() => {
-    async function fetchData() {
-      await dispatch(loadHotCategories());
-    }
-    fetchData();
-    console.log(hotCategories);
-  }, []);
+
   const [controlledSwiper, setControlledSwiper] = useState(null);
 
   return (
