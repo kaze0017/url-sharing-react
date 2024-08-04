@@ -3,6 +3,7 @@ import HomeReducer from "./home/homeSlice";
 import LinkManagerReducer from "./linkManagement/linkManagementSlice";
 import NetworksReducer from "./networks/networksSlice";
 import RightPanelReducer from "./rightPanel/rightPanelSlice";
+import LeftPanelReducer from "./leftPanel/leftPanelSlice";
 import RelationsReducer from "./relations/relationsSlice";
 import ShareReducer from "./share/shareSlice";
 import NetworkGroupsReducer from "./networks/groupsSlice";
@@ -15,6 +16,7 @@ import NotificationsReducer from "./notifications/notificationSlice";
 import AlertsReducer from "./alerts/alertsSlice";
 import RegisterReducer from "./loginAndRegister/registerSlice";
 import LoginReducer from "./loginAndRegister/loginSlice";
+import TopContents from "./home/topContents";
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +25,7 @@ export const store = configureStore({
     networks: NetworksReducer,
     netWorkGroups: NetworkGroupsReducer,
     rightPanel: RightPanelReducer,
+    leftPanel: LeftPanelReducer,
     relations: RelationsReducer,
     share: ShareReducer,
     category: CategoryReducer,
@@ -34,6 +37,7 @@ export const store = configureStore({
     alerts: AlertsReducer,
     register: RegisterReducer,
     login: LoginReducer,
+    hotContents: TopContents,
   },
 });
 

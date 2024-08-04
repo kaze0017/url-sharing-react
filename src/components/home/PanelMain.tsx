@@ -5,5 +5,7 @@ interface Props {
 }
 
 export default function PanelMain(props: Props) {
-  return <Feed />;
+  return (
+      <Feed />
+  );
 }

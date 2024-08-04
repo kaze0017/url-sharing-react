@@ -5,19 +5,19 @@ import { FcNext, FcPrevious } from "react-icons/fc";
 
 interface SliderProps {
   CardComponent: React.ComponentType<any>; // Accepts any React component
-  getData: (token: string) => Promise<void | any>; // Function that returns data for the cards
+  data : any;
   cardsSize: "small" | "medium" | "large" | "xlarge";
   cardType?: "category" | "link";
-  token: string;
 }
 
 export default function SliderRow({
   CardComponent,
-  getData,
-  token,
   cardsSize,
   cardType,
+  data,
 }: SliderProps) {
+
+  console.log("data from slider", data);
   const cardWidth =
     cardsSize === "small"
       ? 100
@@ -36,14 +36,10 @@ export default function SliderRow({
   const [currentPage, setCurrentPage] = useState(0);
   const [numberOfCardsPerSlide, setNumberOfCardsPerSlide] = useState(0);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [cardsData, setCardsData] = useState<any[]>([]);
+  const [cardsData, setCardsData] = useState<any[]>(data);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    getData(token).then((data) => {
-      setCardsData(data);
-    });
-  }, [getData]);
+  
 
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
@@ -77,15 +73,15 @@ export default function SliderRow({
     if (currentSlideIndex > 0) {
       setCurrentSlideIndex((prev) => prev - 1);
     } else {
-      setIsLoading(true);
+      // setIsLoading(true);
       setTimeout(() => {
         const numberOfSlides = Math.ceil(
           cardsData.length / numberOfCardsPerSlide
         );
         setCurrentSlideIndex(numberOfSlides - 1);
         setCurrentPage(currentPage - 1);
-        setIsLoading(false);
-      }, 1000);
+        // setIsLoading(false);
+      }, 0);
     }
   }
 
@@ -94,13 +90,13 @@ export default function SliderRow({
     if (currentSlideIndex < numberOfSlides - 1) {
       setCurrentSlideIndex((prev) => prev + 1);
     } else {
-      setIsLoading(true);
+      // setIsLoading(true);
 
       setTimeout(() => {
         setCurrentSlideIndex(0);
         setCurrentPage(currentPage + 1);
-        setIsLoading(false);
-      }, 1000);
+        // setIsLoading(false);
+      }, 0);
     }
   }
 

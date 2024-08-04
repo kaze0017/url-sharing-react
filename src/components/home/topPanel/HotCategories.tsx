@@ -1,20 +1,72 @@
+import { useEffect, useState } from "react";
 import CardCategoryHot from "../../cards/CardCategoryHot";
-import { getTopSharedCategories } from "../../../api/gets/getTopSharedCategories";
-import SliderRow from "../../sliders/SliderRow";
-import { useContext } from "react";
-import AuthContext from "../../../context/AuthProvider";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../../state/store";
+import { loadHotCategories } from "../../../state/home/topContents";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 export default function CardHotCategories() {
-  const { auth } = useContext(AuthContext);
-  const token = auth?.token || "";
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { hotCategories } = useSelector(
+    (state: RootState) => state.hotContents
+  );
+  useEffect(() => {
+    async function fetchData() {
+      await dispatch(loadHotCategories());
+    }
+    fetchData();
+    console.log(hotCategories);
+  }, []);
+  const [controlledSwiper, setControlledSwiper] = useState(null);
 
   return (
-    <SliderRow
-      CardComponent={CardCategoryHot}
-      getData={getTopSharedCategories}
-      token={token}
-      cardsSize="medium"
-      cardType="category"
-    />
+    <div className="inline_container">
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={20}
+        slidesPerView={3}
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+          },
+          400: {
+            slidesPerView: 2,
+          },
+          639: {
+            slidesPerView: 3,
+          },
+          1700: {
+            slidesPerView: 4,
+          },
+        }}
+        navigation
+        // pagination={{ clickable: true }}
+        // scrollbar={{ draggable: true }}
+      >
+        {hotCategories.map((category, index) => (
+          <SwiperSlide key={index}>
+            <div className="flex w-full justify-center">
+              <CardCategoryHot link={category} />
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
+}
+
+{
+  /* <SliderRow
+  CardComponent={CardCategoryHot}
+  data={hotCategories}
+  cardsSize="medium"
+  cardType="category"
+/> */
 }

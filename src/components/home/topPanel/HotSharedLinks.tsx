@@ -5,64 +5,65 @@ import CardLinkHot from "../../cards/CardLinkHot";
 import SliderRow from "../../sliders/SliderRow";
 import { SharedLinkType } from "../../../lib/interfaces";
 import AuthContext from "../../../context/AuthProvider";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../../state/store";
+import { loadHotLinks } from "../../../state/home/topContents";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 interface HotSharedLinksProps {
   mode: "wall" | "link";
 }
 
 export default function HotSharedLinks({ mode }: HotSharedLinksProps) {
-  const { auth } = useContext(AuthContext);
-  const token = auth?.token || "";
-  // const [numberOfDisplayedImages, setNumberOfDisplayedImages] =
-  //   React.useState(0);
-
-  // const [loading, setLoading] = useState(false); // State to manage loading state
-  // const [hasMore, setHasMore] = useState(false); // State to track if there's more data to fetch
-
-  // const numberOfimagesOnEachCal = 7;
-
-  // get top shared links
-  // const [topSharedLinks, setTopSharedLinks] = useState<SharedLinkType[] | null>(
-  //   []
-  // );
-
-  // useEffect(() => {
-  //   getTopSharedLinks(token).then((data) => {
-  //     setTopSharedLinks(data);
-  //   });
-  // }, []);
+  const dispatch = useDispatch<AppDispatch>();
+  const { hotLinks } = useSelector((state: RootState) => state.hotContents);
 
   const wrapperClass = `w-[100%]`;
 
-  // Develope Pagination
-
-  // useEffect(() => {
-  //   if (numberOfDisplayedImages === numberOfimagesOnEachCal) {
-  //     setNumberOfDisplayedImages(0);
-  //   }
-  // }, [numberOfDisplayedImages]);
-
-  // const fetchData = () => {
-  //   setLoading(true);
-  // };
-
-  // const handleScroll = (event: any) => {
-  //   const bottom =
-  //     event.target.scrollHeight - event.target.scrollTop ===
-  //     event.target.clientHeight;
-  //   if (bottom && !loading && hasMore) {
-  //     fetchData();
-  //   }
-  // };
+  useEffect(() => {
+    async function fetchData() {
+      await dispatch(loadHotLinks());
+    }
+    fetchData();
+    console.log("from hot", hotLinks);
+  }, []);
 
   return (
-    <div className={wrapperClass}>
-      <SliderRow
-        CardComponent={CardLinkHot}
-        getData={getTopSharedLinks}
-        cardsSize="medium"
-        token={token}
-      />
+    <div className="inline_container">
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={20}
+        slidesPerView={3}
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+          },
+          400: {
+            slidesPerView: 2,
+          },
+          639: {
+            slidesPerView: 3,
+          },
+          1700: {
+            slidesPerView: 4,
+          },
+        }}
+        navigation
+        // pagination={{ clickable: true }}
+        // scrollbar={{ draggable: true }}
+      >
+        {hotLinks.map((link, index) => (
+          <SwiperSlide key={index}>
+            <CardLinkHot link={link}  variant="medium" />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }

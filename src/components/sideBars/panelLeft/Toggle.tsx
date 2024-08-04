@@ -1,23 +1,27 @@
 import React from "react";
 import { FiMenu, FiX } from "react-icons/fi";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../state/store";
+import { setToggled } from "../../../state/leftPanel/leftPanelSlice";
 
-interface Props {
-    toggledCollapse: boolean;
-    handelLeftPanelToggle: () => void;
-    }
 
-export default function Toggle({ toggledCollapse, handelLeftPanelToggle }: Props) {
+
+export default function Toggle() {
+   
+
+  const { toggled : leftPanelToggled } = useSelector((state: RootState) => state.leftPanel);
+  const dispatch = useDispatch();
   // toggle button css classes
   const toggleButtonClasses = `flex flex-row-reverse cursor-pointer p-4 text-gray items-center  h-6 w-full 
-  ${!toggledCollapse ? "justify-start" : "justify-center"}
+  ${!leftPanelToggled ? "justify-start" : "justify-center"}
   `;
   return (
     <div
       id="leftPanelToggleBtn"
       className={toggleButtonClasses}
-      onClick={() => handelLeftPanelToggle()}
+      onClick={() => dispatch(setToggled(!leftPanelToggled))}
     >
-      {!toggledCollapse ? (
+      {!leftPanelToggled ? (
         <FiX className="text-2xl text-gray-800" />
       ) : (
         <FiMenu className="text-2xl text-gray-800 text-center" />

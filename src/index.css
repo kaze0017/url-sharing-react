@@ -4,3 +4,40 @@
     box-sizing: border-box;
 }
 
+ .responsive-div {
+    width: 100%; /* Default width to take full container width */
+    transition: width 0.3s ease; /* Smooth transition for width change */
+    overflow: hidden; /* Hide the horizontal scrollbar */
+    border: 1px solid green; /* Add a border for better visibility */
+  }
+
+  /* Apply styles when the width of the parent container is at least 600px */
+  @media (min-width: 600px) {
+    .responsive-div {
+      width: 400px; /* Set fixed width for containers larger than 600px */
+        border: 1px solid blue; /* Add a border for better visibility */
+    }
+  }
+
+  /* Apply styles when the width of the parent container is at least 800px */
+  @media (min-width: 800px) {
+    .responsive-div {
+      width: 600px; /* Set a different fixed width for containers larger than 800px */
+      border: 1px solid red; /* Add a border for better visibility */
+    }
+  }
+
+  /* Optional: Apply styles for containers larger than 1000px */
+  @media (min-width: 1000px) {
+    .responsive-div {
+      width: 200; /* Set another fixed width for containers larger than 1000px */
+      border: 1px solid #333; /* Add a border for better visibility */
+    }
+  }
+
+
+  .inline_container {
+    container-type: inline-size; /* Enable container queries */
+  }
+
+ 

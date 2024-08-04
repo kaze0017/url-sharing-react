@@ -8,6 +8,7 @@ import ActionBtns from "./topPanel/ActionBtns";
 import { useDraggable } from "react-use-draggable-scroll";
 import Histories from "./rightPanel/Histories";
 import Notifications from "./rightPanel/Notifications";
+import { Container } from "@mui/material";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../state/store";
@@ -42,10 +43,8 @@ export default function PanelRight(props: PanelLeftProps) {
   }
 
   // panel css classes
-  const panelWrapper = `flex flex-col items-center gap-1 p-1 pb-2  transition-300 grow h-full overflow-x-hidden overflow-y-hidden scrollbar-hide
-  ${
-    toggleRightPanel ? "min-w-20 w-20 max-w-20" : "min-w-60 w-60 max-w-60"
-  } relative
+  const panelWrapper = `w-full flex flex-col items-center gap-1 p-1 pb-2  transition-300 h-full overflow-x-hidden overflow-y-hidden scrollbar-hide
+ relative
   panel-light
   text-gray-900
   `;

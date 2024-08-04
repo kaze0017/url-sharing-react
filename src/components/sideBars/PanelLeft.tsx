@@ -7,33 +7,38 @@ import { useDraggable } from "react-use-draggable-scroll";
 import UserInfo from "./panelLeft/UserInfo";
 import NavMenu from "./panelLeft/NavMenu";
 import Toggle from "./panelLeft/Toggle";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../state/store";
+import { setToggled } from "../../state/leftPanel/leftPanelSlice";
 
 interface PanelLeftProps {
   className?: string;
 }
 
 const PanelLeft: React.FC<PanelLeftProps> = ({ className }) => {
+  const { toggled: leftPanelToggle } = useSelector(
+    (state: RootState) => state.leftPanel
+  );
+  const dispatch = useDispatch();
+
   // Hooks
-  const [toggledCollapse, setToggleCollapse] = useState(false);
+  // const [toggledCollapse, setToggleCollapse] = useState(false);
 
   // panel css classes
-  const panelWrapper = `flex flex-col items-center gap-1 p-1 pb-2  transition-300 grow h-full overflow-x-hidden overflow-y-hidden scrollbar-hide
-  ${
-    toggledCollapse ? "min-w-20 w-20 max-w-20" : "min-w-60 w-60 max-w-60"
-  } relative
+  const panelWrapper = `w-full flex flex-col items-center gap-1 p-1 pb-2  transition-300 h-full overflow-x-hidden overflow-y-hidden scrollbar-hide
+ relative
   panel-light
   text-gray-900
   `;
-
   //  Space div css classes
   const growingDivClasses = "flex flex-grow";
 
   const user = getOwner();
 
-  // functions
-  const handelLeftPanelToggle = () => {
-    setToggleCollapse(!toggledCollapse);
-  };
+  // // functions
+  // const handelLeftPanelToggle = () => {
+  //   setToggleCollapse(!leftPanelToggle);
+  // };
 
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
@@ -42,21 +47,18 @@ const PanelLeft: React.FC<PanelLeftProps> = ({ className }) => {
   useEffect(() => {
     window.addEventListener("resize", () => {
       if (window.innerWidth < 960) {
-        setToggleCollapse(true);
+        dispatch(setToggled(true));
       }
     });
   }, []);
 
   return (
     <div ref={ref} className={panelWrapper} {...events}>
-      <Toggle
-        toggledCollapse={toggledCollapse}
-        handelLeftPanelToggle={handelLeftPanelToggle}
-      />
-      <UserInfo user={user} toggledCollapse={toggledCollapse} />
-      <NavMenu toggledCollapse={toggledCollapse} menuLinks={menuLinks} />
+      <Toggle />
+      <UserInfo user={user} toggledCollapse={leftPanelToggle} />
+      <NavMenu toggledCollapse={leftPanelToggle} menuLinks={menuLinks} />
       <div className={growingDivClasses}></div>
-      <LogoProfile toggledCollapse={toggledCollapse} />
+      <LogoProfile toggledCollapse={leftPanelToggle} />
     </div>
   );
 };
