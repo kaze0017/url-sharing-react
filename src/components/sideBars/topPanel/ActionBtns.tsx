@@ -7,7 +7,7 @@ import { RootState } from "../../../state/store";
 import { setContent } from "../../../state/rightPanel/rightPanelSlice";
 import Badge from "@mui/material/Badge";
 import { useEffect } from "react";
-import { Tabs, Tab } from "@mui/material";
+import { Tabs, Tab, Paper } from "@mui/material";
 
 export default function ActionBtns() {
   const { content, toggleRightPanel } = useSelector(
@@ -23,6 +23,12 @@ export default function ActionBtns() {
   const passiveBtnClass = "text-2xl text-gray-500 cursor-pointer";
 
   return !toggleRightPanel ? (
+    <Paper
+    sx={{
+      backgroundColor: "transparent",
+    }}
+    elevation={3}
+  >
     <Tabs
       value={content}
       onChange={(event, newValue) => dispatch(setContent(newValue))}
@@ -67,8 +73,14 @@ export default function ActionBtns() {
         sx={{ minWidth: 50 }}
       />
     </Tabs>
+  </Paper>
   ) : (
     <div className="flex flex-col gap-1 p-1">
+      <Paper
+        sx={{
+          backgroundColor: "transparent",
+        }}
+      >
       <Tabs
         value={content}
         onChange={(event, newValue) => dispatch(setContent(newValue))}
@@ -104,6 +116,7 @@ export default function ActionBtns() {
           }
         />
       </Tabs>
+      </Paper>
     </div>
   );
 }

@@ -154,6 +154,7 @@ const linkManagementSlice = createSlice({
       }
     },
     setClass: (state, action: PayloadAction<"all" | "link" | "category">) => {
+      console.log("ff setClass:", action.payload);
       state.contentClass = action.payload;
       state.contentsToDisplay = state.contents.filter((content) => {
         if (action.payload === "all") {

@@ -69,7 +69,11 @@ export default function Actions() {
       {/* <CssBaseline /> */}
 
       <AppBar component="nav" color="transparent" position="relative">
-        <Toolbar>
+        <Toolbar
+          sx={{
+            marginRight: 2,
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"

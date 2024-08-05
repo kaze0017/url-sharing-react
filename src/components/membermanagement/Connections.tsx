@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "../state/store";
+import { RootState, AppDispatch } from "../../state/store";
 import {
   acceptConnection,
   fetchConnections,
-} from "../state/connections/connectionsSlice";
-import { addAlert } from "../state/alerts/alertsSlice";
-import { fetchNotifications } from "../state/notifications/notificationSlice";
+} from "../../state/connections/connectionsSlice";
+import { addAlert } from "../../state/alerts/alertsSlice";
+import { fetchNotifications } from "../../state/notifications/notificationSlice";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -81,16 +81,11 @@ export default function Connections() {
         variant: "warning",
         autoHideDuration: 4000,
       });
-    },
-    6000);
-
-    
+    }, 6000);
   }, [dispatch]);
 
   return (
     <div className="panel-light flex w-full flex-col flex-grow">
-      <h1>Connections</h1>
-
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -99,8 +94,8 @@ export default function Connections() {
             <Tab label="Requests" value="3" />
           </TabList>
         </Box>
-        <TabPanel value="1" className="border border-green-700">
-          <ul className="border border-green-700">
+        <TabPanel value="1">
+          <ul>
             {connections.map((connection: any, index) => (
               <li key={index} className="flex p-1 gap-2 items-center">
                 <Avatar
@@ -120,14 +115,14 @@ export default function Connections() {
           </ul>
         </TabPanel>
         <TabPanel value="2">
-          <ul className="border border-green-700">
+          <ul>
             {connections.map((connection, index) => (
               <li key={index}>{connection.name}</li>
             ))}
           </ul>
         </TabPanel>
         <TabPanel value="3">
-          <ul className="border border-green-700">
+          <ul>
             {requests.map((requests, index) => (
               <li key={index}>
                 <Stack direction="column" spacing={1} padding={2}>
@@ -163,9 +158,9 @@ export default function Connections() {
           </ul>
         </TabPanel>
       </TabContext>
-      <Snackbar open={alarmOpen} autoHideDuration={3000} onClose={handelClose}>
+      {/* <Snackbar open={alarmOpen} autoHideDuration={3000} onClose={handelClose}>
         <Alert severity="success">This is a success Alert.</Alert>
-      </Snackbar>
+      </Snackbar> */}
     </div>
   );
 }
