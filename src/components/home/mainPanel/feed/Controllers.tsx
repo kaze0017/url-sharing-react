@@ -16,8 +16,8 @@ export default function Controllers() {
     <div className="w-full flex flex-col  align-center justify-between">
       <div className="w-full flex align-center justify-between">
         <Actions />
-        <div className="flex grow"></div>
-        <Search query={query} setQuery={handleSetQuery} />
+        {/* <div className="flex grow"></div> */}
+        {/* <Search query={query} setQuery={handleSetQuery} /> */}
       </div>
       <Sort />
     </div>

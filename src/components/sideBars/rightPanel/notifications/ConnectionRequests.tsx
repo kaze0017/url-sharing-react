@@ -4,7 +4,6 @@ import { RootState, AppDispatch } from "../../../../state/store";
 import { Avatar } from "@mui/material";
 import Button from "@mui/material/Button";
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -16,8 +15,6 @@ import {
 
 export default function ConnectionRequests() {
   const { requests } = useSelector((state: RootState) => state.connections);
-  console.log("requests", requests);
-
   const dispatch = useDispatch<AppDispatch>();
 
   async function acceptRequest(id: number) {

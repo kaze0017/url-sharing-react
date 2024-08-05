@@ -20,10 +20,6 @@ export const fetchNotifications = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     const token = (getState() as any).auth.token;
     const notifications = await getNotifications(token);
-    console.log(
-      "fetching notifications in notificationSlice.ts",
-      notifications
-    );
     dispatch(setRequests(notifications.connection_request));
     return notifications;
   }
@@ -41,7 +37,6 @@ export const acceptLinks = createAsyncThunk(
       token,
       data: { shared_accept: links },
     });
-    console.log("acceptLinks in notificationSlice.ts", apiResponse);
     const response = {
       status: apiResponse?.status,
       links,
@@ -68,13 +63,10 @@ const notificationSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchNotifications.fulfilled, (state, action) => {
-      console.log("fetchNotifications.fulfilled", action.payload);
       state.notifications = action.payload;
-      console.log("state.notifications", state.notifications);
     });
 
     builder.addCase(acceptLinks.fulfilled, (state, action) => {
-      console.log("acceptLinks.fulfilled", action.payload);
       const acceptedLinksEventIds = action.payload.links;
       if (action.payload.status === 200) {
         state.notifications.shared[action.payload.sharedIndex].links =

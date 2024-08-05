@@ -13,6 +13,18 @@ import { TextField } from "@mui/material";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import SelectClass from "./controllerBtns/SelectClass";
 import FieldsSelector from "./controllerBtns/FieldsSelector";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Search from "../../home/mainPanel/feed/controllers/Search";
+
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 export default function Controller() {
   const { selectedContents } = useSelector(
@@ -22,21 +34,88 @@ export default function Controller() {
   const dispatch = useDispatch();
   const { query } = useSelector((state: RootState) => state.linkManagement);
 
-  function handleSetQuery(query: string) {
-    dispatch(setQuery(query));
-  }
+  const drawerWidth = 240;
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  };
+  const drawer = (
+    <Box sx={{ textAlign: "center" }}>
+      <Typography variant="h6" sx={{ my: 2 }} onClick={handleDrawerToggle}>
+        <MenuOpenIcon color="primary" fontSize="large" />
+      </Typography>
+      <Divider />
+      <ButtonGroup
+        orientation="vertical"
+        color="primary"
+        aria-label="Vertical button group"
+        fullWidth
+        variant="text"
+      >
+        <Create />
+        <SelectClass />
+        <FieldsSelector />
+      </ButtonGroup>
+    </Box>
+  );
 
   return (
     <div className="flex w-full items-center uppercase p-4 gap-4">
       {selectedContents.length === 0 ? (
         <>
-          <Create />
+          {/* <Create />
           <SelectClass />
           <FieldsSelector />
           <div className="flex flex-grow"></div>
           <div className="max-w-md flex-grow">
             <SearchBar query={query} setQuery={handleSetQuery} />
-          </div>
+          </div> */}
+          <AppBar component="nav" color="transparent" position="relative">
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { sm: "none" } }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Box sx={{ display: { xs: "none", sm: "block", flexGrow: 1 } }}>
+                <div className="flex">
+                  <Create />
+                  <SelectClass />
+                  <FieldsSelector />
+                </div>
+              </Box>
+              <Search
+                query={query}
+                setQuery={(query: any) => dispatch(setQuery(query))}
+              />
+            </Toolbar>
+          </AppBar>
+          <nav>
+            <Drawer
+              // container={container}
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+              sx={{
+                display: { xs: "block", sm: "none" },
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                },
+              }}
+            >
+              {drawer}
+            </Drawer>
+          </nav>
         </>
       ) : (
         <LinksSelectedMenu />

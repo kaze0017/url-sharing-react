@@ -28,3 +28,6 @@ const toppanelSlice = createSlice({
     },
   },
 });
+
+export const { setTitle, setState } = toppanelSlice.actions;
+

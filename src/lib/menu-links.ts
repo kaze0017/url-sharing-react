@@ -2,12 +2,13 @@ import { IconType } from "react-icons";
 import { FiLink, FiSliders, FiLogOut } from "react-icons/fi";
 import { BiLogoGraphql } from "react-icons/bi";
 import { FaRegChartBar } from "react-icons/fa";
+import { IoHomeOutline } from "react-icons/io5";
 
 export interface menuLinkInterface {
   id: number;
   title: string;
   url: string;
-  icon?: IconType;
+  icon?: IconType ; // Union type for icon
 }
 
 const menuLinks: menuLinkInterface[] = [
@@ -15,7 +16,7 @@ const menuLinks: menuLinkInterface[] = [
     id: 1,
     title: "Dashboard",
     url: "/",
-    icon: FiLink,
+    icon: IoHomeOutline,
   },
   {
     id: 2,

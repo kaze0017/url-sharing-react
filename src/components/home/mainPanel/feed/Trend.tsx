@@ -11,18 +11,17 @@ import { loadPopularLinks } from "../../../../state/home/topContentsSlice";
 import LoadingBackdrop from "../../LoadingBackdrop";
 
 export default function Trend() {
-  const view = useSelector((state: RootState) => state.home.view);
-  const [sharedLinks, setSharedLinks] = useState<SharedLinkType[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
-  const { popularLinks, loadingPopularLinks } = useSelector(
+  const { linksToDisplay, view } = useSelector(
+    (state: RootState) => state.home
+  );
+  const { loadingPopularLinks } = useSelector(
     (state: RootState) => state.hotContents
   );
-
   useEffect(() => {
     async function loadPopular() {
       await dispatch(loadPopularLinks());
-      setSharedLinks(popularLinks);
     }
     loadPopular();
   }, []);
@@ -35,7 +34,7 @@ export default function Trend() {
     );
   }
 
-  if (sharedLinks === null || sharedLinks.length === 0) {
+  if (linksToDisplay === null || linksToDisplay.length === 0) {
     return <NotFound title="shared links" size="text-md" />;
   }
 
@@ -43,7 +42,7 @@ export default function Trend() {
     <div className="w-full h-full overflow-hidden flex flex-col gap-2 p-2">
       {view === "grid" && (
         <SliderFlexWrapper
-          sharedLinks={sharedLinks}
+          sharedLinks={linksToDisplay}
           CardComponent={CardSharedMd}
           setIsLoading={setIsLoading}
           multi={true}
@@ -51,14 +50,14 @@ export default function Trend() {
       )}
       {view === "cardImgIconS" && (
         <SliderFlexWrapper
-          sharedLinks={sharedLinks}
+          sharedLinks={linksToDisplay}
           CardComponent={CardImgIconS}
           setIsLoading={setIsLoading}
         />
       )}
       {view !== "grid" && view !== "cardImgIconS" && (
         <SliderFlexWrapper
-          sharedLinks={sharedLinks}
+          sharedLinks={linksToDisplay}
           CardComponent={CardSharedLg}
           setIsLoading={setIsLoading}
         />

@@ -13,8 +13,6 @@ export default function Notifications() {
   const { notifications } = useSelector(
     (state: RootState) => state.notifications
   );
-  console.log("notifications", notifications);
-
   return (
     <div className="flex flex-col p-1 gap-3 w-full items-center">
       {notifications.shared.map((notification, index) => {

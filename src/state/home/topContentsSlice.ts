@@ -6,6 +6,7 @@ import { CategoryType } from "../../lib/interfaces/categoryType";
 import { getQuickAccessLinks } from "../../api/gets/getQuickAccessLinks";
 import { getPublicLinks } from "../../api/gets/getPublicLinks";
 import { getPopularLinks } from "../../api/gets/getPopularLinks";
+import { setLinks } from "./homeSlice";
 
 // Define async thunks
 
@@ -16,7 +17,6 @@ export const loadHotLinks = createAsyncThunk(
   async (_, { getState }) => {
     const authState = getState() as { auth: { token: string } };
     const response = await getTopSharedLinks(authState.auth.token);
-    console.log("response from content slice", response);
     return response;
   }
 );
@@ -34,9 +34,10 @@ export const loadHotCategories = createAsyncThunk(
 // QuickAccessLinks
 export const loadQuickAccessLinks = createAsyncThunk(
   "hotLinks/fetchQuickAccessLinks",
-  async (_, { getState }) => {
+  async (_, { getState, dispatch }) => {
     const authState = getState() as { auth: { token: string } };
     const response = await getQuickAccessLinks(authState.auth.token);
+    dispatch(setLinks(response));
     return response;
   }
 );
@@ -44,9 +45,10 @@ export const loadQuickAccessLinks = createAsyncThunk(
 // PublicLinks
 export const loadPublicLinks = createAsyncThunk(
   "hotLinks/fetchPublicLinks",
-  async (_, { getState }) => {
+  async (_, { getState, dispatch }) => {
     const authState = getState() as { auth: { token: string } };
     const response = await getPublicLinks(authState.auth.token);
+    dispatch(setLinks(response));
     return response;
   }
 );
@@ -54,9 +56,10 @@ export const loadPublicLinks = createAsyncThunk(
 // PopularLinks
 export const loadPopularLinks = createAsyncThunk(
   "hotLinks/fetchPopularLinks",
-  async (_, { getState }) => {
+  async (_, { getState, dispatch }) => {
     const authState = getState() as { auth: { token: string } };
     const response = await getPopularLinks(authState.auth.token);
+    dispatch(setLinks(response));
     return response;
   }
 );

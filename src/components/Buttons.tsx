@@ -1,11 +1,13 @@
 import { IconType } from "react-icons";
 import { Link } from "react-router-dom";
+import { SvgIconComponent } from "@mui/icons-material"; // Import the MUI SvgIconComponent type
+
 
 interface NavButtonProps {
   link: string;
   toggledCollapse: boolean | true;
   children: React.ReactNode;
-  icon?: IconType;
+  icon?: IconType | SvgIconComponent;
 }
 
 const NavButton: React.FC<NavButtonProps> = ({
