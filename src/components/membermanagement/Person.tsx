@@ -1,7 +1,7 @@
 import React from "react";
 import { UserProfileType } from "../../lib/interfaces";
 import { useDrag } from "react-dnd";
-import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
+import ProfilePicture from "../profilePictures/ProfilePicture"
 
 interface PersonProps {
   person: UserProfileType;
@@ -26,7 +26,7 @@ export default function Person({ person }: PersonProps) {
 
   return (
     <div ref={dragRef} draggable={true} onDragStart={handleDragStart}>
-      <ProfilePictureSm person={person} />
+      <ProfilePicture user={person} size="small" clickable={false} />
     </div>
   );
 }

@@ -22,6 +22,7 @@ import {
   registerUser,
   setPending,
   initialRegisterSlice,
+  setDisplayDialog,
 } from "../../state/loginAndRegister/registerSlice";
 import {
   PassConditionsType,
@@ -29,6 +30,7 @@ import {
 } from "../../lib/interfaces/RegisterConditionsTypes";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import SecurityCodeDialog from "./SecurityCodeDialog";
 
 interface LoginFormProps {
   showRegister: boolean;
@@ -51,6 +53,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
   }
 
   const [showPassword, setShowPassword] = useState(false);
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -69,11 +72,13 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
     isPending,
   } = useSelector((state: RootState) => state.register);
   const dispatch = useDispatch<AppDispatch>();
+  dispatch(initialRegisterSlice());
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     dispatch(setPending(true));
+
     const response: any = await dispatch(registerUser());
     console.log("from registerform ", response.payload);
     const status = response.payload.status;
@@ -87,6 +92,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
       }, 5000);
       return;
     }
+
     const tempUserProfile = {
       user_id: data.id,
       first_name: "",
@@ -95,15 +101,16 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
       username: data.email,
     };
 
-    setAuth({
-      userProfile: tempUserProfile,
-      token: data.auth,
-    });
+    // setAuth({
+    //   userProfile: tempUserProfile,
+    //   token: data.auth,
+    // });
 
-    setUserProfile(tempUserProfile);
-    dispatch(initialRegisterSlice());
-    navigate("/initialProfile");
+    // setUserProfile(tempUserProfile);
+    // dispatch(initialRegisterSlice());
+    // navigate("/initialProfile");
 
+    dispatch(setDisplayDialog(true));
   }
   const errorClass = "text-red-500 text-sm";
   useEffect(() => {
@@ -112,6 +119,7 @@ export function RegisterForm({ showRegister }: LoginFormProps) {
 
   return (
     <FadeInOut show={showRegister} duration={500}>
+      <SecurityCodeDialog />
       <form
         className="flex flex-col gap-2  max-w-md px-4 py-1 rounded-md"
         onSubmit={handleRegister}

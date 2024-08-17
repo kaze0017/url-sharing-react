@@ -7,10 +7,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
 import { mapSelectedContentsToSelectedLinksIds } from "../../../state/linkManagement/linkSlice";
 
-export default function LinksSelectedMenu() {
-  const { auth } = useContext(AuthContext);
-  const token = auth?.token || "";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Search from "../../home/mainPanel/feed/controllers/Search";
 
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Share from "./controllerBtns/Share";
+import Delete from "./controllerBtns/Delete";
+import MoveToCategory from "./controllerBtns/MoveToCategory";
+
+export default function LinksSelectedMenu() {
   const { selectedContents } = useSelector(
     (state: RootState) => state.linkManagement
   );
@@ -20,49 +33,75 @@ export default function LinksSelectedMenu() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("selectedContents: ", selectedContents);
-    const hasCategoryClassType = selectedContents.some(
-      (content) => content.contentClass === "category"
-    );
-    console.log("hasCategoryClassType: ", hasCategoryClassType);
-    setIsCategorySelected(hasCategoryClassType);
-  }, [selectedContents]);
+  const drawerWidth = 240;
 
-  function handleDeleteBtnClick() {
-    console.log("handleDeleteBtnClick");
-    dispatch(deleteSelectedContents());
-  }
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  function handleShareBtnClick() {
-    dispatch(mapSelectedContentsToSelectedLinksIds());
-    navigate("/sharelinks");
-  }
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  };
 
-  const mainBtnClass =
-    "p-2 px-2 flex items-center justify-center text-xs bg-gray-300 h-10 rounded-xl min-w-24 max-w-24 uppercase hover:bg-gray-600 text-xs text-black hover:text-white disabled:opacity-50 disabled:cursor-not-allowed";
-
-  function handelAddLinksToCategory() {
-    dispatch(mapSelectedContentsToSelectedLinksIds());
-    navigate("/linkmanagement/addlinkstocategory");
-  }
+  const drawer = (
+    <Box sx={{ textAlign: "center" }}>
+      <Typography variant="h6" sx={{ my: 2 }} onClick={handleDrawerToggle}>
+        <MenuOpenIcon color="primary" fontSize="large" />
+      </Typography>
+      <Divider />
+      <ButtonGroup
+        orientation="vertical"
+        color="primary"
+        aria-label="Vertical button group"
+        fullWidth
+        variant="text"
+      >
+        <MoveToCategory />
+        <Share />
+        <Delete />
+      </ButtonGroup>
+    </Box>
+  );
 
   return (
-    <div className="left flex gap-2 z-20 p-4">
-      <button
-        className={mainBtnClass}
-        disabled={isCategorySelected}
-        title={isCategorySelected ? "Category selected!" : "Move to a category"}
-        onClick={handelAddLinksToCategory}
-      >
-        Move to a category
-      </button>
-      <button className={mainBtnClass} onClick={handleShareBtnClick}>
-        Share
-      </button>
-      <button className={mainBtnClass} onClick={handleDeleteBtnClick}>
-        Delete selected
-      </button>
-    </div>
+    <>
+      <AppBar component="nav" color="transparent" position="relative">
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box sx={{ display: { xs: "none", sm: "block", flexGrow: 1 } }}>
+            <div className="flex">
+              <MoveToCategory />
+              <Share />
+              <Delete />
+            </div>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <nav>
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </nav>
+    </>
   );
 }

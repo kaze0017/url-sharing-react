@@ -86,6 +86,7 @@ const linkSlice = createSlice({
     },
     setSelectedLinks: (state, action: PayloadAction<SharedLinkType[]>) => {
       state.selectedLinks = action.payload;
+      state.selectedLinkIds = action.payload.map((link) => link.id);
     },
     setUserLinks: (state, action: PayloadAction<SharedLinkType[]>) => {
       state.userLinks = action.payload;

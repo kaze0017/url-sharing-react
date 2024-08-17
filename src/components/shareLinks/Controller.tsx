@@ -8,11 +8,14 @@ import { RootState } from "../../state/store";
 import { setStatus } from "../../state/share/shareSlice";
 
 export default function Controller() {
-  const { selectedLinkIds } = useSelector(
-    (state: RootState) => state.link
+  const { selectedLinkIds } = useSelector((state: RootState) => state.link);
+  const { selectedCategoriesIds } = useSelector(
+    (state: RootState) => state.category
   );
 
-  console.log("selected links idsa",selectedLinkIds);
+  console.log("selected categories ids", selectedCategoriesIds);
+  console.log("selected links ids", selectedLinkIds);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -38,7 +41,7 @@ export default function Controller() {
     "font-bold font-blue-950 bg-gray-200 text-center justify-center uppercase flex items-center gap-1 p-2 hover:bg-indigo-100 cursor-pointer h-[150px] w-[150px] rounded-lg border border-gray-300";
   return (
     <div className="flex flex-wrap flex-grow overflow-hidden w-full h-full items-center gap-3 justify-center p-4">
-      {selectedLinkIds.length > 0 ? (
+      {selectedLinkIds.length > 0 || selectedCategoriesIds.length > 0 ? (
         <div className="panel-light flex flex-col gap-5 p-5 w-10/12 h-full items-center justify-between">
           <div className="flex flex-wrap gap-5 flex-grow items-center">
             <MenuBtnCard

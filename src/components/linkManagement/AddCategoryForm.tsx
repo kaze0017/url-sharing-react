@@ -6,15 +6,24 @@ import ThumbnailSelector from "./ThumbnailSelector";
 import FadeInOut from "../login/FadeInOut";
 import { MdOutlineChangeCircle } from "react-icons/md";
 import { CiCirclePlus } from "react-icons/ci";
-import TagSelector from "../TagSelector";
+import TagSelector from "./category/TagSelector";
 import { RxCheckCircled, RxCrossCircled } from "react-icons/rx";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../state/store";
 import {
+  initSelectedCategory,
   createCategory,
   setSelectedCategory,
+  setSelectedCategoryContentDescription,
+  setSelectedCategoryTags,
+  setSelectedCategoryThumbnail,
+  setSelectedCategoryTitle,
 } from "../../state/linkManagement/categorySlice";
 import { CategoryType } from "../../lib/interfaces/categoryType";
+import TextField from "@mui/material/TextField";
+import { Button } from "@mui/material";
+import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
+import { useNavigate } from "react-router-dom";
 
 // Steps
 const steps = getSteps();
@@ -22,47 +31,26 @@ const steps = getSteps();
 // CSS Classes
 const formClass =
   "relative w-full h-[500px] flex flex-col gap-1 p-2 overflow-y-auto";
-const longTextInputClass = "text-xs w-full";
-const lineClass = "grow border border-2 border-blue-800";
-
-const circleCompleteClass =
-  "w-[20px] h-[20px]  rounded-full bg-blue-800 border-4 outline outline-blue-800";
-const circleIncompleteClass =
-  "w-[20px] h-[20px]  rounded-full border-4 outline  outline-blue-800";
-const circleCurrentClass =
-  "w-[20px] h-[20px]  rounded-full bg-gray-400 border-4 outline  outline-blue-800";
-
-// Interfaces
-// interface IFormInput {
-//   category_id: number;
-//   title: string;
-//   contentDescription: string;
-//   thumbnail: string;
-//   tags: string[];
-//   audience: boolean;
-//   sharingAbility: boolean;
-//   externalSharingAbility: boolean;
-//   sharingDeptLevel: string;
-//   owner: "add";
-//   class_type: "category";
-// }
-// interface IFormInput : CategoryType {}
 
 // AddCategoryForm Component
 export default function AddCategoryForm() {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { tags: userTags, categories: userCategories } = useSelector(
     (state: RootState) => state.auth.user
+  );
+  const { selectedCategory } = useSelector(
+    (state: RootState) => state.category
   );
 
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const delta = currentStep - previousStep;
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const [selectedImage, setSelectedImage] = useState(
-    "/images/defaults/thumbnails/th1.jpg"
-  );
+  function handleSetSelectedTags(tags: string[]) {
+    dispatch(setSelectedCategoryTags(tags));
+    register("tags", { value: tags });
+  }
 
   const [showThumbnailSelector, setShowThumbnailSelector] = useState(false);
   const [apiResponse, setApiResponse] = useState<string>();
@@ -74,55 +62,21 @@ export default function AddCategoryForm() {
     reset,
     formState: { errors },
     watch,
+    setValue,
   } = useForm<CategoryType>();
+
+  register("thumbnail", { value: selectedCategory.thumbnail });
   const watched = watch();
 
-  useEffect(() => {
-    dispatch(
-      setSelectedCategory({
-        category_id: 0,
-        title: "",
-        owner: {
-          user_id: 0,
-          email: "",
-          first_name: "",
-          last_name: "",
-          tags: [],
-          categories: [],
-        },
-        contentDescription: "",
-        thumbnail: "/images/defaults/thumbnails/th1.jpg",
-        tags: [],
-        audience: false,
-        sharingAbility: false,
-        externalSharingAbility: false,
-        sharingDeptLevel: "",
-        publication_date: "",
-        links: [],
-      })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    setShowThumbnailSelector(false);
-    register("thumbnail", { value: selectedImage });
-  }, [selectedImage, register]);
-
-  useEffect(() => {
-    register("tags", { value: selectedTags });
-  }, [selectedTags, register]);
+  async function handleSetSelectedImage(image: string) {
+    dispatch(setSelectedCategoryThumbnail(image));
+  }
 
   const onSubmit: SubmitHandler<CategoryType> = async (data) => {
     const isValid = await trigger();
-    data = { ...data };
-
     if (isValid) {
       setCurrentStep(3);
-      dispatch(setSelectedCategory(data));
       const response = await dispatch(createCategory());
-
-      console.log("response", response);
       setApiResponse(response.payload.message);
     } else {
       console.log("Form has errors. Please fill in all required fields.");
@@ -154,9 +108,28 @@ export default function AddCategoryForm() {
     setShowThumbnailSelector(!showThumbnailSelector);
   }
 
+  function resetTheForm() {
+    reset();
+    setCurrentStep(0);
+    dispatch(initSelectedCategory());
+  }
+  function backToContentManagement() {
+    reset();
+    dispatch(initSelectedCategory());
+    navigate("/linkmanagement");
+  }
+
   const mainWrapperClass =
     "panel-light relative p-1 justify-center flex flex-col gap-x-2 gap-y-1 overflow-x-scroll w-[700px] w-full overflow-y-auto";
   const summeryCheckWrapperClass = "flex items-center gap-1 w-[250px]";
+
+  useEffect(() => {
+    dispatch(initSelectedCategory());
+  }, []);
+
+  useEffect(() => {
+    setShowThumbnailSelector(false);
+  }, [selectedCategory.thumbnail]);
 
   return (
     <div className={mainWrapperClass}>
@@ -178,39 +151,75 @@ export default function AddCategoryForm() {
             className="w-full flex gap-1 h-full justify-between p-1"
           >
             <div className="w-1/2 p-2 flex flex-col gap-2 items-center">
-              <input
-                type="text"
-                className={longTextInputClass}
-                placeholder="Content Name"
+              <TextField
+                label="Content Name"
+                variant="outlined"
                 {...register("title", {
                   required: true,
-                  maxLength: 20,
-                  minLength: 3,
+                  maxLength: {
+                    value: 20,
+                    message: "Name should be less than 20 characters",
+                  },
+                  minLength: {
+                    value: 3,
+                    message: "Name should be more than 3 characters",
+                  },
+                  onBlur: (e) => trigger("title"),
+                  onChange: (e) =>
+                    trigger("title").then((isValid) => {
+                      if (isValid) {
+                        dispatch(setSelectedCategoryTitle(e.target.value));
+                      }
+                    }),
                 })}
+                fullWidth
+                sx={{
+                  backgroundColor: "white",
+                }}
+                error={errors.title ? true : false}
+                helperText={errors.title ? errors.title.message : ""}
               />
-              {errors.title && (
-                <p className="text-red-500 text-xs">
-                  Name Should be between 3 and 20 characters
-                </p>
-              )}
-
-              <input
-                type="text"
-                className={longTextInputClass}
-                placeholder="Content Description"
-                {...register("contentDescription")}
-              />
-
               <TagSelector
-                setSelectedTags={setSelectedTags}
-                inSuggestions={userTags}
-                selectedTags={selectedTags}
+                setSelectedTags={handleSetSelectedTags}
+                selectedTags={selectedCategory.tags}
+              />
+              <TextField
+                label="Content Description"
+                variant="outlined"
+                {...register("contentDescription", {
+                  required: false,
+                  maxLength: {
+                    value: 200,
+                    message: "Description should be less than 200 characters",
+                  },
+                  minLength: {
+                    value: 10,
+                    message: "Description should be more than 10 characters",
+                  },
+                  onBlur: (e) => trigger("contentDescription"),
+                  onChange: (e) =>
+                    trigger("contentDescription").then((isValid) => {
+                      if (isValid) {
+                        dispatch(
+                          setSelectedCategoryContentDescription(e.target.value)
+                        );
+                      }
+                    }),
+                })}
+                fullWidth
+                sx={{
+                  backgroundColor: "white",
+                }}
               />
             </div>
             <div className="gradientBorder p-2 w-1/2 flex flex-col gap-2 items-center">
-              {selectedImage && (
+              {selectedCategory.thumbnail && (
                 <div>
-                  <img alt="not found" width={"250px"} src={selectedImage} />
+                  <img
+                    alt="not found"
+                    width={"250px"}
+                    src={selectedCategory.thumbnail}
+                  />
                 </div>
               )}
               <button
@@ -224,7 +233,10 @@ export default function AddCategoryForm() {
               show={showThumbnailSelector}
               className="absolute top-0 left-0 w-full h-full bg-white"
             >
-              <ThumbnailSelector setSelectedImage={setSelectedImage} />
+              <ThumbnailSelector
+                setSelectedImage={handleSetSelectedImage}
+                selectedImage={selectedCategory.thumbnail}
+              />
             </FadeInOut>
           </motion.div>
         )}
@@ -279,7 +291,7 @@ export default function AddCategoryForm() {
             <div className="relative flex w-full h-full overflow-hidden">
               <div className="flex absolute opacity-30 w-full h-full">
                 <img
-                  src={watched.thumbnail}
+                  src={selectedCategory.thumbnail}
                   alt=""
                   className="absolute w-full h-full object-cover"
                 />
@@ -296,7 +308,7 @@ export default function AddCategoryForm() {
                 </div>
                 <div className="flex w-full flex-wrap justify-center">
                   <div className={summeryCheckWrapperClass}>
-                    {watched.tags ? (
+                    {selectedCategory.tags.length > 0 ? (
                       <RxCheckCircled className="text-green-800" />
                     ) : (
                       <RxCrossCircled className="text-red-800" />
@@ -344,34 +356,20 @@ export default function AddCategoryForm() {
             <h3 className="text-center text-green-600 w-full text-2xl capitalize">
               {apiResponse}
             </h3>
-            <CiCirclePlus
-              className="text-2xl text-blue-600 mt-4 cursor-pointer"
-              onClick={() => {
-                reset();
-                setCurrentStep(0);
-                dispatch(
-                  setSelectedCategory({
-                    category_id: 0,
-                    title: "",
-                    contentDescription: "",
-                    thumbnail: "/images/defaults/thumbnails/th1.jpg",
-                    tags: [],
-                    audience: false,
-                    sharingAbility: false,
-                    externalSharingAbility: false,
-                    sharingDeptLevel: "",
-                    owner: {
-                      user_id: 0,
-                      email: "",
-                      first_name: "",
-                      last_name: "",
-                    },
-                    publication_date: "",
-                    links: [],
-                  })
-                );
-              }}
-            />
+            <Button
+              startIcon={<CiCirclePlus />}
+              onClick={resetTheForm}
+              variant="contained"
+            >
+              Create Another Category
+            </Button>
+            <Button
+              startIcon={<ReplyAllOutlinedIcon />}
+              onClick={backToContentManagement}
+              variant="outlined"
+            >
+              Back to Content Management
+            </Button>
           </motion.div>
         )}
         {/* Controls */}
@@ -434,4 +432,28 @@ function getSteps() {
     },
     { step: 2, title: "Completion" },
   ];
+}
+
+{
+  /* 
+              {errors.title && (
+                <p className="text-red-500 text-xs">
+                  Name Should be between 3 and 20 characters
+                </p>
+              )}
+
+              {/* <input
+                type="text"
+                className={longTextInputClass}
+                placeholder="Content Description"
+                {...register("contentDescription")}
+              /> */
+}
+{
+  /* 
+              <TagSelector
+                setSelectedTags={setSelectedTags}
+                inSuggestions={userTags}
+                selectedTags={selectedTags}
+              /> */
 }

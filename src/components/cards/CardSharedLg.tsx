@@ -54,7 +54,7 @@ export default function CardSharedLg({ sharedLink }: CardSharedLgProps) {
           <CiGrid41 className="text-2xl" />
         </div>
         <div className="flex gap-2 items-center stopPropagation">
-          <ProfilePicture person={sharedLink.owner} />
+          <ProfilePicture user={sharedLink.owner} size="small" clickable={false}  hoverAnimation={false} />
           <h4>{ownerFullName}</h4>
         </div>
         <div className="flex grow"></div>

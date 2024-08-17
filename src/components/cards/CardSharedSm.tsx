@@ -1,7 +1,7 @@
 import React from "react";
 import { SharedLinkType } from "../../lib/interfaces";
 import { IoIosLink } from "react-icons/io";
-import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
+import ProfilePicture from "../profilePictures/ProfilePicture";
 import CardDetailIcons from "./actionBtns/ActionBtns";
 import FeaturedImage from "./featuredImages/FeaturedImage";
 import ActionBtns from "./actionBtns/ActionBtns";
@@ -41,7 +41,7 @@ export default function CardSharedSm({ sharedLink }: CardSharedSmProps) {
 
       <div className="flex items-center gap-1 h-1/3 text-2xs">
         <IoIosLink />
-        <ProfilePictureSm person={sharedLink.owner} />
+        <ProfilePicture user={sharedLink.owner} size="small" clickable={false} />
         <div className="flex flex-col">
           <p>{firstName}</p>
           <p>{lastName}</p>

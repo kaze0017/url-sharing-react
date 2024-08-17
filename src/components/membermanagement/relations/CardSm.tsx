@@ -1,6 +1,6 @@
 import React from "react";
 import { UserProfileType } from "../../../lib/interfaces";
-import ProfilePictureLg from "../../profilePictures/ProfilePictureLg";
+import ProfilePicture from "../../profilePictures/ProfilePicture";
 import { IoLogoTux } from "react-icons/io";
 import { BsExclamationLg } from "react-icons/bs";
 
@@ -13,13 +13,7 @@ export default function cardSm(person: UserProfileType) {
   return (
     <div className={mainWrapperClass}>
       <div className={textPanelClass}>
-        <img
-          src={person.profile_picture}
-          alt="profile"
-          className="rounded-full  border-2 border-blue-950"
-          width={70}
-          height={70}
-        />
+        <ProfilePicture user={person} size="small" clickable={false} />
         {person.connections ? (
           <div className="absolute top-0 right-0 flex items-center justify-center w-6 h-8 bg-indigo-300 rounded-full">
             {person.connections.length}

@@ -15,7 +15,7 @@ export default function SubscribeSuggestion({
   return variant === "expanded" && person ? (
     <div className="text-xs h-20 p-1 w-full border border-gray-950 flex flex-col gap-1 justify-center rounded bg-gray-100">
       <div className="flex items-center justify-between gap-1 text-center">
-        <ProfilePicture person={person} />
+        <ProfilePicture user={person} size="medium" clickable={false} />
         <h3 className="w-1/4">{fullName}</h3>
         <RxDotFilled />
         {/* <p className="w-1/4">{person.subscribers}</p> */}
@@ -32,6 +32,6 @@ export default function SubscribeSuggestion({
       </div>
     </div>
   ) : (
-    <ProfilePicture person={person} />
+    <ProfilePicture user={person} size="medium" clickable={false} />
   );
 }

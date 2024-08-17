@@ -6,10 +6,11 @@ import {
   EmailConditionsType,
 } from "../../lib/interfaces/RegisterConditionsTypes";
 import { postLogin } from "../../api/posts/postLogin";
+import { setUser } from "../auth/authSlice";
 
 export const loginFunction = createAsyncThunk(
   "login/loginUser",
-  async (_, { getState }) => {
+  async (_, { getState , dispatch}) => {
     const loginState = getState() as { login: LoginState };
     const userData = {
       username: loginState.login.email,
@@ -24,6 +25,7 @@ export const loginFunction = createAsyncThunk(
         data: apiResponse.data,
         status: 200,
       };
+      dispatch(setUser(apiResponse.profile));
     } else {
         console.log("apiResponse in login slice", apiResponse);
       response = {

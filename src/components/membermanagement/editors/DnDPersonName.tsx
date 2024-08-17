@@ -19,7 +19,7 @@ export default function DndPerson({ person }: { person: UserProfileType }) {
         ref={drag}
         className="flex items-center gap-2 text-xs uppercase"
       >
-        <ProfilePicture person={person} />
+        <ProfilePicture user={person} size="small" clickable={false} />
         <h2>{personFullName}</h2>
       </div>
     </div>

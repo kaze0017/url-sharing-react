@@ -7,7 +7,7 @@ import FadeInOut from "../login/FadeInOut";
 import { MdOutlineChangeCircle } from "react-icons/md";
 import { IoCloseOutline } from "react-icons/io5";
 import { CiCirclePlus } from "react-icons/ci";
-import TagSelector from "../TagSelector";
+import TagSelector from "./category/TagSelector";
 import AuthContext from "../../context/AuthProvider";
 import axiosInstance from "../../api/axios";
 import { CREATE_URL } from "../../api/constants";
@@ -305,7 +305,7 @@ export default function AddLinkForm() {
               <TagSelector
                 setSelectedTags={setSelectedTags}
                 selectedTags={selectedTags}
-                inSuggestions={tagSuggestions}
+                tagsOptionList={tagSuggestions}
               />
               <div className="flex flex-col gap-1 w-full">
                 <input
@@ -376,7 +376,7 @@ export default function AddLinkForm() {
                 className="text-xs w-full"
               /> */}
               <div className="flex flex-col w-full">
-                <FormControl sx={{ minWidth: 120 }}>
+                <FormControl sx={{ minWidth: 120, backgroundColor:"white" }}>
                   <InputLabel id="demo-simple-select-helper-label">
                     Category
                   </InputLabel>

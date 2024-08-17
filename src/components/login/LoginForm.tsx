@@ -36,12 +36,14 @@ interface LoginFormProps {
 }
 export default function LoginForm({ showLogin }: LoginFormProps) {
   const navigate = useNavigate();
-
+  
   const { setAuth } = useContext(AuthContext);
   const { setUserProfile } = useContext(UserProfileContext);
-
+  const dispatch = useDispatch<AppDispatch>();
+  dispatch(initialLoginState());
+  
   const [showApiError, setShowApiError] = useState(false);
-
+  
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(setIsPending(true));
@@ -75,7 +77,6 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
 
   const errorClass = "text-red-500 text-sm";
 
-  const dispatch = useDispatch<AppDispatch>();
   const {
     email,
     password,

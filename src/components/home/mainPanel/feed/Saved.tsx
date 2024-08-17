@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../../state/store";
 import { loadQuickAccessLinks } from "../../../../state/home/topContentsSlice";
 import LoadingBackdrop from "../../LoadingBackdrop";
+import { Alert, Paper } from "@mui/material";
 
 export default function Wall() {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +34,14 @@ export default function Wall() {
       {loadingQuickAccessLinks ? (
         <LoadingBackdrop />
       ) : linksToDisplay === null || linksToDisplay.length === 0 ? (
-        <NotFound title="shared links" size="text-md" />
+        <div className="flex flex-grow  w-full items-center justify-center">
+          <Paper className="flex items-center justify-center p-4" elevation={3}>
+            <Alert severity="info">
+              You have not saved any links yet. Start saving links to see them
+              here.
+            </Alert>
+          </Paper>
+        </div>
       ) : (
         <>
           {view === "grid" && (

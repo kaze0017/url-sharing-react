@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { Link } from "react-router-dom";
-import { UserProfileType } from "../../lib/interfaces";
-import NotFound from "../NotFound";
+import { UserProfileType } from "../../../lib/interfaces";
+import NotFound from "../../NotFound";
 
 interface ProfilePictureProps {
   person: UserProfileType | null;

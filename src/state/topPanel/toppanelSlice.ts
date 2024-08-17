@@ -2,23 +2,23 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { getNotifications } from "../../api/gets/getNotifications";
 
 interface TopPanelState {
-  title: string;
+  pageTitle: string;
   state: "notification" | "search" | "settings" | "history";
   notifications: any;
 }
 
 const initialState: TopPanelState = {
-  title: "Search",
+  pageTitle: "Search",
   state: "search",
   notifications: [],
 };
 
-const toppanelSlice = createSlice({
+const topPanelSlice = createSlice({
   name: "toppanel",
   initialState,
   reducers: {
-    setTitle: (state, action: PayloadAction<string>) => {
-      state.title = action.payload;
+    setPageTitle: (state, action: PayloadAction<string>) => {
+      state.pageTitle = action.payload;
     },
     setState: (
       state,
@@ -29,5 +29,6 @@ const toppanelSlice = createSlice({
   },
 });
 
-export const { setTitle, setState } = toppanelSlice.actions;
+export const { setPageTitle, setState } = topPanelSlice.actions;
+export default topPanelSlice.reducer;
 

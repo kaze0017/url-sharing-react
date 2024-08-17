@@ -5,7 +5,8 @@ import { postCreateCategory } from "../../api/posts/postCreateCategory";
 import { getUserCategories } from "../../api/gets/getUserCategories";
 import { postAddLinksToCategory } from "../../api/posts/postAddLinksToCategory";
 import { SharedLinkType } from "../../lib/interfaces";
-import { postDeleteCategories } from "../../api/posts/postDeleteCategories";
+import { postDeleteCategory } from "../../api/posts/postDeleteCategory";
+import Category from "../../components/linkManagement/Category";
 
 export const addLinksToCategory = createAsyncThunk(
   "category/addLinksToCategory",
@@ -27,7 +28,6 @@ export const addLinksToCategory = createAsyncThunk(
     } else {
       category_id = state.category.selectedCategories[0].category_id;
     }
-    console.log("link_ids", link_ids);
     const response = await postAddLinksToCategory({
       token: state.auth.token,
       category_id: category_id,
@@ -42,9 +42,6 @@ export const fetchUserCategories = createAsyncThunk(
   async (_, { getState }) => {
     const state = getState() as { auth: { token: string } };
     const response = await getUserCategories(state.auth.token);
-
-    console.log("dfgfdg", response);
-
     response.sort((a: CategoryType, b: CategoryType) => {
       const dateA = new Date(a.publication_date);
       const dateB = new Date(b.publication_date);
@@ -77,13 +74,16 @@ export const deleteSelectedCategories = createAsyncThunk(
       category: categoryState;
       auth: { token: string };
     };
-    const response = await postDeleteCategories({
-      token: state.auth.token,
-      ids: state.category.selectedCategories.map(
-        (category) => category.category_id
-      ),
+    console.log("selected categories", state.category.selectedCategories);
+    state.category.selectedCategories.forEach((category) => {
+      const response = postDeleteCategory({
+        token: state.auth.token,
+        id: category.category_id,
+      });
+      console.log("response", response);
     });
-    return response?.data;
+
+    return null;
   }
 );
 
@@ -112,6 +112,7 @@ const initialState: categoryState = {
     },
     publication_date: "",
     links: [],
+    thumbnail: "/images/defaults/thumbnails/th1.jpg",
   },
   selectedCategories: [],
   userCategories: [],
@@ -124,6 +125,9 @@ const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
+    initSelectedCategory: (state) => {
+      state.selectedCategory = initialState.selectedCategory;
+    },
     setCategoryMode: (state, action: PayloadAction<"edit" | "create">) => {
       state.categoryMode = action.payload;
     },
@@ -136,8 +140,21 @@ const categorySlice = createSlice({
     setSelectedCategoryThumbnail: (state, action: PayloadAction<string>) => {
       state.selectedCategory.thumbnail = action.payload;
     },
+    setSelectedCategoryContentDescription: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.selectedCategory.contentDescription = action.payload;
+    },
+    setSelectedCategoryTitle: (state, action: PayloadAction<string>) => {
+      state.selectedCategory.title = action.payload;
+    },
     setSelectedCategories: (state, action: PayloadAction<CategoryType[]>) => {
       state.selectedCategories = action.payload;
+      console.log("selectedCategory", state.selectedCategory);
+      state.selectedCategoriesIds = action.payload.map(
+        (Category) => Category.category_id
+      );
     },
     setUserCategories: (state, action: PayloadAction<CategoryType[]>) => {
       state.userCategories = action.payload;
@@ -155,7 +172,6 @@ const categorySlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(createCategory.fulfilled, (state, action) => {
-      console.log(action.payload);
       return initialState;
     });
     builder.addCase(fetchUserCategories.fulfilled, (state, action) => {
@@ -166,10 +182,13 @@ const categorySlice = createSlice({
 });
 
 export const {
+  initSelectedCategory,
   setCategoryMode,
   setSelectedCategory,
+  setSelectedCategoryTitle,
   setSelectedCategoryTags,
   setSelectedCategoryThumbnail,
+  setSelectedCategoryContentDescription,
   setSelectedCategories,
   setUserCategories,
   setCategoriesToDisplay,

@@ -11,11 +11,22 @@ export const registerUser = createAsyncThunk(
   "register/registerUser",
   async (_, { getState }) => {
     const regState = getState() as { register: RegisterState };
-    const userData = {
-      username: regState.register.email,
-      password: regState.register.password,
-      email: regState.register.email,
-    };
+    let userData;
+    if (regState.register.emailCode.length > 0) {
+      userData = {
+        username: regState.register.email,
+        password: regState.register.password,
+        email: regState.register.email,
+        email_code: regState.register.emailCode,
+      };
+    } else {
+      userData = {
+        username: regState.register.email,
+        password: regState.register.password,
+        email: regState.register.email,
+      };
+    }
+
     const apiResponse = await postRegisterUser(userData);
     console.log("from registerUser thunk", apiResponse);
 
@@ -50,6 +61,8 @@ export interface RegisterState {
   emailConditions: EmailConditionsType;
   formValid: boolean;
   isPending: boolean;
+  displayDialog: boolean;
+  emailCode: string;
 }
 
 const initialState: RegisterState = {
@@ -94,13 +107,14 @@ const initialState: RegisterState = {
   },
   formValid: false,
   isPending: false,
+  displayDialog: false,
+  emailCode: "",
 };
 
 const registerSlice = createSlice({
   name: "register",
   initialState,
   reducers: {
-
     initialRegisterSlice: (state) => {
       state = initialState;
     },
@@ -145,6 +159,13 @@ const registerSlice = createSlice({
     setPending: (state, action: PayloadAction<boolean>) => {
       state.isPending = action.payload;
     },
+    setDisplayDialog: (state, action: PayloadAction<boolean>) => {
+      console.log("from setDisplayDialog", action.payload);
+      state.displayDialog = action.payload;
+    },
+    setEmailCode: (state, action: PayloadAction<string>) => {
+      state.emailCode = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -168,6 +189,8 @@ export const {
   setApiError,
   setPending,
   initialRegisterSlice,
+  setDisplayDialog,
+  setEmailCode,
 } = registerSlice.actions;
 export default registerSlice.reducer;
 

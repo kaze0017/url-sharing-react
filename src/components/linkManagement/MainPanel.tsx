@@ -14,7 +14,7 @@ import { UserProfileType } from "../../lib/interfaces";
 import { createColumnHelper } from "@tanstack/react-table";
 import GrabScroll from "../GrabScroll";
 import FeederBtn from "../FeederBtn";
-import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
+import ProfilePicture from "../profilePictures/ProfilePicture";
 import Type from "./table/body/Type";
 import PublicationDate from "./table/body/PublicationDate";
 import ExpirationDate from "./table/body/ExpirationDate";

@@ -8,6 +8,11 @@ import {
   ClickAwayListener,
   MenuList,
   MenuItem,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  List,
 } from "@mui/material";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -52,7 +57,15 @@ export default function SelectClass() {
         aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        startIcon={ contentClass === "link" ? <LinkOutlinedIcon fontSize="small"/> : contentClass === "category" ? <CategoryIcon /> : <PublicIcon />}
+        startIcon={
+          contentClass === "link" ? (
+            <LinkOutlinedIcon fontSize="small" />
+          ) : contentClass === "category" ? (
+            <CategoryIcon />
+          ) : (
+            <PublicIcon />
+          )
+        }
       >
         Class
       </Button>
@@ -74,7 +87,47 @@ export default function SelectClass() {
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList
+                <List>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => dispatch(setClass("all"))}>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: "35px",
+                        }}
+                      >
+                        <PublicIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="All" />
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => dispatch(setClass("link"))}>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: "35px",
+                        }}
+                      >
+                        <LinkOutlinedIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Link" />
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton
+                      onClick={() => dispatch(setClass("category"))}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: "35px",
+                        }}
+                      >
+                        <CategoryIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Category" />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+                {/* <MenuList
                   autoFocusItem={open}
                   id="composition-menu"
                   aria-labelledby="composition-button"
@@ -104,7 +157,7 @@ export default function SelectClass() {
                   >
                     Categories
                   </MenuItem>
-                </MenuList>
+                </MenuList> */}
               </ClickAwayListener>
             </Paper>
           </Grow>

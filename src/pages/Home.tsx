@@ -17,6 +17,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import AppBar from "../components/controllers/MainAppBar";
 
 export default function Home() {
   const { isNewUser } = useContext(AuthContext);
@@ -37,30 +38,37 @@ export default function Home() {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: `${toggledLeftPanel ? "90px" : "260px"} 1fr ${
-              toggleRightPanel ? "90px" : "260px"
-            }`,
-            columnGap: "2px",
+            gridTemplateRows: "50px 1fr",
             height: "100vh",
-            width: "100vw",
           }}
         >
-          <PanelLeft />
+          <AppBar />
           <Box
             sx={{
               display: "grid",
-              gridTemplateRows: "1fr 35px",
-              rowGap: "2px",
-              height: "100vh",
-              width: "100%",
-
+              gridTemplateColumns: `${
+                toggledLeftPanel ? "90px" : "260px"
+              } 1fr ${toggleRightPanel ? "90px" : "260px"}`,
+              columnGap: "2px",
+              width: "100vw",
+              height: "100%",
             }}
           >
-            <Outlet />
-            <ActionBtns />
-          </Box>
+            <PanelLeft />
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateRows: "1fr 35px",
+                rowGap: "2px",
+                width: "100%",
+              }}
+            >
+              <Outlet />
+              <ActionBtns />
+            </Box>
 
-          <PanelRight />
+            <PanelRight />
+          </Box>
         </Box>
       )}
     </div>

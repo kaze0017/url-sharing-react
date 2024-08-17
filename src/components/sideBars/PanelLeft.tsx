@@ -8,8 +8,8 @@ import UserInfo from "./panelLeft/UserInfo";
 import NavMenu from "./panelLeft/NavMenu";
 import Toggle from "./panelLeft/Toggle";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../state/store";
-import { setToggled } from "../../state/leftPanel/leftPanelSlice";
+import { RootState, AppDispatch } from "../../state/store";
+import { loadTopUsers, setToggled } from "../../state/leftPanel/leftPanelSlice";
 
 interface PanelLeftProps {
   className?: string;
@@ -19,10 +19,8 @@ const PanelLeft: React.FC<PanelLeftProps> = ({ className }) => {
   const { toggled: leftPanelToggle } = useSelector(
     (state: RootState) => state.leftPanel
   );
-  const dispatch = useDispatch();
-
-  // Hooks
-  // const [toggledCollapse, setToggleCollapse] = useState(false);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
 
   // panel css classes
   const panelWrapper = `w-full flex flex-col items-center gap-1 p-1 pb-2  transition-300 h-full overflow-x-hidden overflow-y-hidden scrollbar-hide
@@ -33,16 +31,17 @@ const PanelLeft: React.FC<PanelLeftProps> = ({ className }) => {
   //  Space div css classes
   const growingDivClasses = "flex flex-grow";
 
-  const user = getOwner();
-
-  // // functions
-  // const handelLeftPanelToggle = () => {
-  //   setToggleCollapse(!leftPanelToggle);
-  // };
 
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
+
+  useEffect(() => {
+    async function init() {
+      await dispatch(loadTopUsers());
+    }
+    init();
+  }, []);
 
   useEffect(() => {
     window.addEventListener("resize", () => {

@@ -3,6 +3,7 @@ import { PiChartLineUp } from "react-icons/pi";
 import { RiShareForwardLine } from "react-icons/ri";
 import { Avatar } from "@mui/material";
 import ConnectionActions from "./pageTitle/ConnectionActions ";
+import ProfilePicture from "../profilePictures/ProfilePicture";
 
 interface ProfilePageProps {
   person: UserProfileType;
@@ -22,10 +23,7 @@ export default function PageTitle({ person }: ProfilePageProps) {
     <div className=" p-2">
       <div className="flex items-center justify-between">
         <div className="flex  items-center">
-          <Avatar src={person.profile_picture} alt={fullName}>
-            {person.first_name[0].toUpperCase()}
-            {person.last_name[0].toUpperCase()}
-          </Avatar>
+          <ProfilePicture user={person} size="large" clickable={false} hoverAnimation={false} />
           <div className="flex flex-col ml-2">
             <h1 className="text-2xl font-bold">{fullName}</h1>
             <p>{person?.title}</p>
@@ -34,48 +32,6 @@ export default function PageTitle({ person }: ProfilePageProps) {
 
         <ConnectionActions person={person} />
 
-        {/* <Stack direction="row" spacing={2}>
-          {relationState === "requestReceived" ? (
-            <div className="flex flex-col items-center bg-slate-200 p-2 rounded-md">
-              <p className="text-sm">
-                {person.first_name} has sent you a connection request
-              </p>
-              <Button
-                className="btn-primary ml-auto"
-                color="success"
-                onClick={handleAcceptRequest}
-              >
-                Accept
-              </Button>
-              <Button
-                className="btn-primary ml-auto"
-                color="error"
-                onClick={handleRejectRequest}
-              >
-                Reject
-              </Button>
-            </div>
-          ) : relationState === "none" ? (
-            <Button
-              onClick={handleConnect}
-              className="btn-primary ml-auto disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={connectBtnState}
-            >
-              Connect
-            </Button>
-          ) : relationState === "connected" ? (
-            <Button className="btn-primary ml-auto" onClick={handleUnFollow}>
-              Un Follow
-            </Button>
-          ) : relationState === "requestSent" ? (
-            <Button
-              className="btn-primary ml-auto disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleUnFollow}
-            >
-              Cancel Request
-            </Button>
-          ) : null}
-        </Stack> */}
         <div className="flex gap-2">
           <div className={rankShareClass}>
             <p>{person?.rankCount}</p>

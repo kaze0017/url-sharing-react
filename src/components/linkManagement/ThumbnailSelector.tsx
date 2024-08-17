@@ -13,7 +13,7 @@ import "swiper/css/scrollbar";
 import { Backdrop } from "@mui/material";
 
 interface ThumbnailSelectorProps {
-  setSelectedImage: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedImage: (image : string) => void;
   selectedImage?: string;
 }
 

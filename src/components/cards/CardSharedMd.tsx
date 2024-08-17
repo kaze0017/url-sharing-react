@@ -1,6 +1,6 @@
 import { SharedLinkType } from "../../lib/interfaces";
 import { IoIosLink } from "react-icons/io";
-import ProfilePicture from "../profilePictures/ProfilePicture";
+import ProfilePicture from "../profilePictures/ProfilePicture"
 import ActionBtns from "./actionBtns/ActionBtns";
 import GradientIcon from "../customIcons/GradientIcon";
 import { CiPlay1 } from "react-icons/ci";
@@ -42,7 +42,7 @@ export default function CardSharedMd({ sharedLink }: CardSharedMdProps) {
 
       <div className="w-full flex gap-1 items-center text-xs">
         <IoIosLink />
-        <ProfilePicture person={sharedLink.owner} />
+        <ProfilePicture user={sharedLink.owner} size="medium" clickable={false} hoverAnimation={false} />
         <div className="flex-flex-col">
           <p>{firstName}</p>
           <p>{lastName}</p>

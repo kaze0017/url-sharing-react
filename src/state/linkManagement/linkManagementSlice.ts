@@ -58,7 +58,11 @@ export const fetchUserContent = createAsyncThunk(
 export const setSelectedContentsLinksCategories =
   (Contents: ContentType[]): AppThunk =>
   (dispatch: any, getState: any) => {
+
+    
     dispatch(setSelectedContents(Contents));
+
+    console.log("Contents:", Contents);
 
     // Filter contents to get the links
     const SelectedLinksIds = Contents.filter(
@@ -68,38 +72,59 @@ export const setSelectedContentsLinksCategories =
       (content) => content.contentClass === "category"
     ).map((content) => content.id);
 
-    console.log("ff Selected Links Ids:", SelectedLinksIds);
-
-    // Example of how you might want to use getState() and dispatch more actions
     const state = getState();
     const links = state.link.userLinks;
-    console.log("ff Links:", links);
+    const categories = state.category.userCategories;
+
     const selectedLinks = links.filter((link: SharedLinkType) =>
       SelectedLinksIds.includes(link.id)
     );
-    console.log("ff Selected Links:", selectedLinks);
-
-    dispatch(setSelectedLinks(selectedLinks));
-    dispatch(
-      setSelectedCategories(
-        state.category.userCategories.filter((category: CategoryType) =>
-          SelectedCategoriesIds.includes(category.category_id)
-        )
-      )
+    const selectedCategories = categories.filter((category: CategoryType) =>
+      SelectedCategoriesIds.includes(category.category_id)
     );
 
-    console.log("Current state:", state);
+    dispatch(setSelectedLinks(selectedLinks));
+    dispatch(setSelectedCategories(selectedCategories));
 
-    // Dispatch additional actions as needed, e.g., to update links or categories
-    // dispatch(updateLinks(SelectedLinksIds));
-    // dispatch(updateCategories(...));
+    if (SelectedLinksIds.length === 0 && SelectedCategoriesIds.length === 0) {
+      dispatch(setSelectedContentsType("all"));
+    } else if (
+      SelectedLinksIds.length > 0 &&
+      SelectedCategoriesIds.length === 0
+    ) {
+      dispatch(setSelectedContentsType("link"));
+    } else if (
+      SelectedLinksIds.length === 0 &&
+      SelectedCategoriesIds.length > 0
+    ) {
+      dispatch(setSelectedContentsType("category"));
+    } else {
+      dispatch(setSelectedContentsType("all"));
+    }
+
+
+    console.log("SelectedLinksIds:", SelectedLinksIds);
+    console.log("SelectedCategoriesIds:", SelectedCategoriesIds);
   };
 
 export const deleteSelectedContents = createAsyncThunk(
   "linkManagement/deleteSelectedContents",
-  async (_, { dispatch }) => {
-    await dispatch(deleteSelectedLinks());
-    await dispatch(deleteSelectedCategories());
+  async (_, { getState, dispatch }) => {
+    const linkState = getState() as {
+      link: { selectedLinks: SharedLinkType[] };
+    };
+    const categoryState = getState() as {
+      category: { selectedCategories: CategoryType[] };
+    };
+    if (linkState.link.selectedLinks.length > 0) {
+      linkState.link.selectedLinks.forEach((link) => {
+        dispatch(deleteSelectedLinks());
+      });
+    }
+    if (categoryState.category.selectedCategories.length > 0) {
+      dispatch(deleteSelectedCategories());
+    }
+
     const updatedContents = await dispatch(fetchUserContent());
     dispatch(setSelectedContents([]));
     dispatch(setContentToDisplay(updatedContents.payload as ContentType[]));
@@ -112,6 +137,7 @@ interface LinkManagementState {
   contents: ContentType[];
   contentsToDisplay: ContentType[];
   selectedContents: ContentType[];
+  selectedContentsType: "link" | "category" | "all";
   query: string;
   timeSensitive: "all" | "scheduled" | "expiresSoon" | "comeSoon";
   viewSize: "small" | "medium" | "large" | "details";
@@ -134,6 +160,7 @@ const initialState: LinkManagementState = {
   showFilter: false,
   selectedLinks: [],
   selectedCategories: [],
+  selectedContentsType: "all",
 };
 
 const linkManagementSlice = createSlice({
@@ -207,6 +234,12 @@ const linkManagementSlice = createSlice({
         (content) => content.contentClass === "category"
       );
     },
+    setSelectedContentsType: (
+      state,
+      action: PayloadAction<"link" | "category" | "all">
+    ) => {
+      state.selectedContentsType = action.payload;
+    },
     // deleteSelectedContents: (state) => {
     //   state.selectedContents = [];
     // },
@@ -232,6 +265,7 @@ export const {
   setShowFilter,
   setContentToDisplay,
   setSelectedContents,
+  setSelectedContentsType,
   // deleteSelectedContents,
 } = linkManagementSlice.actions;
 export default linkManagementSlice.reducer;

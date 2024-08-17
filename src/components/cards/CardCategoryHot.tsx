@@ -16,7 +16,7 @@ export default function CategoryHot({ link }: CategoryHotProps) {
   const categoryHotInfoClass = `flex flex-row grow items-center w-3/5 h-10  border border-gray-500 rounded-md p-1 pl-2 text-center`;
   return (
     <div className={categoryHotWrapperClass}>
-      <ProfilePicture person={link.owner} />
+      <ProfilePicture user={link.owner} size="small" clickable={false} />
       <div className={categoryHotInfoClass}>
         <div className="flex flex-col text-2xs uppercase font-bold w-1/2">
           <p>{firstName}</p>

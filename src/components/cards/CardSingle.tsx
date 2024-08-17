@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { SharedLinkType } from "../../lib/interfaces";
-import ProfilePictureSm from "../profilePictures/ProfilePictureSm";
+import ProfilePicture from "../profilePictures/ProfilePicture";
 import { CiEdit } from "react-icons/ci";
 import GradientIcon from "../customIcons/GradientIcon";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +25,7 @@ export default function CardSingle({
     <div className=" uppercase flex flex-col h-full gap-1 p-2 panel-light">
       <div className=" flex items-center justify-between h-12 p-1 border-b-2 border-indigo-700 ">
         <div className="flex gap-1 justify-center items-center h-full w-40">
-          <ProfilePictureSm person={sharedLink.owner} />
+          <ProfilePicture user={sharedLink.owner} size="small" clickable={false} hoverAnimation={false} />
           <h3 className="text-xs">{ownerFullName}</h3>
         </div>
         <div className="flex justify-center items-center h-full flex-grow text-center">

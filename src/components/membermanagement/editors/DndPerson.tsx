@@ -1,6 +1,6 @@
 import { useDrag } from "react-dnd";
 import { UserProfileType } from "../../../lib/interfaces";
-import ProfilePictureLg from "../../profilePictures/ProfilePictureLg";
+import ProfilePicture from "../../profilePictures/ProfilePicture";
 import { useDispatch } from "react-redux";
 import { setDraggingMember } from "../../../state/networks/groupsSlice";
 
@@ -34,7 +34,7 @@ export default function DndPerson({ person }: { person: UserProfileType }) {
       onDragStart={handleDragStart}
     >
       <div role="Handle" ref={drag}></div>
-      <ProfilePictureLg person={person} />
+      <ProfilePicture user={person} size="medium" clickable={false}  hoverAnimation={false} />
     </div>
   );
 }

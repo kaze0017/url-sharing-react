@@ -8,7 +8,15 @@ import {
   ClickAwayListener,
   MenuList,
   MenuItem,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  List,
 } from "@mui/material";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 
 export default function Create() {
   const navigate = useNavigate();
@@ -17,9 +25,6 @@ export default function Create() {
     navigate("/linkmanagement/createlink");
   }
 
-  function handleCreateGroup() {
-    navigate("/linkmanagement/creategroup");
-  }
 
   function handleCreateCategory() {
     navigate("/linkmanagement/createCategory");
@@ -58,6 +63,7 @@ export default function Create() {
         aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
+        startIcon={<AddOutlinedIcon />}
       >
         Create
       </Button>
@@ -80,7 +86,7 @@ export default function Create() {
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList
+                {/* <MenuList
                   autoFocusItem={open}
                   id="composition-menu"
                   aria-labelledby="composition-button"
@@ -90,9 +96,37 @@ export default function Create() {
                     zIndex: 1,
                   }}
                 >
-                  <MenuItem onClick={handleCreateLink}>Link</MenuItem>
+                  <MenuItem onClick={handleCreateLink}
+                    
+                  >Link</MenuItem>
                   <MenuItem onClick={handleCreateCategory}>Category</MenuItem>
-                </MenuList>
+                </MenuList> */}
+                <List>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={handleCreateLink}>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: "35px",
+                        }}
+                      >
+                        <LinkOutlinedIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Link" />
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={handleCreateCategory}>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: "35px",
+                        }}
+                      >
+                        <CategoryOutlinedIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Category" />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
               </ClickAwayListener>
             </Paper>
           </Grow>

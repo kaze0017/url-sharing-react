@@ -1,14 +1,15 @@
 import axiosInstance from "../axios";
 import { DELETE_CATEGORY_URL } from "../constants";
 
-export async function postDeleteCategories({
+export async function postDeleteCategory({
   token,
-  ids,
+  id,
 }: {
-  ids: number[];
+  id: number;
   token: string;
 }) {
   console.log("API: DeleteCategories");
+
 
   const config = {
     headers: {
@@ -17,8 +18,7 @@ export async function postDeleteCategories({
     },
   };
   const formData = new URLSearchParams();
-  formData.append("category_ids", ids.join(","));
-
+  formData.append("category_id", id.toString());
   try {
     const response = await axiosInstance.post(
       DELETE_CATEGORY_URL,

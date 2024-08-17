@@ -25,7 +25,7 @@ import Count from "./body/Count";
 import QrCode from "./body/QrCode";
 import ShortLink from "./body/ShortLink";
 import ClassIcon from "./body/ClassIcon";
-import ProfilePictureSm from "../../profilePictures/ProfilePictureSm";
+import ProfilePicture from "../../profilePictures/ProfilePicture";
 import { SharedLinkType, UserProfileType } from "../../../lib/interfaces";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -36,6 +36,15 @@ import {
   setShowFilter,
 } from "../../../state/linkManagement/linkManagementSlice";
 import Backdrop from "@mui/material/Backdrop";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Unstable_Grid2";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { text } from "d3";
+import { Button, Typography } from "@mui/material";
+import Drawer from "@mui/material/Drawer";
 
 declare module "@tanstack/react-table" {
   //allows us to define custom properties for our columns
@@ -77,6 +86,15 @@ export default function Table({
   // const links = contentsToDisplay.map((content) => {
   //   return content.link;
   // });
+
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  }));
+
   const table = useReactTable({
     data: contentsToDisplay,
     columns,
@@ -115,47 +133,52 @@ export default function Table({
   const handleClose = () => {
     dispatch(setShowFilter(false));
   };
+
   return (
     <div className="p-2 text-xs uppercase h-full overflow-y-auto">
-      {showFilter && (
+      <Drawer open={showFilter} onClose={() => handleClose()} anchor="top">
         <div className="inline-block border border-gray-300 shadow rounded">
-          <div className="px-1 border-b border-gray-300 p-2">
-            <label>
-              <input
-                name="columnVisibility"
-                {...{
-                  type: "checkbox",
-                  checked: table.getIsAllColumnsVisible(),
-                  onChange: table.getToggleAllColumnsVisibilityHandler(),
-                }}
-              />
-              Toggle All
-            </label>
+          <div className="px-4 border-b border-gray-300 p-2 flex justify-between ">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={table.getIsAllColumnsVisible()}
+                  onChange={table.getToggleAllColumnsVisibilityHandler()}
+                />
+              }
+              label="Select All"
+            />
+            <Button onClick={handleClose}>Close</Button>
           </div>
           <div className="flex w-full flex-wrap gap-2 p-2">
-            {table.getAllLeafColumns().map((column) => {
-              return (
-                <div
-                  key={column.id}
-                  className="px-1 flex w-[150px] items-center"
-                >
-                  <label className="flex gap-1">
-                    <input
-                      name="columnVisibility"
-                      {...{
-                        type: "checkbox",
-                        checked: column.getIsVisible(),
-                        onChange: column.getToggleVisibilityHandler(),
-                      }}
-                    />
-                    {column.id}
-                  </label>
-                </div>
-              );
-            })}
+            <div className="scontainer">
+              <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={1} sx={{ textAlign: "left" }}>
+                  {table.getAllLeafColumns().map((column) => {
+                    return (
+                      <Grid sm={6} md={3} key={column.id} xs={12}>
+                        <Item>
+                          <Typography align="left" variant="h6">
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={column.getIsVisible()}
+                                  onChange={column.getToggleVisibilityHandler()}
+                                />
+                              }
+                              label={column.id}
+                            />
+                          </Typography>
+                        </Item>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Box>
+            </div>
           </div>
         </div>
-      )}
+      </Drawer>
       <table className="w-full ">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -376,7 +399,12 @@ function createColumns() {
       cell: (info) => (
         <>
           <div className="flex flex-col items-center justify-center">
-            <ProfilePictureSm person={info.getValue()} />
+            <ProfilePicture
+              user={info.getValue()}
+              size="small"
+              clickable={false}
+              hoverAnimation={false}
+            />
             <p className="text-3xs">{info.getValue()?.first_name}</p>
             <p className="text-3xs">{info.getValue()?.last_name}</p>
           </div>
@@ -391,7 +419,12 @@ function createColumns() {
         <>
           {info.getValue() !== (null || undefined) ? (
             <div className="flex flex-col items-center justify-center">
-              <ProfilePictureSm person={info.getValue() as UserProfileType} />
+              <ProfilePicture
+                user={info.getValue()}
+                size="small"
+                clickable={false}
+                hoverAnimation={false}
+              />
               <p className="text-3xs">{info.getValue()?.first_name}</p>
               <p className="text-3xs">{info.getValue()?.last_name}</p>
             </div>
@@ -409,7 +442,12 @@ function createColumns() {
         <>
           {info.getValue() !== (null || undefined) ? (
             <div className="flex flex-col items-center justify-center">
-              <ProfilePictureSm person={info.getValue() as UserProfileType} />
+              <ProfilePicture
+                user={info.getValue()}
+                size="small"
+                clickable={false}
+                hoverAnimation={false}
+              />
               <p className="text-3xs">{info.getValue()?.first_name}</p>
               <p className="text-3xs">{info.getValue()?.last_name}</p>
             </div>

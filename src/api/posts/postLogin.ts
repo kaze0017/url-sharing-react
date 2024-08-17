@@ -16,7 +16,6 @@ export async function postLogin({ username, password }: postLoginInterface) {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       withCredentials: true,
     });
-    console.log(response);
     return response;
   } catch (err : any) {
     return err.response;

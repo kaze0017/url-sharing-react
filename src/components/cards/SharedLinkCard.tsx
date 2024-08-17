@@ -137,7 +137,14 @@ function SharedLinkCardList({ sharedLink }: { sharedLink: SharedLinkType }) {
       <p className="text-ellipsis overflow-hidden text-xs max-w-32 w-4/12 h-max-full">
         {sharedLink.contentDescription}
       </p>
-      <ProfilePicture person={sharedLink.owner} />
+      {sharedLink.sharedby && (
+        <ProfilePicture
+          user={sharedLink.sharedby}
+          size="small"
+          clickable={false}
+          hoverAnimation={false}
+        />
+      )}
       <p className="text-xs text-gray-500 p-1 w-[60px] justify-center items-center">
         {sharedLink.seenCount}
       </p>
