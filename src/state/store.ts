@@ -19,6 +19,8 @@ import RegisterReducer from "./loginAndRegister/registerSlice";
 import LoginReducer from "./loginAndRegister/loginSlice";
 import TopContents from "./home/topContentsSlice";
 import profileSlice from "./profile/profileSlice";
+import themeSlice from "./theme/themeSlice";
+import loginAndRegisterSlice from "./loginAndRegister/loginAndRegisterSlice";
 
 export const store = configureStore({
   reducer: {
@@ -37,11 +39,13 @@ export const store = configureStore({
     connections: ConnectionReducer,
     notifications: NotificationsReducer,
     alerts: AlertsReducer,
+    loginAndRegister: loginAndRegisterSlice,
     register: RegisterReducer,
     login: LoginReducer,
     hotContents: TopContents,
     profile: profileSlice,
     topPanel: TopPanelReducer,
+    theme: themeSlice,
   },
 });
 

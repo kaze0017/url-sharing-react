@@ -2,6 +2,7 @@ import ProfilePicture from "../profilePictures/ProfilePicture";
 import InfoReport from "../InfoReport";
 
 import { CategoryTypeo } from "../../lib/interfaces";
+import Typography from "@mui/material/Typography";
 
 interface CategoryHotProps {
   link: CategoryTypeo;
@@ -19,8 +20,12 @@ export default function CategoryHot({ link }: CategoryHotProps) {
       <ProfilePicture user={link.owner} size="small" clickable={false} />
       <div className={categoryHotInfoClass}>
         <div className="flex flex-col text-2xs uppercase font-bold w-1/2">
-          <p>{firstName}</p>
-          <p>{lastName}</p>
+          <Typography variant="caption" color="text.secondary">
+            {firstName}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {lastName}
+          </Typography>
         </div>
         <InfoReport title={link.title} data={0} className="truncate w-1/2" />
       </div>

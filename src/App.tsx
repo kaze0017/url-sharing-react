@@ -34,76 +34,91 @@ import MainGroupEditor from "./components/membermanagement/GEditor";
 import CreateCategory from "./components/linkManagement/CreateCategory";
 import Category from "./components/linkManagement/Category";
 import AddLinksToCategory from "./components/linkManagement/AddLinksToCategory";
+import { red } from "@mui/material/colors";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    mode: "light",
+    // primary: {
+    //   main: red[500],
+    // },
+    secondary: {
+      main: "#f44336",
+    },
+
+  },
+});
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route path="login" element={<LoginPage />} />
-        <Route path="unauthorized" element={<Unauthorized />} />
-        <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth />}>
-            <Route path="/" element={<Home />}>
-              <Route path="/initialProfile" element={<InitialProfile />} />
-              <Route path="/" element={<PanelMiddle />} />
-              <Route path="/linkManagement" element={<LinkManagement />}>
-                <Route path="/linkManagement" element={<MainPanel />} />
-                <Route
-                  path="/linkManagement/createLink"
-                  element={<CreateLink />}
-                />
-                <Route
-                  path="/linkManagement/createCategory"
-                  element={<CreateCategory />}
-                />
-                <Route
-                  path="/linkManagement/editLink/:id"
-                  element={<EditLink />}
-                />
-                <Route
-                  path="/linkManagement/category/:id"
-                  element={<Category />}
-                />
-                <Route
-                  path="/linkManagement/addLinksToCategory"
-                  element={<AddLinksToCategory />}
-                />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="unauthorized" element={<Unauthorized />} />
+          <Route element={<PersistLogin />}>
+            <Route element={<RequireAuth />}>
+              <Route path="/" element={<Home />}>
+                <Route path="/initialProfile" element={<InitialProfile />} />
+                <Route path="/" element={<PanelMiddle />} />
+                <Route path="/linkManagement" element={<LinkManagement />}>
+                  <Route path="/linkManagement" element={<MainPanel />} />
+                  <Route
+                    path="/linkManagement/createLink"
+                    element={<CreateLink />}
+                  />
+                  <Route
+                    path="/linkManagement/createCategory"
+                    element={<CreateCategory />}
+                  />
+                  <Route
+                    path="/linkManagement/editLink/:id"
+                    element={<EditLink />}
+                  />
+                  <Route
+                    path="/linkManagement/category/:id"
+                    element={<Category />}
+                  />
+                  <Route
+                    path="/linkManagement/addLinksToCategory"
+                    element={<AddLinksToCategory />}
+                  />
+                </Route>
+                <Route path="/shareLinks" element={<ShareLinks />}>
+                  <Route path="/shareLinks" element={<Controller />} />
+                  <Route
+                    path="/shareLinks/shareWithGroups"
+                    element={<ShareWithGroups />}
+                  />
+                  <Route
+                    path="/shareLinks/shareByDiagram"
+                    element={<ShareByDiagram />}
+                  />
+                  <Route
+                    path="/shareLinks/shareOnInternet"
+                    element={<ShareOnInternet />}
+                  />
+                  <Route path="/shareLinks/approval" element={<Approval />} />
+                </Route>
+                <Route path="/networks" element={<MemberManagement />}>
+                  <Route index element={<NetworkMainPanel />} />
+                  <Route path="groups" element={<Groups />} />
+                  <Route path="graphs" element={<Graphs />} />
+                  <Route path="relations" element={<Relations />} />
+                  <Route path="connections" element={<Connections />} />
+                  <Route path="editor/:id" element={<Editor />} />
+                  <Route path="groupEditor/" element={<MainGroupEditor />} />
+                </Route>
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/profile/:userId" element={<Profile />} />
+                <Route path="/sharedLink/:id" element={<SharedLink />} />
+                <Route path="/reports" element={<Reports />} />
+                <Route path="/logout" element={<LogOut />} />
               </Route>
-              <Route path="/shareLinks" element={<ShareLinks />}>
-                <Route path="/shareLinks" element={<Controller />} />
-                <Route
-                  path="/shareLinks/shareWithGroups"
-                  element={<ShareWithGroups />}
-                />
-                <Route
-                  path="/shareLinks/shareByDiagram"
-                  element={<ShareByDiagram />}
-                />
-                <Route
-                  path="/shareLinks/shareOnInternet"
-                  element={<ShareOnInternet />}
-                />
-                <Route path="/shareLinks/approval" element={<Approval />} />
-              </Route>
-              <Route path="/networks" element={<MemberManagement />}>
-                <Route index element={<NetworkMainPanel />} />
-                <Route path="groups" element={<Groups />} />
-                <Route path="graphs" element={<Graphs />} />
-                <Route path="relations" element={<Relations />} />
-                <Route path="connections" element={<Connections />} />
-                <Route path="editor/:id" element={<Editor />} />
-                <Route path="groupEditor/" element={<MainGroupEditor />} />
-              </Route>
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/profile/:userId" element={<Profile />} />
-              <Route path="/sharedLink/:id" element={<SharedLink />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/logout" element={<LogOut />} />
             </Route>
           </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
   );
 }
 

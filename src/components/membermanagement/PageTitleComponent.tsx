@@ -7,15 +7,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../state/store";
 import { setType } from "../../state/networks/networksSlice";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
+import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
+import HubOutlinedIcon from "@mui/icons-material/HubOutlined";
+import StreamOutlinedIcon from "@mui/icons-material/StreamOutlined";
+import Diversity2OutlinedIcon from "@mui/icons-material/Diversity2Outlined";
 
 export default function PageTitleComponent() {
   const navigate = useNavigate();
   const { type } = useSelector((state: RootState) => state.networks);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   navigate("/networks");
-  // }, [type, navigate]);
   const [page, setPage] = useState<"groups" | "graphs" | "relations" | "connections">();
   const handleChange = (
     event: React.SyntheticEvent,
@@ -25,8 +26,7 @@ export default function PageTitleComponent() {
     navigate(`/networks/${newValue}`);
   };
 
-  const wrapperClass = "flex gap-2 text-5xl font-bold ml-2 uppercase";
-  const iconsClass = "cursor-pointer text-indigo-500 hover:text-blue-800 ";
+ 
   return (
     <BottomNavigation
       value={page}
@@ -38,25 +38,25 @@ export default function PageTitleComponent() {
     >
       <BottomNavigationAction
         label="Groups"
-        icon={<HiOutlineUserGroup />}
+        icon={<Groups2OutlinedIcon />}
         value="groups"
         sx={{ minWidth: 80, padding: 0 }}
       />
       <BottomNavigationAction
         label="Graphs"
-        icon={<PiGraphLight />}
+        icon={<HubOutlinedIcon />}
         value="graphs"
         sx={{ minWidth: 80, padding: 0 }}
       />
       <BottomNavigationAction
         label="Relations"
-        icon={<TbWorldUpload />}
+        icon={<StreamOutlinedIcon />}
         value="relations"
         sx={{ minWidth: 80, padding: 0 }}
       />
       <BottomNavigationAction
         label="Connections"
-        icon={<TbWorldUpload />}
+        icon={<Diversity2OutlinedIcon />}
         value="connections"
         sx={{ minWidth: 80, padding: 0 }}
       />

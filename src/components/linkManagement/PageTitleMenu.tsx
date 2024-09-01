@@ -10,8 +10,6 @@ import { RootState } from "../../state/store";
 import { setClass } from "../../state/linkManagement/linkManagementSlice";
 
 export default function PageTitleMenu() {
-  const iconsClass = "text-indigo-600 text-xl font-bold ml-2";
-  const MainWrapperClass = "flex gap-5 uppercase";
 
   const { contentClass } = useSelector(
     (state: RootState) => state.linkManagement

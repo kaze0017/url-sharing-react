@@ -7,9 +7,10 @@ import {
 } from "../../lib/interfaces/RegisterConditionsTypes";
 import { postRegisterUser } from "../../api/posts/postRegisterUser";
 
+// Define the async thunk
 export const registerUser = createAsyncThunk(
   "register/registerUser",
-  async (_, { getState }) => {
+  async (_, { rejectWithValue, getState }) => {
     const regState = getState() as { register: RegisterState };
     let userData;
     if (regState.register.emailCode.length > 0) {
@@ -27,27 +28,18 @@ export const registerUser = createAsyncThunk(
       };
     }
 
-    const apiResponse = await postRegisterUser(userData);
-    console.log("from registerUser thunk", apiResponse);
-
-    let response;
-    if (apiResponse.status >= 200 && apiResponse.status < 300) {
-      response = {
+    try {
+      const apiResponse = await postRegisterUser(userData);
+      console.log("from registerUser", apiResponse);
+      return {
         data: apiResponse.data,
-        status: 200,
+        status: apiResponse.status,
       };
-    } else {
-      response = {
-        data: apiResponse.data,
-        status: 400,
-      };
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data || { message: "Unknown error" }
+      );
     }
-    return response;
-    // }
-    // response = {
-    //   data: apiResponse.data,
-    //   status: 200,
-    // };
   }
 );
 
@@ -55,7 +47,11 @@ export interface RegisterState {
   email: string;
   password: string;
   confirmPassword: string;
-  apiError: string;
+  apiState: {
+    message: string;
+    status: number;
+  };
+
   passConditions: PassConditionsType;
   passConfirmConditions: PassConfirmConditionsType;
   emailConditions: EmailConditionsType;
@@ -69,7 +65,10 @@ const initialState: RegisterState = {
   email: "",
   password: "",
   confirmPassword: "",
-  apiError: "",
+  apiState: {
+    message: "",
+    status: 0,
+  },
   passConditions: {
     length: {
       value: 8,
@@ -116,9 +115,12 @@ const registerSlice = createSlice({
   initialState,
   reducers: {
     initialRegisterSlice: (state) => {
-      state = initialState;
+      Object.assign(state, initialState);
+      console.log(
+        "from initialRegisterSlice: display dialog",
+        state.displayDialog
+      );
     },
-
     setEmail: (state, action: PayloadAction<string>) => {
       state.email = action.payload;
       const emailValidation = validateEmail(action.payload);
@@ -128,6 +130,8 @@ const registerSlice = createSlice({
     },
     setPassword: (state, action: PayloadAction<string>) => {
       state.password = action.payload;
+
+      // Validate the password against the conditions
       const passValidation = validatePassword(
         action.payload,
         state.passConditions
@@ -138,23 +142,28 @@ const registerSlice = createSlice({
       state.passConditions.number.state = passValidation.number;
       state.passConditions.special.state = passValidation.special;
 
-      const formValidation = checkFormValidity(state);
-      console.log("formValidation", formValidation);
-      state.formValid = formValidation;
+      // Recheck if passwords match
+      state.passConfirmConditions.match =
+        state.password === state.confirmPassword;
+
+      // Recalculate form validity
+      state.formValid = checkFormValidity(state);
     },
     setConfirmPassword: (state, action: PayloadAction<string>) => {
       state.confirmPassword = action.payload;
-      if (state.password === action.payload) {
-        state.passConfirmConditions.match = true;
-      } else {
-        state.passConfirmConditions.match = false;
-      }
-      const formValidation = checkFormValidity(state);
-      console.log("formValidation", formValidation);
-      state.formValid = formValidation;
+
+      // Recheck if passwords match
+      state.passConfirmConditions.match =
+        state.password === state.confirmPassword;
+
+      // Recalculate form validity
+      state.formValid = checkFormValidity(state);
     },
-    setApiError: (state, action: PayloadAction<string>) => {
-      state.apiError = action.payload;
+    setApiState: (
+      state,
+      action: PayloadAction<{ message: string; status: number }>
+    ) => {
+      state.apiState = action.payload;
     },
     setPending: (state, action: PayloadAction<boolean>) => {
       state.isPending = action.payload;
@@ -167,18 +176,38 @@ const registerSlice = createSlice({
       state.emailCode = action.payload;
     },
   },
-
   extraReducers: (builder) => {
-    builder.addCase(registerUser.fulfilled, (state, action) => {
-      console.log("from registerSlice", action.payload);
-      if (action.payload.status === 200) {
+    builder
+      .addCase(registerUser.pending, (state) => {
+        state.isPending = true;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        console.log("from registerSlice", action.payload);
+        state.apiState.message = action.payload.data.message;
+        state.apiState.status = action.payload.status;
+
+        switch (action.payload.status) {
+          case 200:
+          case 203:
+          case 204:
+          case 206:
+          case 208:
+            state.displayDialog = true;
+            break;
+          case 400:
+            state.apiState.message =
+              action.payload.data.message || "Error occurred";
+            break;
+          default:
+            break;
+        }
+
         state.isPending = false;
-      } else {
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.apiState.message =  "Request failed";
         state.isPending = false;
-        state.apiError = action.payload.data.message;
-        console.log("from registerSlice", action.payload.data.message);
-      }
-    });
+      });
   },
 });
 
@@ -186,7 +215,7 @@ export const {
   setEmail,
   setPassword,
   setConfirmPassword,
-  setApiError,
+  setApiState,
   setPending,
   initialRegisterSlice,
   setDisplayDialog,

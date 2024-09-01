@@ -9,6 +9,7 @@ import { useDraggable } from "react-use-draggable-scroll";
 import Histories from "./rightPanel/Histories";
 import Notifications from "./rightPanel/Notifications";
 import { Container } from "@mui/material";
+import Paper from "@mui/material/Paper";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../state/store";
@@ -45,9 +46,9 @@ export default function PanelRight(props: PanelLeftProps) {
   // panel css classes
   const panelWrapper = `w-full flex flex-col items-center gap-1 p-1 pb-2  transition-300 h-full overflow-x-hidden overflow-y-hidden scrollbar-hide
  relative
-  panel-light
-  text-gray-900
-  `;
+ text-gray-900
+ `;
+  // panel-light
   const toggleButtonClasses = `flex flex-row-reverse cursor-pointer p-4 text-gray items-center w-full h-6 
   ${!toggleRightPanel ? "justify-start" : "justify-center"}
   `;
@@ -72,25 +73,27 @@ export default function PanelRight(props: PanelLeftProps) {
     });
   }, [dispatch]);
   return (
-    <div className={panelWrapper} ref={ref} {...events}>
-      <div
-        id="RightPanelToggleBtn"
-        className={toggleButtonClasses}
-        onClick={() => handelRightPanelToggle()}
-      >
-        {!toggleRightPanel ? (
-          <FiX className="text-2xl text-gray-800" />
-        ) : (
-          <FiMenu className="text-2xl text-gray-800 text-center" />
+    <Paper>
+      <div className={panelWrapper} ref={ref} {...events}>
+        <div
+          id="RightPanelToggleBtn"
+          className={toggleButtonClasses}
+          onClick={() => handelRightPanelToggle()}
+        >
+          {!toggleRightPanel ? (
+            <FiX className="text-2xl text-gray-800" />
+          ) : (
+            <FiMenu className="text-2xl text-gray-800 text-center" />
+          )}
+        </div>
+        <ActionBtns />
+        {content === "suggestions" && (
+          <Suggestions variant={toggleRightPanel ? "collapsed" : "expanded"} />
         )}
+        {content === "history" && <Histories />}
+        {content === "search" && <Searches />}
+        {content === "notifications" && <Notifications />}
       </div>
-      <ActionBtns />
-      {content === "suggestions" && (
-        <Suggestions variant={toggleRightPanel ? "collapsed" : "expanded"} />
-      )}
-      {content === "history" && <Histories />}
-      {content === "search" && <Searches />}
-      {content === "notifications" && <Notifications />}
-    </div>
+    </Paper>
   );
 }

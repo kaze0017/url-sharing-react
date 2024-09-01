@@ -1,12 +1,21 @@
 import { SharedLinkType } from "../../lib/interfaces";
 import { IoIosLink } from "react-icons/io";
-import ProfilePicture from "../profilePictures/ProfilePicture"
+import ProfilePicture from "../profilePictures/ProfilePicture";
 import ActionBtns from "./actionBtns/ActionBtns";
 import GradientIcon from "../customIcons/GradientIcon";
 import { CiPlay1 } from "react-icons/ci";
 import { CiCamera } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import FeaturedImage from "./featuredImages/FeaturedImage";
+import { Paper } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 interface CardSharedMdProps {
   sharedLink: SharedLinkType;
@@ -29,23 +38,45 @@ export default function CardSharedMd({ sharedLink }: CardSharedMdProps) {
     height: `${height}px`,
   };
   return (
-    <div className={mainWrapperClass} style={mainWrapperStyle}>
+    <Paper
+      sx={{
+        width: width,
+        height: height,
+        display: "flex",
+        flexDirection: "column",
+        boxSizing: "border-box",
+        padding: 1,
+      }}
+    >
       <FeaturedImage
         sharedLink={sharedLink}
         twClass="h-[125px] w-full"
         hight={125}
       />
-      <div className="w-full flex flex-col">
-        <h3 className="font-bold text-sm uppercase ">{sharedLink.title}</h3>
-        <p className="text-sm">{sharedLink.contentDescription}</p>
+      <div className="w-full flex flex-col flex-grow">
+        <Typography variant="h5" component="h3" color={"text.secondary"}>
+          {sharedLink.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {sharedLink.contentDescription}
+        </Typography>
       </div>
 
       <div className="w-full flex gap-1 items-center text-xs">
-        <IoIosLink />
-        <ProfilePicture user={sharedLink.owner} size="medium" clickable={false} hoverAnimation={false} />
+        {/* <IoIosLink /> */}
+        <ProfilePicture
+          user={sharedLink.owner}
+          size="medium"
+          clickable={false}
+          hoverAnimation={false}
+        />
         <div className="flex-flex-col">
-          <p>{firstName}</p>
-          <p>{lastName}</p>
+          <Typography variant="body2" color="text.secondary">
+            {firstName}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {lastName}
+          </Typography>
         </div>
         <div className="flex flex-grow"></div>
         <ActionBtns
@@ -56,6 +87,8 @@ export default function CardSharedMd({ sharedLink }: CardSharedMdProps) {
           link={sharedLink}
         />
       </div>
-    </div>
+    </Paper>
+    
   );
 }
+

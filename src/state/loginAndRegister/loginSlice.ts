@@ -32,6 +32,7 @@ export const loginFunction = createAsyncThunk(
         data: apiResponse.data,
         status: 400,
       };
+      loginState.login.apiError = apiResponse.data.message;
     }
     return response;
   }

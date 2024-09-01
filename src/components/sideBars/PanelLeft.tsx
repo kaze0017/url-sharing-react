@@ -10,6 +10,7 @@ import Toggle from "./panelLeft/Toggle";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../state/store";
 import { loadTopUsers, setToggled } from "../../state/leftPanel/leftPanelSlice";
+import Paper from "@mui/material/Paper";
 
 interface PanelLeftProps {
   className?: string;
@@ -25,12 +26,11 @@ const PanelLeft: React.FC<PanelLeftProps> = ({ className }) => {
   // panel css classes
   const panelWrapper = `w-full flex flex-col items-center gap-1 p-1 pb-2  transition-300 h-full overflow-x-hidden overflow-y-hidden scrollbar-hide
  relative
-  panel-light
-  text-gray-900
-  `;
+ text-gray-900
+ `;
+  // panel-light
   //  Space div css classes
   const growingDivClasses = "flex flex-grow";
-
 
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
@@ -52,13 +52,15 @@ const PanelLeft: React.FC<PanelLeftProps> = ({ className }) => {
   }, []);
 
   return (
-    <div ref={ref} className={panelWrapper} {...events}>
-      <Toggle />
-      <UserInfo user={user} toggledCollapse={leftPanelToggle} />
-      <NavMenu toggledCollapse={leftPanelToggle} menuLinks={menuLinks} />
-      <div className={growingDivClasses}></div>
-      <LogoProfile toggledCollapse={leftPanelToggle} />
-    </div>
+    <Paper>
+      <div ref={ref} className={panelWrapper} {...events}>
+        <Toggle />
+        <UserInfo user={user} toggledCollapse={leftPanelToggle} />
+        <NavMenu toggledCollapse={leftPanelToggle} menuLinks={menuLinks} />
+        <div className={growingDivClasses}></div>
+        <LogoProfile toggledCollapse={leftPanelToggle} />
+      </div>
+    </Paper>
   );
 };
 

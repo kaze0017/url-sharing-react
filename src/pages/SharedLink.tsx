@@ -37,7 +37,7 @@ export default function SharedLink() {
   return (
     <>
       <div className="flex flex-col h-full flex-grow gap-1">
-        <PanelTop mode="link" />
+        {/* <PanelTop mode="link" /> */}
         {isLoading && <NotFound title="Link" size="text-xl" />}
         {!isLoading && (
           <CardSingle sharedLink={sharedLink} editable={editable} />

@@ -9,6 +9,7 @@ import PanelTop from "../components/sideBars/PanelTop";
 import { Box, Container } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../state/store";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
@@ -28,21 +29,24 @@ export default function Home() {
   const { toggled: toggledLeftPanel } = useSelector(
     (state: RootState) => state.leftPanel
   );
+  const { theme } = useSelector((state: RootState) => state.theme);
+  const customTheme = createTheme(theme);
 
   return (
     // <div className="flex  w-full h-full p-1 gap-1 overflow-hidden">
-    <div>
-      {isNewUser ? (
-        <InitialProfile />
-      ) : (
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateRows: "50px 1fr",
-            height: "100vh",
-          }}
-        >
-          <AppBar />
+    <ThemeProvider theme={customTheme}>
+      <div>
+        {isNewUser ? (
+          <InitialProfile />
+        ) : (
+          // <Box
+          //   sx={{
+          //     display: "grid",
+          //     gridTemplateRows: "50px 1fr",
+          //     height: "100vh",
+          //   }}
+          // >
+          //   <AppBar />
           <Box
             sx={{
               display: "grid",
@@ -51,7 +55,7 @@ export default function Home() {
               } 1fr ${toggleRightPanel ? "90px" : "260px"}`,
               columnGap: "2px",
               width: "100vw",
-              height: "100%",
+              height: "100vh",
             }}
           >
             <PanelLeft />
@@ -69,8 +73,9 @@ export default function Home() {
 
             <PanelRight />
           </Box>
-        </Box>
-      )}
-    </div>
+          // </Box>
+        )}
+      </div>
+    </ThemeProvider>
   );
 }

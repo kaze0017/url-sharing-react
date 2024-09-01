@@ -36,33 +36,44 @@ export default function Profile() {
   }, [userId]);
 
   return userInfo ? (
-    <div className="panel-light w-full h-full overflow-hidden flex flex-col gap-1">
-      <PageTitle person={userInfo} />
-      {!linksToDisplay || linksToDisplay.length === 0 ? (
-        <div className="items-center justify-center flex flex-col flex-grow gap-2 overflow-hidden px-2 pb-2">
-          <Paper className="flex items-center justify-center p-4" elevation={3}>
-            <Alert severity="info">
-              This user has not published any links yet.
-            </Alert>
-          </Paper>
-        </div>
-      ) : (
-        <div className="panel-light flex flex-col flex-grow gap-2 overflow-hidden px-2 pb-2">
-          <Actions
-            query={query}
-            setQuery={handleSetQuery}
-            view={view}
-            setView={handleSetView}
-          />
+    <Paper
+      sx={{
+        height: "100%",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <div className="w-full h-full overflow-hidden flex flex-col gap-1">
+        <PageTitle person={userInfo} />
+        {!linksToDisplay || linksToDisplay.length === 0 ? (
+          <div className="items-center justify-center flex flex-col flex-grow gap-2 overflow-hidden px-2 pb-2">
+            <Paper
+              className="flex items-center justify-center p-4"
+            >
+              <Alert severity="info">
+                This user has not published any links yet.
+              </Alert>
+            </Paper>
+          </div>
+        ) : (
+          <div className="panel-light flex flex-col flex-grow gap-2 overflow-hidden px-2 pb-2">
+            <Actions
+              query={query}
+              setQuery={handleSetQuery}
+              view={view}
+              setView={handleSetView}
+            />
 
-          <GrabScroll
-            sharedLinks={linksToDisplay}
-            Component={view === "grid" ? CardSharedMd : CardSharedLg}
-            width={320}
-          />
-        </div>
-      )}
-    </div>
+            <GrabScroll
+              sharedLinks={linksToDisplay}
+              Component={view === "grid" ? CardSharedMd : CardSharedLg}
+              width={320}
+            />
+          </div>
+        )}
+      </div>
+    </Paper>
   ) : (
     <NotFound title="User" size="text-2xl" />
   );

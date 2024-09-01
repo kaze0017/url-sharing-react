@@ -22,13 +22,13 @@ export async function postRegisterUser({
     if (email_code) {
       formData.append("email_code", email_code);
     }
-
+    console.log("from postRegisterUser - Formdata", formData.toString());
     const response = await axiosInstance.post(
       REGISTER_URL,
       formData.toString(),
       {}
     );
-    console.log(response);
+    console.log(" from API - response",response);
     return response;
   } catch (err: any) {
     console.log(err.response);

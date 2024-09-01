@@ -32,6 +32,8 @@ import {
   setSelectedCategoriesIds,
 } from "../../state/linkManagement/categorySlice";
 import { setSelectedLinkIds } from "../../state/linkManagement/linkSlice";
+import { Button } from "@mui/material";
+import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 
 // Steps
 
@@ -254,6 +256,11 @@ export default function AddLinkForm() {
 
   const summeryCheckWrapperClass = "flex items-center gap-1 w-[250px]";
 
+function backToContentManagement() {
+    navigate("/linkmanagement"); 
+  }
+
+
   return (
     <div
       // className="flex flex-col w-700 panel-light gap-1 p-2"
@@ -376,7 +383,7 @@ export default function AddLinkForm() {
                 className="text-xs w-full"
               /> */}
               <div className="flex flex-col w-full">
-                <FormControl sx={{ minWidth: 120, backgroundColor:"white" }}>
+                <FormControl sx={{ minWidth: 120, backgroundColor: "white" }}>
                   <InputLabel id="demo-simple-select-helper-label">
                     Category
                   </InputLabel>
@@ -616,10 +623,20 @@ export default function AddLinkForm() {
             <h3 className="text-center  text-green-600 w-full text-2xl">
               {apiAddToCategoryResponse}
             </h3>
-            <CiCirclePlus
-              className="text-2xl text-blue-600 mt-4 cursor-pointer"
+            <Button
+              startIcon={<CiCirclePlus />}
               onClick={resetTheForm}
-            />
+              variant="contained"
+            >
+              Create Another Category
+            </Button>
+            <Button
+              startIcon={<ReplyAllOutlinedIcon />}
+              onClick={backToContentManagement}
+              variant="outlined"
+            >
+              Back to Content Management
+            </Button>
           </motion.div>
         )}
         {/* Controls for step 0, 1, and 2 */}

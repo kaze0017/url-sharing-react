@@ -1,9 +1,8 @@
 import FadeInOut from "./FadeInOut";
-import SubmitBtn from "./SubmitBtn";
+import SubmitBtn from "./register/SubmitBtn";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { UserProfileContext } from "../../context/UserProfileProvider";
-import { postLogin } from "../../api/posts/postLogin";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../state/store";
@@ -20,6 +19,7 @@ import {
   OutlinedInput,
   Backdrop,
   Button,
+  Typography,
 } from "@mui/material";
 import { InputAdornment } from "@mui/material";
 import { IconButton } from "@mui/material";
@@ -30,20 +30,20 @@ import {
   PassConditionType,
   PassConditionsType,
 } from "../../lib/interfaces/RegisterConditionsTypes";
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 
 interface LoginFormProps {
   showLogin: boolean;
 }
 export default function LoginForm({ showLogin }: LoginFormProps) {
   const navigate = useNavigate();
-  
+
   const { setAuth } = useContext(AuthContext);
   const { setUserProfile } = useContext(UserProfileContext);
   const dispatch = useDispatch<AppDispatch>();
-  dispatch(initialLoginState());
-  
+
   const [showApiError, setShowApiError] = useState(false);
-  
+
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(setIsPending(true));
@@ -63,8 +63,6 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
       dispatch(initialLoginState());
 
       navigate("/");
-
-
     } else {
       setShowApiError(true);
       setTimeout(() => {
@@ -75,17 +73,10 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
     }
   }
 
-  const errorClass = "text-red-500 text-sm";
+  const { formValid, emailConditions, passConditions, isPending } = useSelector(
+    (state: RootState) => state.login
+  );
 
-  const {
-    email,
-    password,
-    formValid,
-    apiError,
-    emailConditions,
-    passConditions,
-    isPending,
-  } = useSelector((state: RootState) => state.login);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -107,17 +98,15 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
     setOpenBackdrop(false);
   }
 
-  useEffect(() => {
-    dispatch(initialLoginState());
-  }, [showLogin]);
-
   return (
     <FadeInOut show={showLogin} duration={500}>
       <form
         className="flex flex-col gap-2  max-w-md px-4 py-1 rounded-md"
         onSubmit={(e) => handleLogin(e)}
       >
-        <h1 className="text-xl font-semibold text-gray-500">SIGN IN</h1>
+        <Typography variant="h5" component="h1">
+          SIGN IN
+        </Typography>
         <FormControl fullWidth variant="outlined">
           <InputLabel htmlFor="outlined-adornment-email">Email</InputLabel>
           <OutlinedInput
@@ -155,39 +144,24 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
             onFocus={(e) => setPassFocused(true)}
           />
         </FormControl>
-
-        {/* <input
-          id="loginUser"
-          className={`${inputClass}`}
-          type="text"
-          placeholder="User Name"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          disabled={isPending}
-        />
-        <input
-          id="loginPassword"
-          className={`${inputClass}`}
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={isPending}
-        /> */}
         <div className="flex items-center gap-1 justify-between text-xs">
           <div className="flex items-center gap-1 text-xs">
-            <label htmlFor="remember" className="text-gray-800">
-              Remember me
-            </label>
-            <input
-              id="remember"
-              type="checkbox"
-              className="rounded-md border-gray-300"
-            />
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox defaultChecked size="small" />}
+                label={
+                  <Typography variant="caption" color="textSecondary">
+                    Remember me
+                  </Typography>
+                }
+              />
+            </FormGroup>
           </div>
-          <p className="text-blue-800 text-xs cursor-pointer ">
-            Forgot password?
-          </p>
+          <Button color="primary" variant="text">
+            <Typography variant="caption" color="primary">
+              Forgot password?
+            </Typography>
+          </Button>
         </div>
         <SubmitBtn
           isDisabled={!formValid || isPending}
@@ -210,7 +184,6 @@ export default function LoginForm({ showLogin }: LoginFormProps) {
           </Button>
         )}
 
-        {/* {showApiError && <p className={errorClass}>{apiError}</p>} */}
         {/* <p className={errorClass}>{error}</p> */}
       </form>
       <Backdrop

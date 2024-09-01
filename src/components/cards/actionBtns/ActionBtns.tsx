@@ -1,5 +1,8 @@
 import { useState, useContext } from "react";
 import AuthContext from "../../../context/AuthProvider";
+import TurnedInNotOutlinedIcon from "@mui/icons-material/TurnedInNotOutlined";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import { FiTrendingUp } from "react-icons/fi";
 import { PiShareFatThin } from "react-icons/pi";
 import { IoPricetagOutline } from "react-icons/io5";
@@ -12,6 +15,8 @@ import {
   postQuickAccess,
   setSelectedLinks,
 } from "../../../state/linkManagement/linkSlice";
+import { Button } from "@mui/material";
+import ActionButton from "./ActionButton";
 
 interface Props {
   id: number;
@@ -22,7 +27,6 @@ interface Props {
 }
 
 export default function ActionBtns(props: Props) {
-  const { selectedLinks } = useSelector((state: RootState) => state.link);
   const dispatch = useDispatch<AppDispatch>();
   const [saved, setSaved] = useState<boolean>(false);
   const [shared, setShared] = useState<boolean>(false);
@@ -64,27 +68,24 @@ export default function ActionBtns(props: Props) {
 
   return (
     <div className={wrapperClass}>
-      <div className={iconCol}>
-        <p>{props.rank}</p>
-        <FiTrendingUp
-          className={`${ranked ? "text-blue-500" : ""} ${iconStyle}`}
-          onClick={(event) => rankUp(event)}
-        />
-      </div>
-      <div className={iconCol}>
-        <p>{props.shared}</p>
-        <PiShareFatThin
-          className={`${shared ? "text-blue-500" : ""} ${iconStyle}`}
-          onClick={(event) => share(event)}
-        />
-      </div>
-      <div className={iconCol}>
-        <p>{props.saved}</p>
-        <IoPricetagOutline
-          className={`${saved ? "text-blue-500" : ""} ${iconStyle}`}
-          onClick={(event) => save(event)}
-        />
-      </div>
+      <ActionButton
+        count={props.rank}
+        IconComponent={ThumbUpOutlinedIcon}
+        isActive={ranked}
+        onClick={rankUp}
+      />
+      <ActionButton
+        count={props.shared}
+        IconComponent={ShareOutlinedIcon}
+        isActive={shared}
+        onClick={share}
+      />
+      <ActionButton
+        count={props.saved}
+        IconComponent={TurnedInNotOutlinedIcon}
+        isActive={saved}
+        onClick={save}
+      />
     </div>
   );
 }
